@@ -29,6 +29,7 @@ The repo had canonical infra roots but no shared environment matrix. This sectio
 
 ## Edge cases
 - `dev` can use local Postgres and file-backed content/config so long as contract shapes stay aligned with ST-02 and ST-05.
+- `dev` must expose a reproducible reachable Postgres path for Prisma-backed runtime validation of starter-arc and subscription continuity before merge; file mode is still allowed for fast local iteration.
 - `staging` must remain synthetic or scrubbed; production-only secrets and customer data never belong in local templates.
 - Environment switching must not become a source of behavioral drift for manual logging or entitlement rules.
 

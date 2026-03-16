@@ -9,20 +9,28 @@
   "economy": {
     "free_active_vow_cap": 3,
     "premium_active_vow_cap": 7,
-    "binary_base_resonance": 12,
-    "count_base_resonance": 15,
-    "duration_base_resonance": 18,
+    "binary_base_resonance": 10,
+    "count_base_resonance": 10,
+    "duration_base_resonance": 12,
+    "binary_base_gold": 5,
+    "count_base_gold": 5,
+    "duration_base_gold": 6,
     "chain_bonus_percent_by_milestone": {
       "3": 5,
       "7": 10,
+      "14": 15,
       "30": 20
     },
-    "embers_cap": 3,
+    "free_embers_cap": 2,
+    "premium_embers_cap": 4,
+    "partial_reward_floor_percent": 30,
+    "first_vow_of_day_gold_bonus": 2,
+    "all_vows_completed_gold_bonus": 5,
     "over_completion_reward_cap_percent": 120
   },
   "onboarding": {
     "starter_vow_recommendation_count": 3,
-    "first_magical_moment_variant": "district_stirs",
+    "first_magical_moment_variant": "oven_glow",
     "soft_paywall_trigger": "after_first_magical_moment"
   },
   "paywall": {

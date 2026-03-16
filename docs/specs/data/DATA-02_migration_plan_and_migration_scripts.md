@@ -24,7 +24,8 @@ The schema now exists, but later environments and CI need a repeatable way to ap
 - The backend package exposes migration scripts.
 - An initial migration artifact exists for the current schema.
 - Prisma validation succeeds with a supplied `DATABASE_URL`.
-- A clean database migrate path is documented even if it is not auto-applied in this repo yet.
+- A clean database migrate path is documented even if it is not auto-applied in prod from this repo.
+- Runtime authority for the starter-arc and monetization slice is exercised against reachable Postgres, not only schema validation.
 
 ## Explicit non-goals
 - destructive rollback automation

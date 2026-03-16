@@ -10,7 +10,8 @@ export const appConfigSchema = z.object({
   ANALYTICS_PROVIDER: z.string().min(1).default("console"),
   OBSERVABILITY_PROVIDER: z.string().min(1).default("console"),
   REMOTE_CONFIG_SOURCE: z.string().min(1).default("file"),
-  CONTENT_SOURCE: z.string().min(1).default("file")
+  CONTENT_SOURCE: z.string().min(1).default("file"),
+  CORE_LOOP_PERSISTENCE: z.enum(["file", "prisma"]).default("file")
 });
 
 export type AppConfig = z.infer<typeof appConfigSchema>;

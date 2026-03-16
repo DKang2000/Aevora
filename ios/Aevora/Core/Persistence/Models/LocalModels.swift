@@ -81,6 +81,19 @@ final class LocalDistrictSnapshot {
 }
 
 @Model
+final class LocalCoreLoopSnapshot {
+    @Attribute(.unique) var id: String
+    var payload: Data
+    var updatedAt: Date
+
+    init(id: String, payload: Data, updatedAt: Date = .now) {
+        self.id = id
+        self.payload = payload
+        self.updatedAt = updatedAt
+    }
+}
+
+@Model
 final class LocalSubscriptionCache {
     @Attribute(.unique) var id: String
     var tier: String

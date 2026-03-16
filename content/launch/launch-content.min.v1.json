@@ -3,19 +3,31 @@
   "originFamilies": [
     {
       "id": "dawnbound",
-      "titleKey": "content.family.dawnbound.title"
+      "titleKey": "content.family.dawnbound.title",
+      "summaryKey": "content.family.dawnbound.summary",
+      "starterNpcId": "brigant_hal",
+      "starterQuestOverlayKey": "content.family.dawnbound.overlay"
     },
     {
       "id": "archivist",
-      "titleKey": "content.family.archivist.title"
+      "titleKey": "content.family.archivist.title",
+      "summaryKey": "content.family.archivist.summary",
+      "starterNpcId": "sera_quill",
+      "starterQuestOverlayKey": "content.family.archivist.overlay"
     },
     {
       "id": "hearthkeeper",
-      "titleKey": "content.family.hearthkeeper.title"
+      "titleKey": "content.family.hearthkeeper.title",
+      "summaryKey": "content.family.hearthkeeper.summary",
+      "starterNpcId": "tovan_hearth",
+      "starterQuestOverlayKey": "content.family.hearthkeeper.overlay"
     },
     {
       "id": "chartermaker",
-      "titleKey": "content.family.chartermaker.title"
+      "titleKey": "content.family.chartermaker.title",
+      "summaryKey": "content.family.chartermaker.summary",
+      "starterNpcId": "ilya_fen",
+      "starterQuestOverlayKey": "content.family.chartermaker.overlay"
     }
   ],
   "identityShells": [
@@ -23,36 +35,194 @@
       "id": "idn_knight",
       "originFamilyId": "dawnbound",
       "displayNameKey": "content.identity.knight.name",
+      "summaryKey": "content.identity.knight.summary",
       "flavorOverlayKeys": [
         "content.identity.knight.overlay"
-      ]
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_guard",
+        "paletteId": "palette_burnished_gold",
+        "accessoryIds": [
+          "accessory_cloak_pin"
+        ]
+      }
+    },
+    {
+      "id": "idn_paladin",
+      "originFamilyId": "dawnbound",
+      "displayNameKey": "content.identity.paladin.name",
+      "summaryKey": "content.identity.paladin.summary",
+      "flavorOverlayKeys": [
+        "content.identity.paladin.overlay"
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_vow_ward",
+        "paletteId": "palette_dawn_white",
+        "accessoryIds": [
+          "accessory_lantern_seal"
+        ]
+      }
+    },
+    {
+      "id": "idn_ranger",
+      "originFamilyId": "dawnbound",
+      "displayNameKey": "content.identity.ranger.name",
+      "summaryKey": "content.identity.ranger.summary",
+      "flavorOverlayKeys": [
+        "content.identity.ranger.overlay"
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_pathfinder",
+        "paletteId": "palette_moss_steel",
+        "accessoryIds": [
+          "accessory_field_wrap"
+        ]
+      }
+    },
+    {
+      "id": "idn_mage",
+      "originFamilyId": "archivist",
+      "displayNameKey": "content.identity.mage.name",
+      "summaryKey": "content.identity.mage.summary",
+      "flavorOverlayKeys": [
+        "content.identity.mage.overlay"
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_sigil_coat",
+        "paletteId": "palette_moon_ink",
+        "accessoryIds": [
+          "accessory_quill_pin"
+        ]
+      }
+    },
+    {
+      "id": "idn_scholar",
+      "originFamilyId": "archivist",
+      "displayNameKey": "content.identity.scholar.name",
+      "summaryKey": "content.identity.scholar.summary",
+      "flavorOverlayKeys": [
+        "content.identity.scholar.overlay"
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_archive_robe",
+        "paletteId": "palette_amber_ink",
+        "accessoryIds": [
+          "accessory_satchel_clasp"
+        ]
+      }
+    },
+    {
+      "id": "idn_farmer",
+      "originFamilyId": "hearthkeeper",
+      "displayNameKey": "content.identity.farmer.name",
+      "summaryKey": "content.identity.farmer.summary",
+      "flavorOverlayKeys": [
+        "content.identity.farmer.overlay"
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_field_apron",
+        "paletteId": "palette_harvest_green",
+        "accessoryIds": [
+          "accessory_seed_pouch"
+        ]
+      }
     },
     {
       "id": "idn_baker",
       "originFamilyId": "hearthkeeper",
       "displayNameKey": "content.identity.baker.name",
+      "summaryKey": "content.identity.baker.summary",
       "flavorOverlayKeys": [
         "content.identity.baker.overlay"
-      ]
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_oven_apron",
+        "paletteId": "palette_ember_ochre",
+        "accessoryIds": [
+          "accessory_flour_wrap"
+        ]
+      }
+    },
+    {
+      "id": "idn_cafe_keeper",
+      "originFamilyId": "hearthkeeper",
+      "displayNameKey": "content.identity.cafe_keeper.name",
+      "summaryKey": "content.identity.cafe_keeper.summary",
+      "flavorOverlayKeys": [
+        "content.identity.cafe_keeper.overlay"
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_counter_vest",
+        "paletteId": "palette_roasted_clay",
+        "accessoryIds": [
+          "accessory_cup_charm"
+        ]
+      }
     },
     {
       "id": "idn_merchant",
       "originFamilyId": "chartermaker",
       "displayNameKey": "content.identity.merchant.name",
+      "summaryKey": "content.identity.merchant.summary",
       "flavorOverlayKeys": [
         "content.identity.merchant.overlay"
-      ]
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_ledger_coat",
+        "paletteId": "palette_copper_blue",
+        "accessoryIds": [
+          "accessory_seal_ring"
+        ]
+      }
+    },
+    {
+      "id": "idn_charterlord",
+      "originFamilyId": "chartermaker",
+      "displayNameKey": "content.identity.charterlord.name",
+      "summaryKey": "content.identity.charterlord.summary",
+      "flavorOverlayKeys": [
+        "content.identity.charterlord.overlay"
+      ],
+      "defaultAvatar": {
+        "silhouetteId": "silhouette_civic_cloak",
+        "paletteId": "palette_stone_plum",
+        "accessoryIds": [
+          "accessory_charter_chain"
+        ]
+      }
     }
   ],
   "districts": [
     {
       "id": "ember_quay",
       "titleKey": "content.district.ember_quay.title",
+      "summaryKey": "content.district.ember_quay.summary",
+      "startStageId": "dim",
       "restorationStages": [
-        "dim",
-        "stirring",
-        "rebuilding",
-        "rekindled"
+        {
+          "id": "dim",
+          "titleKey": "content.district.ember_quay.stage.dim",
+          "sceneMoodKey": "content.district.ember_quay.mood.dim",
+          "worldChangeKey": "content.district.ember_quay.change.dim"
+        },
+        {
+          "id": "stirring",
+          "titleKey": "content.district.ember_quay.stage.stirring",
+          "sceneMoodKey": "content.district.ember_quay.mood.stirring",
+          "worldChangeKey": "content.district.ember_quay.change.stirring"
+        },
+        {
+          "id": "rebuilding",
+          "titleKey": "content.district.ember_quay.stage.rebuilding",
+          "sceneMoodKey": "content.district.ember_quay.mood.rebuilding",
+          "worldChangeKey": "content.district.ember_quay.change.rebuilding"
+        },
+        {
+          "id": "rekindled",
+          "titleKey": "content.district.ember_quay.stage.rekindled",
+          "sceneMoodKey": "content.district.ember_quay.mood.rekindled",
+          "worldChangeKey": "content.district.ember_quay.change.rekindled"
+        }
       ],
       "problemTemplateIds": [
         "starter_oven_crisis"
@@ -63,40 +233,413 @@
     {
       "id": "maerin_vale",
       "displayNameKey": "content.npc.maerin_vale.name",
+      "summaryKey": "content.npc.maerin_vale.summary",
       "districtId": "ember_quay",
-      "dialogueSetKey": "npc.maerin_vale.core"
+      "dialogueSetKey": "content.dialogue.maerin_vale",
+      "role": "warden"
+    },
+    {
+      "id": "sera_quill",
+      "displayNameKey": "content.npc.sera_quill.name",
+      "summaryKey": "content.npc.sera_quill.summary",
+      "districtId": "ember_quay",
+      "dialogueSetKey": "content.dialogue.sera_quill",
+      "role": "archivist"
     },
     {
       "id": "tovan_hearth",
       "displayNameKey": "content.npc.tovan_hearth.name",
+      "summaryKey": "content.npc.tovan_hearth.summary",
       "districtId": "ember_quay",
-      "dialogueSetKey": "npc.tovan_hearth.core"
+      "dialogueSetKey": "content.dialogue.tovan_hearth",
+      "role": "baker"
+    },
+    {
+      "id": "brigant_hal",
+      "displayNameKey": "content.npc.brigant_hal.name",
+      "summaryKey": "content.npc.brigant_hal.summary",
+      "districtId": "ember_quay",
+      "dialogueSetKey": "content.dialogue.brigant_hal",
+      "role": "captain_in_training"
+    },
+    {
+      "id": "ilya_fen",
+      "displayNameKey": "content.npc.ilya_fen.name",
+      "summaryKey": "content.npc.ilya_fen.summary",
+      "districtId": "ember_quay",
+      "dialogueSetKey": "content.dialogue.ilya_fen",
+      "role": "charter_clerk"
+    },
+    {
+      "id": "pollen",
+      "displayNameKey": "content.npc.pollen.name",
+      "summaryKey": "content.npc.pollen.summary",
+      "districtId": "ember_quay",
+      "dialogueSetKey": "content.dialogue.pollen",
+      "role": "lantern_fox"
     }
   ],
   "chapters": [
     {
       "id": "starter_arc",
       "titleKey": "content.chapter.starter_arc.title",
+      "summaryKey": "content.chapter.starter_arc.summary",
       "entitlementGate": "free",
       "questIds": [
-        "arrival",
-        "oven_rekindled"
-      ]
+        "starter_day_1_arrival",
+        "starter_day_2_ash",
+        "starter_day_3_missing_piece",
+        "starter_day_4_canal_rumors",
+        "starter_day_5_cooling_night",
+        "starter_day_6_quarter_gathers",
+        "starter_day_7_oven_rekindled"
+      ],
+      "startingQuestId": "starter_day_1_arrival",
+      "tomorrowCtaKey": "content.chapter.starter_arc.tomorrow"
     },
     {
       "id": "chapter_one",
       "titleKey": "content.chapter.chapter_one.title",
+      "summaryKey": "content.chapter.chapter_one.summary",
       "entitlementGate": "premium",
       "questIds": [
-        "market_restoration"
-      ]
+        "chapter_one_market_memory"
+      ],
+      "startingQuestId": "chapter_one_market_memory",
+      "tomorrowCtaKey": "content.chapter.chapter_one.tomorrow"
     }
   ],
   "questTemplates": [
     {
-      "id": "arrival",
-      "titleKey": "content.quest.arrival.title",
-      "rewardTableId": "starter_rewards"
+      "id": "starter_day_1_arrival",
+      "titleKey": "content.quest.starter_day_1.title",
+      "summaryKey": "content.quest.starter_day_1.summary",
+      "rewardTableId": "starter_day_rewards",
+      "restorationStageId": "stirring",
+      "dialogueSetKey": "content.dialogue.quest.day_1"
+    },
+    {
+      "id": "starter_day_2_ash",
+      "titleKey": "content.quest.starter_day_2.title",
+      "summaryKey": "content.quest.starter_day_2.summary",
+      "rewardTableId": "starter_day_rewards",
+      "restorationStageId": "stirring",
+      "dialogueSetKey": "content.dialogue.quest.day_2"
+    },
+    {
+      "id": "starter_day_3_missing_piece",
+      "titleKey": "content.quest.starter_day_3.title",
+      "summaryKey": "content.quest.starter_day_3.summary",
+      "rewardTableId": "starter_day_rewards",
+      "restorationStageId": "rebuilding",
+      "dialogueSetKey": "content.dialogue.quest.day_3"
+    },
+    {
+      "id": "starter_day_4_canal_rumors",
+      "titleKey": "content.quest.starter_day_4.title",
+      "summaryKey": "content.quest.starter_day_4.summary",
+      "rewardTableId": "starter_day_rewards",
+      "restorationStageId": "rebuilding",
+      "dialogueSetKey": "content.dialogue.quest.day_4"
+    },
+    {
+      "id": "starter_day_5_cooling_night",
+      "titleKey": "content.quest.starter_day_5.title",
+      "summaryKey": "content.quest.starter_day_5.summary",
+      "rewardTableId": "starter_day_rewards",
+      "restorationStageId": "rebuilding",
+      "dialogueSetKey": "content.dialogue.quest.day_5"
+    },
+    {
+      "id": "starter_day_6_quarter_gathers",
+      "titleKey": "content.quest.starter_day_6.title",
+      "summaryKey": "content.quest.starter_day_6.summary",
+      "rewardTableId": "starter_day_rewards",
+      "restorationStageId": "rebuilding",
+      "dialogueSetKey": "content.dialogue.quest.day_6"
+    },
+    {
+      "id": "starter_day_7_oven_rekindled",
+      "titleKey": "content.quest.starter_day_7.title",
+      "summaryKey": "content.quest.starter_day_7.summary",
+      "rewardTableId": "starter_arc_completion_rewards",
+      "restorationStageId": "rekindled",
+      "dialogueSetKey": "content.dialogue.quest.day_7"
+    }
+  ],
+  "problemTemplates": [
+    {
+      "id": "starter_oven_crisis",
+      "titleKey": "content.problem.starter_oven_crisis.title",
+      "summaryKey": "content.problem.starter_oven_crisis.summary",
+      "resolutionKey": "content.problem.starter_oven_crisis.resolution"
+    }
+  ],
+  "starterVowTemplates": [
+    {
+      "id": "vow_template_walk_10",
+      "titleKey": "content.vow.walk_10.title",
+      "type": "duration",
+      "category": "Physical",
+      "targetValue": 10,
+      "targetUnit": "minutes",
+      "difficulty": "gentle",
+      "applicableLifeAreas": [
+        "Physical"
+      ],
+      "blockerMatches": [
+        "I lose motivation",
+        "My days are unpredictable"
+      ],
+      "toneBias": [
+        "gentle",
+        "balanced"
+      ],
+      "schedule": {
+        "cadence": "daily",
+        "activeWeekdays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      }
+    },
+    {
+      "id": "vow_template_read_10_pages",
+      "titleKey": "content.vow.read_10_pages.title",
+      "type": "count",
+      "category": "Intellectual",
+      "targetValue": 10,
+      "targetUnit": "pages",
+      "difficulty": "standard",
+      "applicableLifeAreas": [
+        "Intellectual"
+      ],
+      "blockerMatches": [
+        "I forget",
+        "I try to do too much"
+      ],
+      "toneBias": [
+        "balanced",
+        "driven"
+      ],
+      "schedule": {
+        "cadence": "daily",
+        "activeWeekdays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      }
+    },
+    {
+      "id": "vow_template_plan_top_3",
+      "titleKey": "content.vow.plan_top_3.title",
+      "type": "binary",
+      "category": "Career",
+      "targetValue": 1,
+      "targetUnit": "completion",
+      "difficulty": "gentle",
+      "applicableLifeAreas": [
+        "Career"
+      ],
+      "blockerMatches": [
+        "I forget",
+        "My current tools feel dead"
+      ],
+      "toneBias": [
+        "gentle",
+        "balanced"
+      ],
+      "schedule": {
+        "cadence": "weekdays",
+        "activeWeekdays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri"
+        ]
+      }
+    },
+    {
+      "id": "vow_template_journal_line",
+      "titleKey": "content.vow.journal_line.title",
+      "type": "binary",
+      "category": "Emotional",
+      "targetValue": 1,
+      "targetUnit": "completion",
+      "difficulty": "gentle",
+      "applicableLifeAreas": [
+        "Emotional"
+      ],
+      "blockerMatches": [
+        "I feel all-or-nothing",
+        "I lose motivation"
+      ],
+      "toneBias": [
+        "gentle",
+        "balanced"
+      ],
+      "schedule": {
+        "cadence": "daily",
+        "activeWeekdays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      }
+    },
+    {
+      "id": "vow_template_make_something_small",
+      "titleKey": "content.vow.make_something_small.title",
+      "type": "duration",
+      "category": "Hobbies",
+      "targetValue": 15,
+      "targetUnit": "minutes",
+      "difficulty": "standard",
+      "applicableLifeAreas": [
+        "Hobbies"
+      ],
+      "blockerMatches": [
+        "I try to do too much",
+        "I lose motivation"
+      ],
+      "toneBias": [
+        "balanced"
+      ],
+      "schedule": {
+        "cadence": "daily",
+        "activeWeekdays": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      }
+    }
+  ],
+  "magicalMoments": [
+    {
+      "id": "oven_glow",
+      "titleKey": "content.moment.oven_glow.title",
+      "summaryKey": "content.moment.oven_glow.summary"
+    },
+    {
+      "id": "ward_lantern",
+      "titleKey": "content.moment.ward_lantern.title",
+      "summaryKey": "content.moment.ward_lantern.summary"
+    },
+    {
+      "id": "canal_gate",
+      "titleKey": "content.moment.canal_gate.title",
+      "summaryKey": "content.moment.canal_gate.summary"
+    },
+    {
+      "id": "pollen_emerges",
+      "titleKey": "content.moment.pollen_emerges.title",
+      "summaryKey": "content.moment.pollen_emerges.summary"
+    }
+  ],
+  "starterArcDays": [
+    {
+      "day": 1,
+      "questId": "starter_day_1_arrival",
+      "restorationStageId": "stirring",
+      "worldMomentId": "oven_glow",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "tovan_hearth",
+        "pollen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.day_1"
+    },
+    {
+      "day": 2,
+      "questId": "starter_day_2_ash",
+      "restorationStageId": "stirring",
+      "worldMomentId": "ward_lantern",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "sera_quill"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.day_2"
+    },
+    {
+      "day": 3,
+      "questId": "starter_day_3_missing_piece",
+      "restorationStageId": "rebuilding",
+      "worldMomentId": "pollen_emerges",
+      "npcIdsVisible": [
+        "sera_quill",
+        "pollen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.day_3"
+    },
+    {
+      "day": 4,
+      "questId": "starter_day_4_canal_rumors",
+      "restorationStageId": "rebuilding",
+      "worldMomentId": "canal_gate",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "brigant_hal",
+        "ilya_fen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.day_4"
+    },
+    {
+      "day": 5,
+      "questId": "starter_day_5_cooling_night",
+      "restorationStageId": "rebuilding",
+      "worldMomentId": "ward_lantern",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "tovan_hearth"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.day_5"
+    },
+    {
+      "day": 6,
+      "questId": "starter_day_6_quarter_gathers",
+      "restorationStageId": "rebuilding",
+      "worldMomentId": "oven_glow",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "tovan_hearth",
+        "brigant_hal"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.day_6"
+    },
+    {
+      "day": 7,
+      "questId": "starter_day_7_oven_rekindled",
+      "restorationStageId": "rekindled",
+      "worldMomentId": "oven_glow",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "tovan_hearth",
+        "sera_quill",
+        "brigant_hal",
+        "ilya_fen",
+        "pollen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.day_7"
     }
   ],
   "itemDefinitions": [
@@ -105,6 +648,12 @@
       "nameKey": "content.item.hearth_apron_common.name",
       "bucket": "cosmetic",
       "rarity": "common"
+    },
+    {
+      "id": "ember_quay_token",
+      "nameKey": "content.item.ember_quay_token.name",
+      "bucket": "reward_token",
+      "rarity": "uncommon"
     }
   ],
   "shopOffers": [

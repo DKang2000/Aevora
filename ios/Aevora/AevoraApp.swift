@@ -9,6 +9,9 @@ struct AevoraApp: App {
         WindowGroup {
             RootTabView(environment: environment)
                 .environmentObject(environment)
+                .onOpenURL { url in
+                    environment.handleOpenURL(url)
+                }
         }
         .modelContainer(environment.persistenceController.container)
     }

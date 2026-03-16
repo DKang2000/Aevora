@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		038DE489A33A87A9388D8BED /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD387CDAA06895848DB8C9 /* AppTab.swift */; };
 		06DCA3072269B41427CB04C6 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B0310F7E03E5D84D3277D /* AppEnvironment.swift */; };
+		07F8EB1A34E138D7A185087C /* OnboardingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */; };
 		0A22D8C5739AEF63A13FE81A /* DebugTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1BBCB130166A666375F90E /* DebugTests.swift */; };
 		0AB8DFC6E92761C80C297EEF /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E30F1D482AFA118D9BB625E /* APIRequest.swift */; };
 		0F991EF0F832BCCD4DC8EF09 /* remote-config-defaults.json in Resources */ = {isa = PBXBuildFile; fileRef = 28563D8BEA3C1B0ADE99BA83 /* remote-config-defaults.json */; };
@@ -21,12 +22,17 @@
 		2B83F838615FC6EF600F594D /* OfflineBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722D6B919EE975BA883CA970 /* OfflineBannerView.swift */; };
 		2D76D8651902E3956E3BBC13 /* SyncConflictView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DA1B47F0B6538B63F65A0F /* SyncConflictView.swift */; };
 		2F135CBB2944BA368534C385 /* RedactionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B041943AB6C78A4E2A54035E /* RedactionPolicy.swift */; };
+		341E496A2C390E409DBCFC7D /* RewardModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2BE78869ACBF60C3855BC7 /* RewardModalView.swift */; };
 		359331067289762811AD63CB /* AnalyticsEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4649A28505A2C84CA5F01397 /* AnalyticsEnvelope.swift */; };
 		3F58D44BF7BEB588CB1EB6C4 /* FeatureFlagOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEF370240A0AF53072AC295 /* FeatureFlagOverrideStore.swift */; };
 		431EE0BF0614836803D90F30 /* DebugMenuRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53567186EE6D40733FCB6406 /* DebugMenuRootView.swift */; };
 		47235F6135D0C220D122A6FB /* SeedScenarioLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FEEE15F5CC7BCE5FDC5C413 /* SeedScenarioLoader.swift */; };
 		47E1924DF5AE287EF6A3B1EA /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8D327578A57BB3A6EFE96 /* APIClient.swift */; };
 		4B4BE1CB2D9DCBBC02B67B02 /* SyncStatusStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF4156CED7ED88C0E66EFB /* SyncStatusStore.swift */; };
+		4BF3AB8458899E4581C55868 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34C6AE7E8F1251B4B3E4D7 /* NotificationManager.swift */; };
+		4F9B2A5809158A32AD5E7A53 /* GlanceSurfaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD3BC2ACC2537DBAEC37054 /* GlanceSurfaceStore.swift */; };
+		52746D9559A9B4DDB5AA79FF /* CopyCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE9042C4904EEDFDD44422F /* CopyCatalog.swift */; };
+		54A34AE1B69B52AF56A4F49F /* QuestJournalSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731B7AB4C829B4396745176E /* QuestJournalSheet.swift */; };
 		559040FBFB03CDD3C99B7B7C /* SyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFAD86645BBEBB1C3B34E90 /* SyncTests.swift */; };
 		57EA7CB59F06F5F07E84E894 /* RemoteConfigClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD483DC1B07D28E9A230848 /* RemoteConfigClient.swift */; };
 		58968B719D5E363B2AF73A3F /* LocalRepositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8681F676DCE7FC56BCA292D5 /* LocalRepositories.swift */; };
@@ -35,16 +41,22 @@
 		68658477D33348D3F7E0FCC0 /* ProfileRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9139DBC7998D7C2B2ADA6674 /* ProfileRootView.swift */; };
 		6B0692FBA9F904A70A09A4AB /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA28F8FCC82888F92ECE85A1 /* AnalyticsEvent.swift */; };
 		6FCDA30BFB45BC5A1D47D594 /* AnalyticsMetadataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7B76DAF93C0234227562D0 /* AnalyticsMetadataProvider.swift */; };
+		7842A0C81EEF603FF97D6B47 /* AccountSurfaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3811DE6E0B48BBD1C64E10 /* AccountSurfaceStore.swift */; };
 		792F86E3737683868F1FB59A /* ConnectivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482E265A84935A597EA40A46 /* ConnectivityMonitor.swift */; };
+		7BF94F5EAB58322A47F471A1 /* AevoraWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B171BFF37476565D05E8B160 /* AevoraWidgetsBundle.swift */; };
 		7E96476041DEF9706453190D /* WorldRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4EE0FBC567D366399F7A49 /* WorldRootView.swift */; };
 		7ECC637C4A13AF098112FE98 /* AevoraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7301BF89211C32F083F51A /* AevoraApp.swift */; };
+		81E39308007F684D11D7830D /* LaunchContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC16E15DCD734BC97D617BD /* LaunchContent.swift */; };
 		81F73782B691B15E6D511085 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC60416C2D35FDBB95F30FDB /* PersistenceTests.swift */; };
 		9A040EB9493C1E43EB41C7AA /* SyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28931C3E7AB28AB38FB3C42F /* SyncOperation.swift */; };
 		9B9BA7B56C5550372DE4BAE2 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033728F637B098F516E2E638 /* StatusTests.swift */; };
 		9C2D7C649CF44D1A8A043D4E /* LogContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295A3462DB36D81DA899FCDB /* LogContext.swift */; };
+		A169B6FD4D536107BE7CC51D /* FirstPlayableStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8D1BEB7CCFA37ABBC93DB9 /* FirstPlayableStore.swift */; };
 		A5372BAC95703EA1D3E53F3C /* AnalyticsValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA38F8F6F2A78541AD19FEF /* AnalyticsValidator.swift */; };
 		A7132F98F3BD8E3CFC14A893 /* SyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8496287AB9754366245BA15E /* SyncCoordinator.swift */; };
+		A8B8C4E1374728124DB29160 /* AevoraWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F79738607DAC95537E4B59C7 /* AevoraWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		ABCBF9BA06ABDA6888AE2A33 /* TodayRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9264A6932686A7E4A19D /* TodayRootView.swift */; };
+		B14D6A2C129F34B301364A5A /* WorldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567F61F75E72B4CCED0D8187 /* WorldScene.swift */; };
 		B757E5C2BCE944290314D3F9 /* RemoteConfigClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0233F5EBE73734322718F8FB /* RemoteConfigClientTests.swift */; };
 		B85628601B76E8D103F0703D /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8BB5D685F303CE0E651714 /* PersistenceController.swift */; };
 		B89DAD08D33BBB251522EC1F /* FeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A6A2372367D3EF195C3E52 /* FeatureFlag.swift */; };
@@ -53,8 +65,14 @@
 		D13484C20351838AAFC9C98F /* AnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA35F180DCFE491F56B0B7B /* AnalyticsClient.swift */; };
 		D23F54F8D5BB3A4AE2E773E3 /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D926286D24773C4EF8E27C /* AnalyticsTests.swift */; };
 		D9E65EB570B430270E70B113 /* APIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25F5725B8D24A9F5C4E0A51 /* APIClientTests.swift */; };
+		DB785B2138F826B5026A3527 /* GlanceSurfaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */; };
+		DE1804FA9C825594F8D97812 /* GlanceSurfaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */; };
 		EBB0FE686E6505DCA29C9FDB /* SyncQueueInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D39D0B9303EB308C3773C1 /* SyncQueueInspector.swift */; };
+		EBE41ECFF8B52F59DE35EB72 /* LiveActivityCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B17D579B5C44109024680D /* LiveActivityCoordinator.swift */; };
+		EC7DDFA25AF38C49AA4808C4 /* AccountSurfaceStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBBBB4ED72FB8B5909E4551 /* AccountSurfaceStoreTests.swift */; };
 		F0D1B308191EEA4FCEB25551 /* HearthRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D459E49C35D37C9EDED109 /* HearthRootView.swift */; };
+		F4CBA2683824CE2B1D47CE93 /* FirstPlayableStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D13B2F3733F1BD569E1C4 /* FirstPlayableStoreTests.swift */; };
+		FB3F1C99AEE9F50481A34300 /* GlanceSurfaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +83,28 @@
 			remoteGlobalIDString = DE6FA7DF67B723962DF01CC5;
 			remoteInfo = Aevora;
 		};
+		FA02322CD8E2F5360B7821B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 68D64F45274B13447BD4A818 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 21037C5810A9A10615C1FA8E;
+			remoteInfo = AevoraWidgets;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E456B58D0DAD998A61A02B9B /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A8B8C4E1374728124DB29160 /* AevoraWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E8D327578A57BB3A6EFE96 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
@@ -75,47 +114,66 @@
 		033728F637B098F516E2E638 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
 		0E30F1D482AFA118D9BB625E /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		1037E6462B55C88ABAAD4386 /* LocalModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalModels.swift; sourceTree = "<group>"; };
+		1D2A20A8AE7E5F62A523418F /* Aevora.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aevora.entitlements; sourceTree = "<group>"; };
 		1FEEE15F5CC7BCE5FDC5C413 /* SeedScenarioLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedScenarioLoader.swift; sourceTree = "<group>"; };
 		26D926286D24773C4EF8E27C /* AnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTests.swift; sourceTree = "<group>"; };
 		28563D8BEA3C1B0ADE99BA83 /* remote-config-defaults.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "remote-config-defaults.json"; sourceTree = "<group>"; };
 		28931C3E7AB28AB38FB3C42F /* SyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncOperation.swift; sourceTree = "<group>"; };
 		295A3462DB36D81DA899FCDB /* LogContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogContext.swift; sourceTree = "<group>"; };
+		2AE9042C4904EEDFDD44422F /* CopyCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyCatalog.swift; sourceTree = "<group>"; };
 		2C70B32E4A8F83AD1AF0C61D /* Aevora.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Aevora.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DBBBB4ED72FB8B5909E4551 /* AccountSurfaceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSurfaceStoreTests.swift; sourceTree = "<group>"; };
+		35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootView.swift; sourceTree = "<group>"; };
 		40F201E9A338E1D51755FDC4 /* TypedRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedRemoteConfig.swift; sourceTree = "<group>"; };
 		4649A28505A2C84CA5F01397 /* AnalyticsEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEnvelope.swift; sourceTree = "<group>"; };
 		482E265A84935A597EA40A46 /* ConnectivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityMonitor.swift; sourceTree = "<group>"; };
 		4EA35F180DCFE491F56B0B7B /* AnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsClient.swift; sourceTree = "<group>"; };
 		53567186EE6D40733FCB6406 /* DebugMenuRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenuRootView.swift; sourceTree = "<group>"; };
+		567F61F75E72B4CCED0D8187 /* WorldScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldScene.swift; sourceTree = "<group>"; };
+		59B17D579B5C44109024680D /* LiveActivityCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityCoordinator.swift; sourceTree = "<group>"; };
 		5BBBE7F262EE25FFEA693997 /* AppNavigationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationTests.swift; sourceTree = "<group>"; };
 		611C61E3547306E4AEC9F2C8 /* StructuredLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructuredLogger.swift; sourceTree = "<group>"; };
 		67AD387CDAA06895848DB8C9 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
 		722D6B919EE975BA883CA970 /* OfflineBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBannerView.swift; sourceTree = "<group>"; };
+		731B7AB4C829B4396745176E /* QuestJournalSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestJournalSheet.swift; sourceTree = "<group>"; };
 		75FB9264A6932686A7E4A19D /* TodayRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRootView.swift; sourceTree = "<group>"; };
+		79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceSurfaceModels.swift; sourceTree = "<group>"; };
 		7AA38F8F6F2A78541AD19FEF /* AnalyticsValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsValidator.swift; sourceTree = "<group>"; };
 		8496287AB9754366245BA15E /* SyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncCoordinator.swift; sourceTree = "<group>"; };
 		8681F676DCE7FC56BCA292D5 /* LocalRepositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRepositories.swift; sourceTree = "<group>"; };
 		8CD483DC1B07D28E9A230848 /* RemoteConfigClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigClient.swift; sourceTree = "<group>"; };
+		8DD74B3EEAF5C1E984B099D0 /* AevoraWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AevoraWidgets.entitlements; sourceTree = "<group>"; };
 		8E8BB5D685F303CE0E651714 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		8F7301BF89211C32F083F51A /* AevoraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraApp.swift; sourceTree = "<group>"; };
 		9139DBC7998D7C2B2ADA6674 /* ProfileRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRootView.swift; sourceTree = "<group>"; };
 		92D39D0B9303EB308C3773C1 /* SyncQueueInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncQueueInspector.swift; sourceTree = "<group>"; };
 		9B2B9505E95645DFF7864208 /* ObservabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservabilityTests.swift; sourceTree = "<group>"; };
+		9BC16E15DCD734BC97D617BD /* LaunchContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchContent.swift; sourceTree = "<group>"; };
+		9D3811DE6E0B48BBD1C64E10 /* AccountSurfaceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSurfaceStore.swift; sourceTree = "<group>"; };
+		A03D13B2F3733F1BD569E1C4 /* FirstPlayableStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPlayableStoreTests.swift; sourceTree = "<group>"; };
 		A536B9B29F4057677FC7BE74 /* SyncQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncQueue.swift; sourceTree = "<group>"; };
 		A5BC70ABB8EB853BD144116F /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
 		AE1BBCB130166A666375F90E /* DebugTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTests.swift; sourceTree = "<group>"; };
 		B041943AB6C78A4E2A54035E /* RedactionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedactionPolicy.swift; sourceTree = "<group>"; };
+		B171BFF37476565D05E8B160 /* AevoraWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraWidgetsBundle.swift; sourceTree = "<group>"; };
 		B9DA1B47F0B6538B63F65A0F /* SyncConflictView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConflictView.swift; sourceTree = "<group>"; };
 		BDFAD86645BBEBB1C3B34E90 /* SyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTests.swift; sourceTree = "<group>"; };
+		C552722BF9ED16767039338D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C6D459E49C35D37C9EDED109 /* HearthRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HearthRootView.swift; sourceTree = "<group>"; };
+		CB34C6AE7E8F1251B4B3E4D7 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		CC7B76DAF93C0234227562D0 /* AnalyticsMetadataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsMetadataProvider.swift; sourceTree = "<group>"; };
 		D25F5725B8D24A9F5C4E0A51 /* APIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTests.swift; sourceTree = "<group>"; };
 		DD9B0310F7E03E5D84D3277D /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		DF36EF5DD0177976BD13AD93 /* AevoraTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AevoraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF8D1BEB7CCFA37ABBC93DB9 /* FirstPlayableStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPlayableStore.swift; sourceTree = "<group>"; };
 		EA28F8FCC82888F92ECE85A1 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
 		EC4EE0FBC567D366399F7A49 /* WorldRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldRootView.swift; sourceTree = "<group>"; };
 		EC60416C2D35FDBB95F30FDB /* PersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceTests.swift; sourceTree = "<group>"; };
 		F2A6A2372367D3EF195C3E52 /* FeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlag.swift; sourceTree = "<group>"; };
+		F79738607DAC95537E4B59C7 /* AevoraWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = AevoraWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7FF4156CED7ED88C0E66EFB /* SyncStatusStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncStatusStore.swift; sourceTree = "<group>"; };
+		FA2BE78869ACBF60C3855BC7 /* RewardModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardModalView.swift; sourceTree = "<group>"; };
+		FBD3BC2ACC2537DBAEC37054 /* GlanceSurfaceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceSurfaceStore.swift; sourceTree = "<group>"; };
 		FCEF370240A0AF53072AC295 /* FeatureFlagOverrideStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagOverrideStore.swift; sourceTree = "<group>"; };
 		FD1616307E3E2F66DD37A6A3 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +193,14 @@
 				CA641AA4C138983E51802347 /* Config */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		0DA0CC69F68E4153248D5F3F /* CoreLoop */ = {
+			isa = PBXGroup;
+			children = (
+				A03D13B2F3733F1BD569E1C4 /* FirstPlayableStoreTests.swift */,
+			);
+			path = CoreLoop;
 			sourceTree = "<group>";
 		};
 		0E12F5C1A5AB73F971BF2896 /* Observability */ = {
@@ -177,6 +243,7 @@
 			children = (
 				2C70B32E4A8F83AD1AF0C61D /* Aevora.app */,
 				DF36EF5DD0177976BD13AD93 /* AevoraTests.xctest */,
+				F79738607DAC95537E4B59C7 /* AevoraWidgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -211,8 +278,18 @@
 			isa = PBXGroup;
 			children = (
 				EC4EE0FBC567D366399F7A49 /* WorldRootView.swift */,
+				567F61F75E72B4CCED0D8187 /* WorldScene.swift */,
 			);
 			path = World;
+			sourceTree = "<group>";
+		};
+		49385E61837CDCF1A3A02444 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				2AE9042C4904EEDFDD44422F /* CopyCatalog.swift */,
+				9BC16E15DCD734BC97D617BD /* LaunchContent.swift */,
+			);
+			path = Content;
 			sourceTree = "<group>";
 		};
 		497CEFA694D04FF469728459 /* Persistence */ = {
@@ -247,8 +324,18 @@
 			children = (
 				C418AA6547D71F1CCC4F12FC /* Aevora */,
 				DD14C3252BEFD6C4F2837924 /* AevoraTests */,
+				DA30FA1101CF51DE66A51529 /* AevoraWidgets */,
+				C71AF9DFB502F4ED8D2F1579 /* SharedGlance */,
 				358A1CCE52DA23612410A9C8 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		5CF457F960890B3F7FEC0A94 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		6655F4A6076B0BC8704D0247 /* Debug */ = {
@@ -262,12 +349,23 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		68645CCA59A3B053101C5BEB /* CoreLoop */ = {
+			isa = PBXGroup;
+			children = (
+				DF8D1BEB7CCFA37ABBC93DB9 /* FirstPlayableStore.swift */,
+			);
+			path = CoreLoop;
+			sourceTree = "<group>";
+		};
 		6E1CA0A72DF0289320EC9E33 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				C862EDCCF5F7FF0F51542F43 /* Analytics */,
 				F9821F2732E861A8E8906FE8 /* Config */,
+				49385E61837CDCF1A3A02444 /* Content */,
+				A34A4DB87CE6F7323C19D1B8 /* Glance */,
 				37D8BD6BF0BB3B72C583952A /* Networking */,
+				D446EFAB68E2B8C2D3DDE5F7 /* Notifications */,
 				29C29BA06FDD1FAFA89553A0 /* Observability */,
 				497CEFA694D04FF469728459 /* Persistence */,
 				7C708B8CFDDAA0A755273294 /* Sync */,
@@ -311,6 +409,23 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		8EB818D5DCF3562D08094383 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				9D3811DE6E0B48BBD1C64E10 /* AccountSurfaceStore.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		A34A4DB87CE6F7323C19D1B8 /* Glance */ = {
+			isa = PBXGroup;
+			children = (
+				FBD3BC2ACC2537DBAEC37054 /* GlanceSurfaceStore.swift */,
+				59B17D579B5C44109024680D /* LiveActivityCoordinator.swift */,
+			);
+			path = Glance;
+			sourceTree = "<group>";
+		};
 		A3C5E165110CC285E54BD459 /* Status */ = {
 			isa = PBXGroup;
 			children = (
@@ -319,11 +434,24 @@
 			path = Status;
 			sourceTree = "<group>";
 		};
+		A3CC6FFA5DC69A7B54413D71 /* Quest */ = {
+			isa = PBXGroup;
+			children = (
+				731B7AB4C829B4396745176E /* QuestJournalSheet.swift */,
+			);
+			path = Quest;
+			sourceTree = "<group>";
+		};
 		B5536F3825031CB0AA2BBA57 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				8EB818D5DCF3562D08094383 /* Account */,
+				68645CCA59A3B053101C5BEB /* CoreLoop */,
 				81AD8CC50068C9694420380B /* Hearth */,
+				5CF457F960890B3F7FEC0A94 /* Onboarding */,
 				ECD0E39F8087F419F875E456 /* Profile */,
+				A3CC6FFA5DC69A7B54413D71 /* Quest */,
+				E3616D911B7EB61E0931D3F9 /* Rewards */,
 				1FCE24BB658AF680F44F2A7E /* Today */,
 				3D03FD7C3BD8D0EBA0605F3C /* World */,
 			);
@@ -341,6 +469,7 @@
 		C418AA6547D71F1CCC4F12FC /* Aevora */ = {
 			isa = PBXGroup;
 			children = (
+				1D2A20A8AE7E5F62A523418F /* Aevora.entitlements */,
 				8F7301BF89211C32F083F51A /* AevoraApp.swift */,
 				8AD4CD3C90C6C46A440C7D58 /* App */,
 				6E1CA0A72DF0289320EC9E33 /* Core */,
@@ -350,6 +479,14 @@
 				09F11F300DE72A8E92E0F570 /* Support */,
 			);
 			path = Aevora;
+			sourceTree = "<group>";
+		};
+		C71AF9DFB502F4ED8D2F1579 /* SharedGlance */ = {
+			isa = PBXGroup;
+			children = (
+				79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */,
+			);
+			path = SharedGlance;
 			sourceTree = "<group>";
 		};
 		C862EDCCF5F7FF0F51542F43 /* Analytics */ = {
@@ -380,12 +517,40 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
+		CF605AB60248C6525F6AF758 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				2DBBBB4ED72FB8B5909E4551 /* AccountSurfaceStoreTests.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		D446EFAB68E2B8C2D3DDE5F7 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				CB34C6AE7E8F1251B4B3E4D7 /* NotificationManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		DA30FA1101CF51DE66A51529 /* AevoraWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				8DD74B3EEAF5C1E984B099D0 /* AevoraWidgets.entitlements */,
+				B171BFF37476565D05E8B160 /* AevoraWidgetsBundle.swift */,
+				C552722BF9ED16767039338D /* Info.plist */,
+			);
+			path = AevoraWidgets;
+			sourceTree = "<group>";
+		};
 		DD14C3252BEFD6C4F2837924 /* AevoraTests */ = {
 			isa = PBXGroup;
 			children = (
 				5BBBE7F262EE25FFEA693997 /* AppNavigationTests.swift */,
+				CF605AB60248C6525F6AF758 /* Account */,
 				89FF4B6C93B89CC3AC5F3462 /* Analytics */,
 				CDA75108A58A89989C8FEF29 /* Config */,
+				0DA0CC69F68E4153248D5F3F /* CoreLoop */,
 				56FB8339EB5DA71086EFC96C /* Debug */,
 				B98A9920DBEE0FADB563EACF /* Networking */,
 				0E12F5C1A5AB73F971BF2896 /* Observability */,
@@ -403,6 +568,14 @@
 				01DFCCE96778B9D952CA0BC8 /* RootTabView.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		E3616D911B7EB61E0931D3F9 /* Rewards */ = {
+			isa = PBXGroup;
+			children = (
+				FA2BE78869ACBF60C3855BC7 /* RewardModalView.swift */,
+			);
+			path = Rewards;
 			sourceTree = "<group>";
 		};
 		EBF52EB9C3C5F6DA64F54490 /* Status */ = {
@@ -444,6 +617,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		21037C5810A9A10615C1FA8E /* AevoraWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86F77B841EB865EF569FFAAE /* Build configuration list for PBXNativeTarget "AevoraWidgets" */;
+			buildPhases = (
+				B9A1AAE6BFCEA65F614C2AC1 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AevoraWidgets;
+			packageProductDependencies = (
+			);
+			productName = AevoraWidgets;
+			productReference = F79738607DAC95537E4B59C7 /* AevoraWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		7E56584B2DDA1B13CFF588A9 /* AevoraTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B492116213C49E7E40F54EBF /* Build configuration list for PBXNativeTarget "AevoraTests" */;
@@ -468,10 +658,12 @@
 			buildPhases = (
 				A55CF0C3259FAB1916AE9EB4 /* Sources */,
 				11384CD6BE23B7165D8D783E /* Resources */,
+				E456B58D0DAD998A61A02B9B /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4276BFB6A6572743FF149489 /* PBXTargetDependency */,
 			);
 			name = Aevora;
 			packageProductDependencies = (
@@ -507,6 +699,7 @@
 			targets = (
 				DE6FA7DF67B723962DF01CC5 /* Aevora */,
 				7E56584B2DDA1B13CFF588A9 /* AevoraTests */,
+				21037C5810A9A10615C1FA8E /* AevoraWidgets */,
 			);
 		};
 /* End PBXProject section */
@@ -530,6 +723,7 @@
 				47E1924DF5AE287EF6A3B1EA /* APIClient.swift in Sources */,
 				C22511C1930FC28071FEA728 /* APIError.swift in Sources */,
 				0AB8DFC6E92761C80C297EEF /* APIRequest.swift in Sources */,
+				7842A0C81EEF603FF97D6B47 /* AccountSurfaceStore.swift in Sources */,
 				7ECC637C4A13AF098112FE98 /* AevoraApp.swift in Sources */,
 				D13484C20351838AAFC9C98F /* AnalyticsClient.swift in Sources */,
 				359331067289762811AD63CB /* AnalyticsEnvelope.swift in Sources */,
@@ -539,20 +733,30 @@
 				06DCA3072269B41427CB04C6 /* AppEnvironment.swift in Sources */,
 				038DE489A33A87A9388D8BED /* AppTab.swift in Sources */,
 				792F86E3737683868F1FB59A /* ConnectivityMonitor.swift in Sources */,
+				52746D9559A9B4DDB5AA79FF /* CopyCatalog.swift in Sources */,
 				14D0C0761986804E67F1E25F /* CrashReporter.swift in Sources */,
 				431EE0BF0614836803D90F30 /* DebugMenuRootView.swift in Sources */,
 				B89DAD08D33BBB251522EC1F /* FeatureFlag.swift in Sources */,
 				3F58D44BF7BEB588CB1EB6C4 /* FeatureFlagOverrideStore.swift in Sources */,
+				A169B6FD4D536107BE7CC51D /* FirstPlayableStore.swift in Sources */,
+				DE1804FA9C825594F8D97812 /* GlanceSurfaceModels.swift in Sources */,
+				4F9B2A5809158A32AD5E7A53 /* GlanceSurfaceStore.swift in Sources */,
 				F0D1B308191EEA4FCEB25551 /* HearthRootView.swift in Sources */,
+				81E39308007F684D11D7830D /* LaunchContent.swift in Sources */,
+				EBE41ECFF8B52F59DE35EB72 /* LiveActivityCoordinator.swift in Sources */,
 				61DE2E10EE407ED851CA7298 /* LocalModels.swift in Sources */,
 				58968B719D5E363B2AF73A3F /* LocalRepositories.swift in Sources */,
 				13831DF462E7CCE222729A2A /* LocalSeedLoader.swift in Sources */,
 				9C2D7C649CF44D1A8A043D4E /* LogContext.swift in Sources */,
+				4BF3AB8458899E4581C55868 /* NotificationManager.swift in Sources */,
 				2B83F838615FC6EF600F594D /* OfflineBannerView.swift in Sources */,
+				07F8EB1A34E138D7A185087C /* OnboardingRootView.swift in Sources */,
 				B85628601B76E8D103F0703D /* PersistenceController.swift in Sources */,
 				68658477D33348D3F7E0FCC0 /* ProfileRootView.swift in Sources */,
+				54A34AE1B69B52AF56A4F49F /* QuestJournalSheet.swift in Sources */,
 				2F135CBB2944BA368534C385 /* RedactionPolicy.swift in Sources */,
 				57EA7CB59F06F5F07E84E894 /* RemoteConfigClient.swift in Sources */,
+				341E496A2C390E409DBCFC7D /* RewardModalView.swift in Sources */,
 				19B78B20C6C18B988CE82A5E /* RootTabView.swift in Sources */,
 				47235F6135D0C220D122A6FB /* SeedScenarioLoader.swift in Sources */,
 				1708ECEB46014EC7DE24B3FB /* StructuredLogger.swift in Sources */,
@@ -565,6 +769,16 @@
 				ABCBF9BA06ABDA6888AE2A33 /* TodayRootView.swift in Sources */,
 				BBF2CC842BFE132D5453161D /* TypedRemoteConfig.swift in Sources */,
 				7E96476041DEF9706453190D /* WorldRootView.swift in Sources */,
+				B14D6A2C129F34B301364A5A /* WorldScene.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B9A1AAE6BFCEA65F614C2AC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BF94F5EAB58322A47F471A1 /* AevoraWidgetsBundle.swift in Sources */,
+				DB785B2138F826B5026A3527 /* GlanceSurfaceModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,9 +787,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9E65EB570B430270E70B113 /* APIClientTests.swift in Sources */,
+				EC7DDFA25AF38C49AA4808C4 /* AccountSurfaceStoreTests.swift in Sources */,
 				D23F54F8D5BB3A4AE2E773E3 /* AnalyticsTests.swift in Sources */,
 				1BF426C29DEFD8EDDEA6E346 /* AppNavigationTests.swift in Sources */,
 				0A22D8C5739AEF63A13FE81A /* DebugTests.swift in Sources */,
+				F4CBA2683824CE2B1D47CE93 /* FirstPlayableStoreTests.swift in Sources */,
+				FB3F1C99AEE9F50481A34300 /* GlanceSurfaceModels.swift in Sources */,
 				1F78488C846C288AC2C58DF4 /* ObservabilityTests.swift in Sources */,
 				81F73782B691B15E6D511085 /* PersistenceTests.swift in Sources */,
 				B757E5C2BCE944290314D3F9 /* RemoteConfigClientTests.swift in Sources */,
@@ -587,6 +804,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4276BFB6A6572743FF149489 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 21037C5810A9A10615C1FA8E /* AevoraWidgets */;
+			targetProxy = FA02322CD8E2F5360B7821B4 /* PBXContainerItemProxy */;
+		};
 		F1FEE06D5B87C684CE3244BA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DE6FA7DF67B723962DF01CC5 /* Aevora */;
@@ -617,9 +839,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Aevora/Aevora.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aevora;
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"aevora\"], \"CFBundleTypeRole\": \"Editor\"]]";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
 					UIInterfaceOrientationPortrait,
@@ -640,9 +864,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Aevora/Aevora.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aevora;
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"aevora\"], \"CFBundleTypeRole\": \"Editor\"]]";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
 					UIInterfaceOrientationPortrait,
@@ -693,6 +919,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -710,6 +937,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -757,6 +985,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -768,6 +997,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -798,6 +1028,48 @@
 			};
 			name = Debug;
 		};
+		C3518940C645786032172AC5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = AevoraWidgets/AevoraWidgets.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AevoraWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aevora.app.widgets;
+				PRODUCT_NAME = AevoraWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C5141E6A3D4011E5CCFA7EEB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = AevoraWidgets/AevoraWidgets.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AevoraWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aevora.app.widgets;
+				PRODUCT_NAME = AevoraWidgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -815,6 +1087,15 @@
 			buildConfigurations = (
 				63D1503BECE697CD5D68C705 /* Debug */,
 				A4FA757B5C9CED975BD0DD48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		86F77B841EB865EF569FFAAE /* Build configuration list for PBXNativeTarget "AevoraWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5141E6A3D4011E5CCFA7EEB /* Debug */,
+				C3518940C645786032172AC5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

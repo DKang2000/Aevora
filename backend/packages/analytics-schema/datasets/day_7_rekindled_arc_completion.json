@@ -1,0 +1,17 @@
+{
+  "scenarioId": "day_7_rekindled_arc_completion",
+  "user": {
+    "id": "usr_demo_day7_001",
+    "authMode": "registered"
+  },
+  "profile": {
+    "identityShellId": "idn_baker",
+    "originFamilyId": "hearthkeeper",
+    "timezone": "America/New_York"
+  },
+  "chapterState": "shared/contracts/fixtures/launch/partial_district_state.json",
+  "vows": [
+    "shared/contracts/fixtures/launch/starter_plan_three_vows.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}

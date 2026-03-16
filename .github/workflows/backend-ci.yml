@@ -18,8 +18,23 @@ on:
 jobs:
   validate-backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: aevora_ci
+          POSTGRES_USER: aevora
+          POSTGRES_PASSWORD: aevora
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U aevora -d aevora_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
     env:
       DATABASE_URL: postgresql://aevora:aevora@localhost:5432/aevora_ci?schema=public
+      CORE_LOOP_PERSISTENCE: file
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,12 +44,18 @@ jobs:
         run: corepack enable
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
+      - name: Generate Prisma client
+        run: corepack pnpm --filter @aevora/api prisma:generate
       - name: Typecheck
         run: corepack pnpm typecheck
       - name: Test
         run: corepack pnpm test
       - name: Validate Prisma schema
         run: corepack pnpm --filter @aevora/api prisma:validate
+      - name: Apply migrations
+        run: corepack pnpm --filter @aevora/api migrate:deploy
+      - name: Exercise Postgres runtime path
+        run: corepack pnpm --filter @aevora/api test:postgres
       - name: Validate analytics fixtures
         run: corepack pnpm --filter @aevora/api validate:analytics
       - name: Validate demo datasets

@@ -1,0 +1,15 @@
+{
+  "scenarioId": "onboarding_in_progress",
+  "user": {
+    "id": "usr_demo_onboarding_001",
+    "authMode": "guest"
+  },
+  "profile": {
+    "identityShellId": "idn_baker",
+    "originFamilyId": "hearthkeeper",
+    "timezone": "America/New_York",
+    "onboardingState": "in_progress"
+  },
+  "vows": [],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}

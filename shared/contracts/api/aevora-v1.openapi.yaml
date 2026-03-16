@@ -88,6 +88,22 @@ paths:
               properties:
                 selectedIdentityShellId:
                   type: string
+                displayName:
+                  type: string
+                pronouns:
+                  type: [string, "null"]
+                selectedGoals:
+                  type: array
+                  items:
+                    type: string
+                selectedLifeAreas:
+                  type: array
+                  items:
+                    type: string
+                blocker:
+                  type: [string, "null"]
+                dailyLoad:
+                  type: integer
                 toneMode:
                   type: string
                   enum: [gentle, balanced, driven]
@@ -345,6 +361,48 @@ paths:
                 properties:
                   subscriptionState:
                     $ref: "#/components/schemas/SubscriptionState"
+  /v1/subscription/trial:
+    post:
+      summary: Start the 7-day starter trial after the first magical moment
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source:
+                  type: string
+      responses:
+        "200":
+          description: Trial state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionActionResponse"
+  /v1/subscription/purchase:
+    post:
+      summary: Purchase a premium subscription tier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tier]
+              properties:
+                tier:
+                  type: string
+                  enum: [premium_monthly, premium_annual]
+                source:
+                  type: string
+      responses:
+        "200":
+          description: Purchased subscription state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionActionResponse"
   /v1/subscription/restore:
     post:
       summary: Trigger a purchase restore check
@@ -354,11 +412,65 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required: [subscriptionState]
-                properties:
-                  subscriptionState:
-                    $ref: "#/components/schemas/SubscriptionState"
+                $ref: "#/components/schemas/SubscriptionRestoreResponse"
+  /v1/subscription/downgrade:
+    post:
+      summary: Downgrade to the free tier while preserving restore continuity
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        "200":
+          description: Downgraded subscription state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionDowngradeResponse"
+  /v1/account:
+    get:
+      summary: Fetch account continuity and subscription summary
+      responses:
+        "200":
+          description: Account summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountSummaryResponse"
+    delete:
+      summary: Delete the current account and starter-arc runtime state
+      responses:
+        "200":
+          description: Account deletion status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountDeleteResponse"
+  /v1/account/export:
+    post:
+      summary: Prepare an account export snapshot
+      responses:
+        "200":
+          description: Export request summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountExportResponse"
+  /v1/glance/state:
+    get:
+      summary: Fetch the current widget and Live Activity witness snapshot
+      responses:
+        "200":
+          description: Glance state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlanceStateResponse"
   /v1/remote-config:
     get:
       summary: Fetch remote config
@@ -418,13 +530,15 @@ components:
           $ref: "#/components/schemas/SubscriptionState"
     Profile:
       type: object
-      required: [id, userId, selectedIdentityShellId, toneMode, timezone, onboardingState]
+      required: [id, userId, selectedIdentityShellId, originFamilyId, toneMode, timezone, onboardingState, displayName, selectedGoals, selectedLifeAreas, dailyLoad]
       properties:
         id:
           type: string
         userId:
           type: string
         selectedIdentityShellId:
+          type: string
+        originFamilyId:
           type: string
         toneMode:
           type: string
@@ -434,6 +548,22 @@ components:
         onboardingState:
           type: string
           enum: [not_started, in_progress, completed]
+        displayName:
+          type: string
+        pronouns:
+          type: [string, "null"]
+        selectedGoals:
+          type: array
+          items:
+            type: string
+        selectedLifeAreas:
+          type: array
+          items:
+            type: string
+        blocker:
+          type: [string, "null"]
+        dailyLoad:
+          type: integer
     Avatar:
       type: object
       required: [id, userId, silhouetteId, paletteId, accessoryIds]
@@ -625,3 +755,126 @@ components:
           type: boolean
         expiresAt:
           type: [string, "null"]
+        restoreTier:
+          type: [string, "null"]
+          enum: [free, trial, premium_monthly, premium_annual, null]
+    SubscriptionActionResponse:
+      type: object
+      required: [subscriptionState, source]
+      properties:
+        subscriptionState:
+          $ref: "#/components/schemas/SubscriptionState"
+        source:
+          type: string
+    SubscriptionRestoreResponse:
+      type: object
+      required: [subscriptionState, restored]
+      properties:
+        subscriptionState:
+          $ref: "#/components/schemas/SubscriptionState"
+        restored:
+          type: boolean
+    SubscriptionDowngradeResponse:
+      type: object
+      required: [subscriptionState, reason]
+      properties:
+        subscriptionState:
+          $ref: "#/components/schemas/SubscriptionState"
+        reason:
+          type: string
+    AccountSummaryResponse:
+      type: object
+      required: [account, subscriptionState]
+      properties:
+        account:
+          type: object
+          required: [userId, authMode, selectedIdentityShellId, completionDayCount, activeVowCount]
+          properties:
+            userId:
+              type: string
+            authMode:
+              type: string
+              enum: [guest, registered]
+            selectedIdentityShellId:
+              type: string
+            completionDayCount:
+              type: integer
+            activeVowCount:
+              type: integer
+        subscriptionState:
+          $ref: "#/components/schemas/SubscriptionState"
+    AccountExportResponse:
+      type: object
+      required: [exportRequest, summary]
+      properties:
+        exportRequest:
+          type: object
+          required: [id, status, generatedAt]
+          properties:
+            id:
+              type: string
+            status:
+              type: string
+              enum: [prepared]
+            generatedAt:
+              type: string
+              format: date-time
+        summary:
+          type: object
+          required: [userId, authMode, activeVows, completionDayCount, subscriptionTier]
+          properties:
+            userId:
+              type: string
+            authMode:
+              type: string
+              enum: [guest, registered]
+            activeVows:
+              type: integer
+            completionDayCount:
+              type: integer
+            subscriptionTier:
+              type: string
+              enum: [free, trial, premium_monthly, premium_annual]
+    AccountDeleteResponse:
+      type: object
+      required: [status, userId]
+      properties:
+        status:
+          type: string
+          enum: [deleted]
+        userId:
+          type: string
+    GlanceStateResponse:
+      type: object
+      required: [todaySnapshot, liveActivitySnapshot]
+      properties:
+        todaySnapshot:
+          $ref: "#/components/schemas/TodayGlanceSnapshot"
+        liveActivitySnapshot:
+          $ref: "#/components/schemas/LiveActivityGlanceSnapshot"
+    TodayGlanceSnapshot:
+      type: object
+      required: [activeVowCount, completedVowCount, chapterId, chapterDay, districtStage, topChainLength]
+      properties:
+        activeVowCount:
+          type: integer
+        completedVowCount:
+          type: integer
+        chapterId:
+          type: string
+        chapterDay:
+          type: integer
+        districtStage:
+          type: string
+        topChainLength:
+          type: integer
+    LiveActivityGlanceSnapshot:
+      type: object
+      required: [enabled, districtStage, progressPercent]
+      properties:
+        enabled:
+          type: boolean
+        districtStage:
+          type: string
+        progressPercent:
+          type: integer

@@ -18,9 +18,12 @@ The repo had only a placeholder workflow. This section adds a backend-specific C
 
 ## Release gates
 - install dependencies
+- generate Prisma client
 - typecheck workspaces
 - run tests
 - validate Prisma schema
+- apply migrations against a reachable Postgres service
+- run a narrow Postgres-backed e2e proving runtime persistence
 - validate analytics fixtures
 - validate demo datasets
 
@@ -28,6 +31,7 @@ The repo had only a placeholder workflow. This section adds a backend-specific C
 - Backend CI has a concrete workflow file.
 - The workflow keeps environment-specific secrets external.
 - Migration validation is included without destructive auto-apply behavior.
+- CI proves the Prisma-backed starter-arc runtime path against Postgres before merge.
 - Local equivalents of CI checks are documented.
 
 ## Explicit non-goals

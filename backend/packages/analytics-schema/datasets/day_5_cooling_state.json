@@ -1,0 +1,18 @@
+{
+  "scenarioId": "day_5_cooling_state",
+  "user": {
+    "id": "usr_demo_day5_001",
+    "authMode": "registered"
+  },
+  "profile": {
+    "identityShellId": "idn_scholar",
+    "originFamilyId": "archivist",
+    "timezone": "America/New_York"
+  },
+  "chapterState": "shared/contracts/fixtures/launch/cooling_rekindle_example.json",
+  "vows": [
+    "shared/contracts/fixtures/launch/vow_binary_read.json",
+    "shared/contracts/fixtures/launch/vow_count_water.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}

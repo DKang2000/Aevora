@@ -1,0 +1,17 @@
+{
+  "scenarioId": "first_completed_vow",
+  "user": {
+    "id": "usr_demo_first_vow_001",
+    "authMode": "guest"
+  },
+  "profile": {
+    "identityShellId": "idn_baker",
+    "originFamilyId": "hearthkeeper",
+    "timezone": "America/New_York"
+  },
+  "chapterState": "shared/contracts/fixtures/launch/first_magical_moment_world_state.json",
+  "vows": [
+    "shared/contracts/fixtures/launch/vow_duration_walk.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}

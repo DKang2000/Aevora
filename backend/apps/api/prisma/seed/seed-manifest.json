@@ -3,6 +3,11 @@
   "datasets": [
     "backend/packages/analytics-schema/datasets/new_user.json",
     "backend/packages/analytics-schema/datasets/in_progress_starter_arc.json",
+    "backend/packages/analytics-schema/datasets/fresh_guest_first_playable.json",
+    "backend/packages/analytics-schema/datasets/onboarding_in_progress.json",
+    "backend/packages/analytics-schema/datasets/first_completed_vow.json",
+    "backend/packages/analytics-schema/datasets/day_5_cooling_state.json",
+    "backend/packages/analytics-schema/datasets/day_7_rekindled_arc_completion.json",
     "backend/packages/analytics-schema/datasets/lapsed_rekindling_user.json",
     "backend/packages/analytics-schema/datasets/subscribed_user.json"
   ]

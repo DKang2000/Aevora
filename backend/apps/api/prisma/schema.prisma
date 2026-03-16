@@ -80,6 +80,10 @@ model User {
   chapterStates      ChapterState[]
   districtStates     DistrictState[]
   subscriptionStates SubscriptionState[]
+  levelState         LevelState?
+  emberState         EmberState?
+  chainStates        ChainState[]
+  inventoryItems     InventoryItem[]
   analyticsEvents    AnalyticsRawEvent[]
   auditLogs          AuditLog[]
 }
@@ -120,6 +124,12 @@ model Profile {
   timezone            String
   onboardingState     String
   selectedChapterId   String?
+  displayName         String   @default("Wayfarer")
+  pronouns            String?
+  selectedGoals       Json     @default("[]")
+  selectedLifeAreas   Json     @default("[]")
+  blocker             String?
+  dailyLoad           Int      @default(3)
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
   user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -145,6 +155,8 @@ model Vow {
   title           String
   type            VowType
   lifecycle       VowLifecycle
+  category        String               @default("Physical")
+  difficulty      String               @default("standard")
   targetValue     Int?
   unitLabel       String?
   reminderEnabled Boolean              @default(false)
@@ -155,6 +167,7 @@ model Vow {
   user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   schedule        VowSchedule?
   completions     VowCompletionEvent[]
+  chainState      ChainState?
 
   @@index([userId, lifecycle])
 }
@@ -205,6 +218,7 @@ model RewardGrant {
   grantedAt            DateTime           @default(now())
   user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   completionEvent      VowCompletionEvent? @relation(fields: [completionEventId], references: [id], onDelete: SetNull)
+  inventoryItems       InventoryItem[]
 
   @@index([userId, grantedAt])
 }
@@ -257,6 +271,7 @@ model SubscriptionState {
   userId              String
   tier                SubscriptionTier
   billingState        BillingState
+  trialEligible       Boolean          @default(true)
   storefront          String?
   expiresAt           DateTime?
   entitlementPayload  Json
@@ -264,6 +279,62 @@ model SubscriptionState {
   user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, refreshedAt])
+}
+
+model LevelState {
+  id                   String   @id
+  userId               String   @unique
+  rank                 Int
+  currentRankResonance Int
+  lifetimeResonance    Int
+  updatedAt            DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EmberState {
+  id                String   @id
+  userId            String   @unique
+  availableEmbers   Int
+  heat              Int
+  lastCoolingDate   String?
+  lastRekindledDate String?
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ChainState {
+  id                String   @id
+  userId            String
+  vowId             String   @unique
+  currentLength     Int
+  bestLength        Int
+  status            String
+  lastCompletedDate String?
+  coolingExpiresAt  DateTime?
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vow               Vow      @relation(fields: [vowId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, vowId])
+  @@index([userId, status])
+}
+
+model InventoryItem {
+  id                String       @id
+  userId            String
+  itemDefinitionId  String
+  quantity          Int          @default(1)
+  bucket            String
+  rarity            String
+  sourceRewardGrantId String?
+  itemPayload       Json
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceRewardGrant RewardGrant? @relation(fields: [sourceRewardGrantId], references: [id], onDelete: SetNull)
+
+  @@index([userId, bucket])
+  @@index([sourceRewardGrantId])
 }
 
 model AnalyticsRawEvent {
@@ -310,4 +381,10 @@ model AuditLog {
   user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([scope, createdAt])
+}
+
+model CoreLoopRuntimeSnapshot {
+  id           String   @id
+  statePayload Json
+  updatedAt    DateTime @updatedAt
 }

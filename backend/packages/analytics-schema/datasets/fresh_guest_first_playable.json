@@ -1,0 +1,16 @@
+{
+  "scenarioId": "fresh_guest_first_playable",
+  "user": {
+    "id": "usr_demo_guest_first_001",
+    "authMode": "guest"
+  },
+  "profile": {
+    "identityShellId": "idn_baker",
+    "originFamilyId": "hearthkeeper",
+    "timezone": "America/New_York"
+  },
+  "vows": [
+    "shared/contracts/fixtures/launch/starter_plan_three_vows.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}

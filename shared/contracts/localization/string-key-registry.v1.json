@@ -3,22 +3,49 @@
   "namespaces": {
     "onboarding": [
       "welcome_title",
-      "why_it_works_body",
-      "start_free_trial_cta"
+      "welcome_body",
+      "goal_title",
+      "life_areas_title",
+      "blocker_title",
+      "daily_load_title",
+      "tone_title",
+      "family_title",
+      "identity_title",
+      "avatar_title",
+      "vows_title",
+      "magical_moment_title",
+      "soft_paywall_title",
+      "sign_in_apple",
+      "continue_guest",
+      "next",
+      "back",
+      "finish"
     ],
     "today": [
       "headline",
       "empty_title",
-      "complete_vow_cta"
+      "complete_vow_cta",
+      "world_cta",
+      "chapter_title",
+      "quest_title",
+      "chain_title",
+      "embers_title",
+      "tomorrow_title"
     ],
     "vow": [
       "create_title",
       "archive_confirm",
-      "cap_reached_title"
+      "cap_reached_title",
+      "progress_title",
+      "binary_done",
+      "partial_cta"
     ],
     "world": [
       "headline",
-      "degraded_cached_state_title"
+      "degraded_cached_state_title",
+      "stage_title",
+      "npc_cta",
+      "quest_marker_title"
     ],
     "profile": [
       "identity_title",
@@ -41,23 +68,34 @@
     ],
     "rewards": [
       "summary_title",
-      "pending_reconciliation_title"
+      "pending_reconciliation_title",
+      "resonance_label",
+      "gold_label",
+      "world_change_label"
     ],
     "states": [
       "today.no_active_vows.title",
       "today.completion_queued_offline.title",
+      "today.active_vow_cap_reached.title",
+      "world.reward_pending.title",
       "permissions.notifications_denied.title"
     ],
     "actions": [
       "retry",
       "continue_free",
       "create_vow",
-      "open_system_settings"
+      "open_system_settings",
+      "see_world",
+      "return_tomorrow"
     ],
     "content": [
       "family.dawnbound.title",
       "identity.knight.name",
-      "district.ember_quay.title"
+      "district.ember_quay.title",
+      "chapter.starter_arc.title",
+      "quest.starter_day_1.title",
+      "moment.oven_glow.title",
+      "npc.maerin_vale.name"
     ]
   },
   "rules": {

@@ -24,6 +24,9 @@ struct RootTabView: View {
         .overlay(alignment: .top) {
             OfflineBannerView(store: environment.syncStatusStore)
         }
+        .fullScreenCover(isPresented: .constant(!environment.firstPlayableStore.hasCompletedOnboarding)) {
+            OnboardingRootView(store: environment.firstPlayableStore)
+        }
         .sheet(isPresented: $environment.isDebugMenuPresented) {
             DebugMenuRootView(
                 seedScenarioLoader: environment.seedScenarioLoader,

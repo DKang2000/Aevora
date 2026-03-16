@@ -13,6 +13,7 @@ final class PersistenceController {
             LocalSyncOperationRecord.self,
             LocalChapterSnapshot.self,
             LocalDistrictSnapshot.self,
+            LocalCoreLoopSnapshot.self,
             LocalSubscriptionCache.self,
             LocalRemoteConfigCache.self
         ])

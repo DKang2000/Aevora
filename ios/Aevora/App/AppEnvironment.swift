@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import Combine
 
 @MainActor
 final class AppEnvironment: ObservableObject {
@@ -18,6 +19,12 @@ final class AppEnvironment: ObservableObject {
     let logger: StructuredLogger
     let crashReporter: CrashReporter
     let seedScenarioLoader: SeedScenarioLoader
+    var firstPlayableStore: FirstPlayableStore
+    let glanceSurfaceStore: GlanceSurfaceStore
+    let liveActivityCoordinator: LiveActivityCoordinator
+    let notificationManager: NotificationManaging
+    var accountSurfaceStore: AccountSurfaceStore
+    private var childStoreCancellables: Set<AnyCancellable> = []
 
     init(inMemory: Bool = false) {
         let overrideStore = FeatureFlagOverrideStore()
@@ -56,5 +63,66 @@ final class AppEnvironment: ObservableObject {
         )
         syncStatusStore = SyncStatusStore(connectivityMonitor: connectivityMonitor, syncQueue: syncQueue)
         seedScenarioLoader = SeedScenarioLoader()
+        glanceSurfaceStore = GlanceSurfaceStore()
+        liveActivityCoordinator = LiveActivityCoordinator()
+        notificationManager = SystemNotificationManager()
+        firstPlayableStore = FirstPlayableStore(
+            repository: repository,
+            syncQueue: syncQueue,
+            analyticsClient: analyticsClient,
+            syncStatusStore: syncStatusStore
+        )
+        accountSurfaceStore = AccountSurfaceStore(
+            repository: repository,
+            analyticsClient: analyticsClient,
+            remoteConfigClient: remoteConfigClient,
+            notificationManager: notificationManager,
+            glanceSurfaceStore: glanceSurfaceStore,
+            liveActivityCoordinator: liveActivityCoordinator
+        )
+        firstPlayableStore.onStateChanged = { [weak self] store in
+            self?.accountSurfaceStore.syncFromCoreLoop(store)
+        }
+        wireChildStores()
+        accountSurfaceStore.syncFromCoreLoop(firstPlayableStore)
+    }
+
+    func handleOpenURL(_ url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let source = components.queryItems?.first(where: { $0.name == "source" })?.value else {
+            return
+        }
+
+        let eventName: AnalyticsEventName
+        switch source {
+        case GlanceSurfaceDeepLinkSource.liveActivity.rawValue:
+            eventName = .liveActivityTapped
+            selectedTab = .world
+        case GlanceSurfaceDeepLinkSource.notification.rawValue:
+            eventName = .notificationOpened
+            selectedTab = .today
+        case GlanceSurfaceDeepLinkSource.premiumWidget.rawValue:
+            eventName = .widgetTapped
+            selectedTab = .profile
+        default:
+            eventName = .widgetTapped
+            selectedTab = .today
+        }
+
+        Task {
+            try? await analyticsClient.track(AnalyticsEvent(name: eventName, surface: "glance", properties: ["source": source]))
+        }
+    }
+
+    private func wireChildStores() {
+        childStoreCancellables.removeAll()
+
+        firstPlayableStore.objectWillChange
+            .sink { [weak self] in self?.objectWillChange.send() }
+            .store(in: &childStoreCancellables)
+
+        accountSurfaceStore.objectWillChange
+            .sink { [weak self] in self?.objectWillChange.send() }
+            .store(in: &childStoreCancellables)
     }
 }
