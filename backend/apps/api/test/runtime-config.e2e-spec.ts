@@ -1,0 +1,58 @@
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+
+import { INestApplication } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import request from "supertest";
+
+import { AppModule } from "../src/app.module";
+
+describe("Runtime config", () => {
+  let app: INestApplication;
+
+  beforeEach(async () => {
+    process.env.NODE_ENV = "test";
+    process.env.PORT = "3001";
+    process.env.DATABASE_URL = "postgresql://aevora:aevora@localhost:5432/aevora_test?schema=public";
+    process.env.API_BASE_URL = "http://localhost:3001";
+    process.env.AUTH_ISSUER = "aevora-test";
+    process.env.AUTH_AUDIENCE = "aevora-ios";
+    process.env.ANALYTICS_PROVIDER = "console";
+    process.env.OBSERVABILITY_PROVIDER = "console";
+    process.env.REMOTE_CONFIG_SOURCE = "file";
+    process.env.CONTENT_SOURCE = "file";
+
+    const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
+    app = moduleRef.createNestApplication();
+    app.setGlobalPrefix("v1");
+    await app.init();
+  });
+
+  afterEach(async () => {
+    delete process.env.AEVORA_REMOTE_CONFIG_OVERRIDE_PATH;
+    await app.close();
+  });
+
+  it("serves the default config payload", async () => {
+    const response = await request(app.getHttpServer()).get("/v1/remote-config").expect(200);
+    expect(response.body.payload.schemaVersion).toBe("v1");
+    expect(response.body.source).toBe("default");
+  });
+
+  it("falls back to defaults when override payload is invalid", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "aevora-config-"));
+    const invalidPath = path.join(dir, "invalid.json");
+    writeFileSync(invalidPath, JSON.stringify({ schemaVersion: "v1" }));
+    process.env.AEVORA_REMOTE_CONFIG_OVERRIDE_PATH = invalidPath;
+
+    await app.close();
+    const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
+    app = moduleRef.createNestApplication();
+    app.setGlobalPrefix("v1");
+    await app.init();
+
+    const response = await request(app.getHttpServer()).get("/v1/remote-config").expect(200);
+    expect(response.body.source).toBe("fallback_after_invalid_override");
+  });
+});

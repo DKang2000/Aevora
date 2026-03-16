@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "v1",
+  "profile": {
+    "id": "pro_demo_001",
+    "selectedIdentityShellId": "idn_baker",
+    "toneMode": "balanced",
+    "timezone": "America/New_York"
+  },
+  "subscriptionState": {
+    "tier": "free",
+    "billingState": "active"
+  },
+  "activeVows": [
+    {
+      "id": "vow_walk_001",
+      "title": "Morning walk",
+      "type": "duration",
+      "status": "active"
+    },
+    {
+      "id": "vow_water_001",
+      "title": "Drink water",
+      "type": "count",
+      "status": "active"
+    },
+    {
+      "id": "vow_read_001",
+      "title": "Read before bed",
+      "type": "binary",
+      "status": "active"
+    }
+  ],
+  "syncQueue": [
+    {
+      "clientRequestId": "op_completion_001",
+      "operationType": "completion_submit",
+      "createdAt": "2026-03-15T12:12:00Z",
+      "attemptCount": 0,
+      "status": "pending",
+      "payload": {
+        "vowId": "vow_walk_001",
+        "localDate": "2026-03-15",
+        "source": "manual",
+        "progressState": "complete",
+        "durationMinutes": 23
+      }
+    }
+  ],
+  "todaySnapshot": {
+    "localDate": "2026-03-15",
+    "activeVowCount": 3,
+    "completedVowCount": 1,
+    "chainSummary": {
+      "bestActiveChain": 3
+    },
+    "chapterSummary": {
+      "chapterId": "starter_arc",
+      "progressPercent": 43
+    }
+  }
+}

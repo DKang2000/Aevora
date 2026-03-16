@@ -1,0 +1,29 @@
+name: iOS CI
+
+on:
+  pull_request:
+    paths:
+      - "ios/**"
+      - "shared/contracts/**"
+      - ".github/workflows/ios-ci.yml"
+  push:
+    branches: [ main ]
+    paths:
+      - "ios/**"
+      - "shared/contracts/**"
+      - ".github/workflows/ios-ci.yml"
+
+jobs:
+  validate-ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate --spec ios/project.yml
+
+      - name: Run iOS tests
+        run: xcodebuild test -project ios/Aevora.xcodeproj -scheme Aevora -destination 'platform=iOS Simulator,name=iPhone 17'

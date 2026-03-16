@@ -1,0 +1,18 @@
+{
+  "inventory": [
+    {
+      "id": "itm_001",
+      "itemDefinitionId": "hearth_apron_common",
+      "quantity": 1,
+      "bucket": "cosmetic"
+    }
+  ],
+  "shopOffers": [
+    {
+      "id": "offer_hearth_apron_common",
+      "itemDefinitionId": "hearth_apron_common",
+      "priceGold": 50,
+      "entitlementGate": "free"
+    }
+  ]
+}

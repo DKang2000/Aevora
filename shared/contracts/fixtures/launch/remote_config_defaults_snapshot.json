@@ -1,0 +1,13 @@
+{
+  "featureFlags": {
+    "advanced_widgets_enabled": true,
+    "live_activities_enabled": true
+  },
+  "economy": {
+    "free_active_vow_cap": 3,
+    "premium_active_vow_cap": 7
+  },
+  "paywall": {
+    "trial_days": 7
+  }
+}

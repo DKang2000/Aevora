@@ -1,0 +1,171 @@
+{
+  "version": "v1",
+  "definitionOfDone": [
+    "all_st_docs_present",
+    "all_required_machine_readable_artifacts_present",
+    "naming_consistent_across_sections",
+    "fixtures_cover_critical_launch_scenarios",
+    "no_unresolved_scope_broadening_conflicts"
+  ],
+  "sections": [
+    {
+      "sectionId": "ST-01",
+      "consumers": [
+        "ios",
+        "backend",
+        "content",
+        "analytics",
+        "qa"
+      ],
+      "criteria": [
+        "all locked v1 entities have one canonical noun",
+        "relationships and invariants are explicit"
+      ]
+    },
+    {
+      "sectionId": "ST-02",
+      "consumers": [
+        "ios",
+        "backend",
+        "qa"
+      ],
+      "criteria": [
+        "high-value v1 endpoints are defined",
+        "error and idempotency rules are explicit"
+      ]
+    },
+    {
+      "sectionId": "ST-03",
+      "consumers": [
+        "ios",
+        "qa"
+      ],
+      "criteria": [
+        "local-first store partitions are defined",
+        "queue and conflict behavior are explicit"
+      ]
+    },
+    {
+      "sectionId": "ST-04",
+      "consumers": [
+        "ios",
+        "backend",
+        "analytics",
+        "qa"
+      ],
+      "criteria": [
+        "core launch events and common properties are locked",
+        "privacy constraints are explicit"
+      ]
+    },
+    {
+      "sectionId": "ST-05",
+      "consumers": [
+        "ios",
+        "backend",
+        "qa"
+      ],
+      "criteria": [
+        "runtime tuning sections are defined",
+        "fallback and precedence behavior are defined"
+      ]
+    },
+    {
+      "sectionId": "ST-06",
+      "consumers": [
+        "ios",
+        "backend",
+        "content",
+        "qa"
+      ],
+      "criteria": [
+        "launch content structures are defined",
+        "content is separated from player state and runtime tuning"
+      ]
+    },
+    {
+      "sectionId": "ST-07",
+      "consumers": [
+        "ios",
+        "backend",
+        "qa"
+      ],
+      "criteria": [
+        "free, trial, monthly, and annual access are explicit",
+        "premium boundaries preserve the behavior loop"
+      ]
+    },
+    {
+      "sectionId": "ST-08",
+      "consumers": [
+        "ios",
+        "backend",
+        "qa"
+      ],
+      "criteria": [
+        "permission timing is explicit",
+        "denial fallback never blocks manual logging"
+      ]
+    },
+    {
+      "sectionId": "ST-09",
+      "consumers": [
+        "ios",
+        "backend",
+        "content",
+        "qa"
+      ],
+      "criteria": [
+        "critical empty, error, degraded, and offline states are cataloged",
+        "tone remains humane and non-shaming"
+      ]
+    },
+    {
+      "sectionId": "ST-10",
+      "consumers": [
+        "ios",
+        "content",
+        "qa"
+      ],
+      "criteria": [
+        "all critical namespaces exist",
+        "system and content copy keys are separated"
+      ]
+    },
+    {
+      "sectionId": "ST-11",
+      "consumers": [
+        "ios",
+        "backend",
+        "content",
+        "analytics",
+        "qa"
+      ],
+      "criteria": [
+        "critical launch fixtures exist",
+        "manifest maps fixtures back to source sections"
+      ]
+    },
+    {
+      "sectionId": "ST-12",
+      "consumers": [
+        "ios",
+        "backend",
+        "content",
+        "analytics",
+        "qa"
+      ],
+      "criteria": [
+        "definition of done is explicit",
+        "pass/fail rules are defined"
+      ]
+    }
+  ],
+  "globalFailConditions": [
+    "required_artifact_missing",
+    "cross_section_naming_drift",
+    "out_of_scope_feature_added",
+    "machine_readable_artifact_conflicts_with_prose"
+  ],
+  "unresolvedGaps": []
+}

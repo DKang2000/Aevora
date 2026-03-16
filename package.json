@@ -1,0 +1,10 @@
+{
+  "name": "aevora",
+  "private": true,
+  "packageManager": "pnpm@10.6.5",
+  "scripts": {
+    "typecheck": "corepack pnpm -r typecheck",
+    "test": "corepack pnpm -r test",
+    "validate:prisma": "corepack pnpm --filter @aevora/api prisma:validate"
+  }
+}

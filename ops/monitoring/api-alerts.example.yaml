@@ -1,0 +1,10 @@
+alerts:
+  - name: backend_error_rate
+    threshold: "5xx > 2% for 15m"
+    owner: backend
+  - name: analytics_queue_backlog
+    threshold: "rejected analytics events > 5% for 15m"
+    owner: data
+  - name: config_delivery_failures
+    threshold: "remote config endpoint 5xx for 10m"
+    owner: platform

@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "v1",
+  "originFamilies": [
+    {
+      "id": "dawnbound",
+      "titleKey": "content.family.dawnbound.title"
+    },
+    {
+      "id": "archivist",
+      "titleKey": "content.family.archivist.title"
+    },
+    {
+      "id": "hearthkeeper",
+      "titleKey": "content.family.hearthkeeper.title"
+    },
+    {
+      "id": "chartermaker",
+      "titleKey": "content.family.chartermaker.title"
+    }
+  ],
+  "identityShells": [
+    {
+      "id": "idn_knight",
+      "originFamilyId": "dawnbound",
+      "displayNameKey": "content.identity.knight.name",
+      "flavorOverlayKeys": [
+        "content.identity.knight.overlay"
+      ]
+    },
+    {
+      "id": "idn_baker",
+      "originFamilyId": "hearthkeeper",
+      "displayNameKey": "content.identity.baker.name",
+      "flavorOverlayKeys": [
+        "content.identity.baker.overlay"
+      ]
+    },
+    {
+      "id": "idn_merchant",
+      "originFamilyId": "chartermaker",
+      "displayNameKey": "content.identity.merchant.name",
+      "flavorOverlayKeys": [
+        "content.identity.merchant.overlay"
+      ]
+    }
+  ],
+  "districts": [
+    {
+      "id": "ember_quay",
+      "titleKey": "content.district.ember_quay.title",
+      "restorationStages": [
+        "dim",
+        "stirring",
+        "rebuilding",
+        "rekindled"
+      ],
+      "problemTemplateIds": [
+        "starter_oven_crisis"
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "maerin_vale",
+      "displayNameKey": "content.npc.maerin_vale.name",
+      "districtId": "ember_quay",
+      "dialogueSetKey": "npc.maerin_vale.core"
+    },
+    {
+      "id": "tovan_hearth",
+      "displayNameKey": "content.npc.tovan_hearth.name",
+      "districtId": "ember_quay",
+      "dialogueSetKey": "npc.tovan_hearth.core"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "starter_arc",
+      "titleKey": "content.chapter.starter_arc.title",
+      "entitlementGate": "free",
+      "questIds": [
+        "arrival",
+        "oven_rekindled"
+      ]
+    },
+    {
+      "id": "chapter_one",
+      "titleKey": "content.chapter.chapter_one.title",
+      "entitlementGate": "premium",
+      "questIds": [
+        "market_restoration"
+      ]
+    }
+  ],
+  "questTemplates": [
+    {
+      "id": "arrival",
+      "titleKey": "content.quest.arrival.title",
+      "rewardTableId": "starter_rewards"
+    }
+  ],
+  "itemDefinitions": [
+    {
+      "id": "hearth_apron_common",
+      "nameKey": "content.item.hearth_apron_common.name",
+      "bucket": "cosmetic",
+      "rarity": "common"
+    }
+  ],
+  "shopOffers": [
+    {
+      "id": "offer_hearth_apron_common",
+      "itemDefinitionId": "hearth_apron_common",
+      "priceGold": 50,
+      "entitlementGate": "free"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "clientRequestId": "op_vow_create_001",
+    "operationType": "vow_create",
+    "createdAt": "2026-03-15T08:03:00Z",
+    "attemptCount": 1,
+    "lastAttemptAt": "2026-03-15T08:04:00Z",
+    "dependencyIds": [],
+    "status": "retryable_error",
+    "payload": {
+      "title": "Stretch for five minutes",
+      "type": "duration",
+      "target": {
+        "durationMinutes": 5
+      }
+    }
+  },
+  {
+    "clientRequestId": "op_completion_001",
+    "operationType": "completion_submit",
+    "createdAt": "2026-03-15T12:12:00Z",
+    "attemptCount": 0,
+    "lastAttemptAt": null,
+    "dependencyIds": [],
+    "status": "pending",
+    "payload": {
+      "vowId": "vow_walk_001",
+      "localDate": "2026-03-15",
+      "progressState": "complete"
+    }
+  }
+]

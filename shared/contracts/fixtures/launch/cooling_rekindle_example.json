@@ -1,0 +1,13 @@
+{
+  "vowId": "vow_read_001",
+  "emberState": {
+    "availableEmbers": 2,
+    "heat": 1,
+    "lastCooldownDate": "2026-03-14"
+  },
+  "chainState": {
+    "currentLength": 1,
+    "bestLength": 6,
+    "status": "rekindled"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "v1",
+  "featureFlags": {
+    "advanced_widgets_enabled": true,
+    "live_activities_enabled": true,
+    "healthkit_verification_enabled": true,
+    "chapter_one_premium_gate_enabled": true
+  },
+  "economy": {
+    "free_active_vow_cap": 3,
+    "premium_active_vow_cap": 7,
+    "binary_base_resonance": 12,
+    "count_base_resonance": 15,
+    "duration_base_resonance": 18,
+    "embers_cap": 3
+  },
+  "onboarding": {
+    "starter_vow_recommendation_count": "3",
+    "first_magical_moment_variant": "district_stirs",
+    "soft_paywall_trigger": "after_first_magical_moment"
+  },
+  "paywall": {
+    "trial_days": "7",
+    "headline_variant": "level_up_your_real_life"
+  },
+  "reminders": {
+    "default_reminder_hour_local": 8,
+    "max_daily_reminders": 2,
+    "reward_reveal_delay_seconds": 1
+  },
+  "widgets": {
+    "basicWidgetEnabled": true,
+    "advancedWidgetRefreshMinutes": 30
+  },
+  "liveActivities": {
+    "enabled": true
+  },
+  "chapterGating": {
+    "starter_arc_enabled": "true",
+    "chapter_one_enabled": "true"
+  }
+}

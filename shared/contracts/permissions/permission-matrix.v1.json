@@ -1,0 +1,58 @@
+{
+  "version": "v1",
+  "capabilities": [
+    {
+      "id": "notifications",
+      "requestType": "os_permission",
+      "trigger": "after_onboarding_setup_complete",
+      "prerequisiteValue": "user_has_seen_vow_or_reward_value",
+      "fallbackBehavior": "disable_os_delivery_but_keep_in_app_preferences",
+      "repromptStrategy": "settings_or_contextual_reeducation_only"
+    },
+    {
+      "id": "healthkit",
+      "requestType": "os_permission",
+      "trigger": "in_context_verified_vow_or_integrations_screen",
+      "prerequisiteValue": "user_chose_relevant_verified_input_flow",
+      "fallbackBehavior": "manual_logging_remains_available",
+      "repromptStrategy": "only_from_integrations_or_relevant_vow_edit"
+    },
+    {
+      "id": "sign_in_with_apple",
+      "requestType": "identity_flow",
+      "trigger": "user_initiated_register_or_link",
+      "prerequisiteValue": "clear_account_value_or_restore_intent",
+      "fallbackBehavior": "continue_in_guest_mode",
+      "repromptStrategy": "user_initiated_only"
+    },
+    {
+      "id": "purchase_restore",
+      "requestType": "user_initiated_capability",
+      "trigger": "paywall_or_settings_restore_action",
+      "prerequisiteValue": "existing_purchase_or_restore_intent",
+      "fallbackBehavior": "leave_subscription_state_unchanged",
+      "repromptStrategy": "always_available_from_account_surfaces"
+    },
+    {
+      "id": "widgets_live_activities",
+      "requestType": "platform_capability",
+      "trigger": "post_setup_surface_entry",
+      "prerequisiteValue": "relevant_surface_is_available_and_entitled",
+      "fallbackBehavior": "today_screen_remains_primary_surface",
+      "repromptStrategy": "surface_education_only"
+    },
+    {
+      "id": "app_intents_shortcuts",
+      "requestType": "platform_capability",
+      "trigger": "after_core_setup_complete",
+      "prerequisiteValue": "user_has_completed_setup",
+      "fallbackBehavior": "app_ui_only",
+      "repromptStrategy": "settings_or_post_setup_education"
+    }
+  ],
+  "hardRules": [
+    "never_request_notifications_before_setup_is_complete",
+    "never_request_healthkit_in_first_minute_of_onboarding",
+    "manual_logging_is_always_available"
+  ]
+}

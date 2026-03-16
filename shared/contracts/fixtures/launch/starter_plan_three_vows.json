@@ -1,0 +1,20 @@
+{
+  "userId": "usr_fixture_free_001",
+  "vows": [
+    {
+      "id": "vow_walk_001",
+      "title": "Morning walk",
+      "type": "duration"
+    },
+    {
+      "id": "vow_water_001",
+      "title": "Drink water",
+      "type": "count"
+    },
+    {
+      "id": "vow_read_001",
+      "title": "Read before bed",
+      "type": "binary"
+    }
+  ]
+}

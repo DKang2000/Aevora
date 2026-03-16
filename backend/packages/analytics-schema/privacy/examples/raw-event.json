@@ -1,0 +1,19 @@
+{
+  "event_name": "vow_completed",
+  "event_version": "v1",
+  "occurred_at_utc": "2026-03-16T12:00:00Z",
+  "local_date": "2026-03-16",
+  "user_id": "usr_private",
+  "session_id": "ses_private",
+  "surface": "today",
+  "app_build": "1",
+  "platform": "ios",
+  "experiment_assignments": [],
+  "properties": {
+    "vow_id": "vow_read",
+    "note_text": "I wrote a long freeform note here.",
+    "healthkit_payload": {
+      "steps": 4200
+    }
+  }
+}

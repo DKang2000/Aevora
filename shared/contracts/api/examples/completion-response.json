@@ -1,0 +1,19 @@
+{
+  "completionEvent": {
+    "id": "vce_walk_001",
+    "vowId": "vow_walk_001",
+    "localDate": "2026-03-15",
+    "source": "manual",
+    "progressState": "complete"
+  },
+  "rewards": [
+    {
+      "id": "rwd_walk_001",
+      "resonance": 18,
+      "gold": 7
+    }
+  ],
+  "reconciliation": {
+    "status": "applied"
+  }
+}

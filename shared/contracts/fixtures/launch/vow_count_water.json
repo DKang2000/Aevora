@@ -1,0 +1,9 @@
+{
+  "id": "vow_water_001",
+  "title": "Drink water",
+  "type": "count",
+  "target": {
+    "count": 8,
+    "unit": "cups"
+  }
+}

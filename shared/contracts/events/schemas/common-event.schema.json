@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common-event.schema.json",
+  "title": "Aevora Common Event",
+  "type": "object",
+  "required": [
+    "event_name",
+    "event_version",
+    "occurred_at_utc",
+    "local_date",
+    "session_id",
+    "surface",
+    "app_build",
+    "platform"
+  ],
+  "properties": {
+    "event_name": {
+      "type": "string"
+    },
+    "event_version": {
+      "const": "v1"
+    },
+    "occurred_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "local_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "user_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "anonymous_device_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "surface": {
+      "type": "string",
+      "enum": [
+        "onboarding",
+        "today",
+        "world",
+        "hearth",
+        "widget",
+        "live_activity",
+        "settings",
+        "paywall",
+        "background"
+      ]
+    },
+    "app_build": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string",
+      "const": "ios"
+    },
+    "experiment_assignments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "experiment_key",
+          "variant_key"
+        ],
+        "properties": {
+          "experiment_key": {
+            "type": "string"
+          },
+          "variant_key": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

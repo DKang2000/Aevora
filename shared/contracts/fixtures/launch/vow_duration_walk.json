@@ -1,0 +1,8 @@
+{
+  "id": "vow_walk_001",
+  "title": "Morning walk",
+  "type": "duration",
+  "target": {
+    "durationMinutes": 20
+  }
+}

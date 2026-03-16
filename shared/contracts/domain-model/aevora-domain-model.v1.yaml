@@ -1,0 +1,205 @@
+version: v1
+entities:
+  User:
+    idPrefix: usr_
+    owns:
+      - Profile
+      - Avatar
+      - SubscriptionState
+      - Vow
+      - RewardGrant
+      - LevelState
+      - EmberState
+      - ChapterState
+      - QuestState
+      - DistrictState
+      - InventoryItem
+      - NotificationPreference
+      - SourceConnection
+      - ExperimentAssignment
+    fields:
+      id: string
+      authMode: [guest, registered]
+      status: [active, deleted_pending]
+      createdAt: datetime
+  Profile:
+    idPrefix: pro_
+    fields:
+      id: string
+      userId: string
+      selectedIdentityShellId: string
+      toneMode: [gentle, balanced, driven]
+      timezone: string
+      onboardingState: [not_started, in_progress, completed]
+  Avatar:
+    idPrefix: ava_
+    fields:
+      id: string
+      userId: string
+      silhouetteId: string
+      paletteId: string
+      accessoryIds: array
+  OriginFamily:
+    idPrefix: fam_
+    values:
+      - dawnbound
+      - archivist
+      - hearthkeeper
+      - chartermaker
+  IdentityShell:
+    idPrefix: idn_
+    fields:
+      id: string
+      originFamilyId: string
+      displayName: string
+  Vow:
+    idPrefix: vow_
+    fields:
+      id: string
+      userId: string
+      title: string
+      type: [binary, count, duration]
+      category: string
+      status: [draft, active, archived]
+      difficulty: [gentle, standard, stretch]
+      target: object
+      scheduleId: string
+      sourceConnectionId: [string, "null"]
+  VowSchedule:
+    fields:
+      cadence: [daily, weekly_custom]
+      activeWeekdays: array
+      reminderLocalTime: [string, "null"]
+  VowCompletionEvent:
+    idPrefix: vce_
+    fields:
+      id: string
+      userId: string
+      vowId: string
+      localDate: date
+      source: [manual, healthkit]
+      progressState: [partial, complete]
+      quantity: [number, "null"]
+      durationMinutes: [number, "null"]
+      recordedAt: datetime
+  RewardGrant:
+    idPrefix: rwd_
+    fields:
+      id: string
+      userId: string
+      sourceEventId: string
+      resonance: number
+      gold: number
+      embersDelta: number
+      districtProgressDelta: number
+      grantedAt: datetime
+  LevelState:
+    fields:
+      userId: string
+      rank: number
+      currentRankResonance: number
+      lifetimeResonance: number
+  ChainState:
+    fields:
+      userId: string
+      vowId: string
+      currentLength: number
+      bestLength: number
+      status: [active, cooled, rekindled]
+      lastQualifiedDate: date
+  EmberState:
+    fields:
+      userId: string
+      availableEmbers: number
+      heat: number
+      lastCooldownDate: [date, "null"]
+  ChapterState:
+    idPrefix: chp_
+    fields:
+      id: string
+      userId: string
+      chapterId: string
+      status: [locked, active, completed]
+      progressPercent: number
+  QuestState:
+    idPrefix: qst_
+    fields:
+      id: string
+      userId: string
+      questId: string
+      status: [locked, active, completed]
+      stepId: string
+  DistrictState:
+    idPrefix: dst_
+    fields:
+      id: string
+      userId: string
+      districtId: string
+      restorationStage: [dim, stirring, rebuilding, rekindled]
+      problemTemplateId: string
+  InventoryItem:
+    idPrefix: itm_
+    fields:
+      id: string
+      userId: string
+      itemDefinitionId: string
+      quantity: number
+      bucket: [cosmetic, prop, consumable, token]
+      rarity: [common, uncommon, rare, epic]
+  ShopOffer:
+    idPrefix: sho_
+    fields:
+      id: string
+      itemDefinitionId: string
+      priceGold: number
+      entitlementGate: [free, premium]
+      featureFlag: [string, "null"]
+  NotificationPreference:
+    fields:
+      userId: string
+      remindersEnabled: boolean
+      rewardMomentsEnabled: boolean
+      weeklyArcEnabled: boolean
+  SourceConnection:
+    fields:
+      userId: string
+      sourceType: [healthkit]
+      authorizationState: [not_requested, requested, granted, denied]
+      supportedDomains: array
+      lastSyncAt: [datetime, "null"]
+  SubscriptionState:
+    idPrefix: sub_
+    fields:
+      id: string
+      userId: string
+      tier: [free, trial, premium_monthly, premium_annual]
+      billingState: [active, grace_period, billing_retry, expired]
+      trialEligible: boolean
+      expiresAt: [datetime, "null"]
+  ExperimentAssignment:
+    idPrefix: exp_
+    fields:
+      id: string
+      userId: string
+      experimentKey: string
+      variantKey: string
+      assignedAt: datetime
+relationships:
+  - User 1:1 Profile
+  - User 1:1 Avatar
+  - User 1:1 SubscriptionState
+  - User 1:many Vow
+  - Vow 1:1 VowSchedule
+  - Vow 1:many VowCompletionEvent
+  - User 1:many RewardGrant
+  - User 1:many InventoryItem
+  - User 1:many QuestState
+  - User 1:many ChapterState
+  - User 1:many ExperimentAssignment
+  - Profile many:1 IdentityShell
+  - IdentityShell many:1 OriginFamily
+invariants:
+  - one current SubscriptionState per User
+  - logging is local-first
+  - reward grants are server-authoritative
+  - free and premium vow caps are entitlement-driven

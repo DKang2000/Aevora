@@ -1,0 +1,313 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AuthMode {
+  guest
+  registered
+}
+
+enum VowType {
+  binary
+  count
+  duration
+}
+
+enum VowLifecycle {
+  draft
+  active
+  archived
+}
+
+enum CompletionSource {
+  manual
+  healthkit
+}
+
+enum CompletionStatus {
+  partial
+  complete
+}
+
+enum SyncOperationType {
+  vow_create
+  vow_update
+  vow_archive
+  completion_submit
+  analytics_enqueue
+}
+
+enum SyncOperationStatus {
+  pending
+  in_flight
+  retryable_error
+  terminal_error
+  applied
+}
+
+enum SubscriptionTier {
+  free
+  trial
+  premium_monthly
+  premium_annual
+}
+
+enum BillingState {
+  active
+  grace_period
+  billing_retry
+  expired
+}
+
+model User {
+  id                 String               @id
+  authMode           AuthMode
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  profile            Profile?
+  avatar             Avatar?
+  providerLinks      AuthProviderLink[]
+  authSessions       AuthSession[]
+  vows               Vow[]
+  completionEvents   VowCompletionEvent[]
+  rewardGrants       RewardGrant[]
+  syncOperations     SyncOperation[]
+  chapterStates      ChapterState[]
+  districtStates     DistrictState[]
+  subscriptionStates SubscriptionState[]
+  analyticsEvents    AnalyticsRawEvent[]
+  auditLogs          AuditLog[]
+}
+
+model AuthProviderLink {
+  id              String   @id
+  userId          String
+  provider        String
+  providerUserId  String
+  linkedAt        DateTime @default(now())
+  lastUsedAt      DateTime?
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+}
+
+model AuthSession {
+  id                String   @id
+  userId            String
+  accessTokenHash   String
+  refreshTokenHash  String?
+  deviceIdentifier  String?
+  expiresAt         DateTime
+  createdAt         DateTime @default(now())
+  revokedAt         DateTime?
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Profile {
+  id                  String   @id
+  userId              String   @unique
+  identityShellId     String
+  originFamilyId      String
+  toneMode            String
+  timezone            String
+  onboardingState     String
+  selectedChapterId   String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Avatar {
+  id             String   @id
+  userId         String   @unique
+  bodyFrame      String
+  skinTone       String
+  hairStyle      String
+  hairColor      String
+  accessory      String?
+  appearanceJson Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Vow {
+  id              String               @id
+  userId          String
+  title           String
+  type            VowType
+  lifecycle       VowLifecycle
+  targetValue     Int?
+  unitLabel       String?
+  reminderEnabled Boolean              @default(false)
+  archivedAt      DateTime?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  deletedAt       DateTime?
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schedule        VowSchedule?
+  completions     VowCompletionEvent[]
+
+  @@index([userId, lifecycle])
+}
+
+model VowSchedule {
+  id                 String   @id
+  vowId              String   @unique
+  timezone           String
+  recurrenceRule     String
+  reminderHourLocal  Int?
+  reminderMinute     Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  vow                Vow      @relation(fields: [vowId], references: [id], onDelete: Cascade)
+}
+
+model VowCompletionEvent {
+  id                String           @id
+  userId            String
+  vowId             String
+  clientRequestId   String           @unique
+  localDate         String
+  occurredAtUtc     DateTime
+  source            CompletionSource
+  status            CompletionStatus
+  quantity          Int?
+  durationSeconds   Int?
+  noteRedacted      Boolean          @default(true)
+  rawPayload        Json?
+  createdAt         DateTime         @default(now())
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vow               Vow              @relation(fields: [vowId], references: [id], onDelete: Cascade)
+  rewardGrants      RewardGrant[]
+
+  @@index([userId, localDate])
+  @@index([vowId, localDate])
+}
+
+model RewardGrant {
+  id                   String             @id
+  userId               String
+  completionEventId    String?
+  rewardKind           String
+  resonanceDelta       Int                @default(0)
+  goldDelta            Int                @default(0)
+  embersDelta          Int                @default(0)
+  grantPayload         Json
+  grantedAt            DateTime           @default(now())
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completionEvent      VowCompletionEvent? @relation(fields: [completionEventId], references: [id], onDelete: SetNull)
+
+  @@index([userId, grantedAt])
+}
+
+model SyncOperation {
+  id               String              @id
+  userId           String
+  clientRequestId  String              @unique
+  operationType    SyncOperationType
+  status           SyncOperationStatus
+  payload          Json
+  dependencyIds    Json?
+  attemptCount     Int                 @default(0)
+  createdAt        DateTime            @default(now())
+  lastAttemptAt    DateTime?
+  appliedAt        DateTime?
+  user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+model ChapterState {
+  id                 String   @id
+  userId             String
+  chapterId          String
+  status             String
+  activeQuestId      String?
+  snapshotPayload    Json
+  updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId])
+}
+
+model DistrictState {
+  id                 String   @id
+  userId             String
+  districtId         String
+  restorationStage   String
+  problemTemplateId  String?
+  visibilityPayload  Json
+  updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, districtId])
+}
+
+model SubscriptionState {
+  id                  String           @id
+  userId              String
+  tier                SubscriptionTier
+  billingState        BillingState
+  storefront          String?
+  expiresAt           DateTime?
+  entitlementPayload  Json
+  refreshedAt         DateTime         @default(now())
+  user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, refreshedAt])
+}
+
+model AnalyticsRawEvent {
+  id                  String   @id
+  userId              String?
+  eventName           String
+  eventVersion        String
+  sessionId           String
+  surface             String
+  localDate           String
+  occurredAtUtc       DateTime
+  appBuild            String
+  platform            String
+  anonymizedActorId   String
+  payload             Json
+  ingestedAt          DateTime @default(now())
+  user                User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([eventName, occurredAtUtc])
+  @@index([userId, occurredAtUtc])
+}
+
+model RemoteConfigSnapshot {
+  id               String   @id
+  environment      String
+  schemaVersion    String
+  etag             String?
+  configPayload    Json
+  fetchedAt        DateTime @default(now())
+
+  @@index([environment, fetchedAt])
+}
+
+model AuditLog {
+  id               String   @id
+  userId           String?
+  scope            String
+  action           String
+  actorType        String
+  actorId          String?
+  requestId        String?
+  metadata         Json?
+  createdAt        DateTime @default(now())
+  user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([scope, createdAt])
+}

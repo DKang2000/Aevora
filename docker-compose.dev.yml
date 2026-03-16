@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: aevora-postgres-dev
+    environment:
+      POSTGRES_DB: aevora_dev
+      POSTGRES_USER: aevora
+      POSTGRES_PASSWORD: aevora
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_dev_data:

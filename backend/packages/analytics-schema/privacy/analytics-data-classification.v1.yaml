@@ -1,0 +1,50 @@
+version: v1
+fields:
+  event_name:
+    classification: operational
+    redaction: none
+    retention: standard
+  event_version:
+    classification: operational
+    redaction: none
+    retention: standard
+  occurred_at_utc:
+    classification: operational
+    redaction: none
+    retention: standard
+  local_date:
+    classification: operational
+    redaction: none
+    retention: standard
+  user_id:
+    classification: pseudonymous_identifier
+    redaction: hash
+    retention: standard
+  anonymous_device_id:
+    classification: pseudonymous_identifier
+    redaction: hash
+    retention: short_lived
+  session_id:
+    classification: pseudonymous_identifier
+    redaction: hash
+    retention: short_lived
+  surface:
+    classification: operational
+    redaction: none
+    retention: standard
+  app_build:
+    classification: operational
+    redaction: none
+    retention: standard
+  experiment_assignments:
+    classification: operational
+    redaction: none
+    retention: standard
+  properties.note_text:
+    classification: prohibited_free_text
+    redaction: drop
+    retention: none
+  properties.healthkit_payload:
+    classification: prohibited_sensitive_source
+    redaction: drop
+    retention: none

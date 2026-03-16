@@ -1,0 +1,10 @@
+{
+  "chapterId": "starter_arc",
+  "districtId": "ember_quay",
+  "restorationStage": "stirring",
+  "momentId": "first_magical_moment",
+  "npcIdsVisible": [
+    "maerin_vale",
+    "tovan_hearth"
+  ]
+}

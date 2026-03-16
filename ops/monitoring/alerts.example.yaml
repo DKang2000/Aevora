@@ -1,0 +1,26 @@
+alerts:
+  - name: api_health_degraded
+    severity: page
+    owner: backend
+    condition: health endpoint fails or readiness check is false for 5 minutes
+    channel: pager-placeholder
+  - name: analytics_ingestion_rejections_high
+    severity: ticket
+    owner: data
+    condition: rejected analytics events exceed 5 percent of accepted events in 15 minutes
+    channel: queue-placeholder
+  - name: remote_config_delivery_failing
+    severity: ticket
+    owner: platform
+    condition: remote config endpoint returns 5xx for 10 minutes
+    channel: queue-placeholder
+  - name: content_bootstrap_failures
+    severity: ticket
+    owner: platform
+    condition: content bootstrap endpoint returns 5xx for 10 minutes
+    channel: queue-placeholder
+  - name: backend_ci_failing
+    severity: ticket
+    owner: engineering
+    condition: main branch backend workflow fails
+    channel: queue-placeholder

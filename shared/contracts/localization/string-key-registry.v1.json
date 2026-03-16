@@ -1,0 +1,69 @@
+{
+  "version": "v1",
+  "namespaces": {
+    "onboarding": [
+      "welcome_title",
+      "why_it_works_body",
+      "start_free_trial_cta"
+    ],
+    "today": [
+      "headline",
+      "empty_title",
+      "complete_vow_cta"
+    ],
+    "vow": [
+      "create_title",
+      "archive_confirm",
+      "cap_reached_title"
+    ],
+    "world": [
+      "headline",
+      "degraded_cached_state_title"
+    ],
+    "profile": [
+      "identity_title",
+      "stats_title"
+    ],
+    "settings": [
+      "notifications_title",
+      "integrations_title",
+      "restore_purchase_cta"
+    ],
+    "paywall": [
+      "headline",
+      "body",
+      "trial_cta",
+      "continue_free_cta"
+    ],
+    "notifications": [
+      "education_title",
+      "education_body"
+    ],
+    "rewards": [
+      "summary_title",
+      "pending_reconciliation_title"
+    ],
+    "states": [
+      "today.no_active_vows.title",
+      "today.completion_queued_offline.title",
+      "permissions.notifications_denied.title"
+    ],
+    "actions": [
+      "retry",
+      "continue_free",
+      "create_vow",
+      "open_system_settings"
+    ],
+    "content": [
+      "family.dawnbound.title",
+      "identity.knight.name",
+      "district.ember_quay.title"
+    ]
+  },
+  "rules": {
+    "interpolationStyle": "{token_name}",
+    "pluralizationStyle": "icu_like_split_keys",
+    "utilityCopyFirst": true,
+    "loreFlavorOptional": true
+  }
+}

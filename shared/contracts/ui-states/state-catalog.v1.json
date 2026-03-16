@@ -1,0 +1,159 @@
+{
+  "version": "v1",
+  "states": [
+    {
+      "stateId": "onboarding.network_unavailable",
+      "surface": "onboarding",
+      "category": "offline",
+      "severity": "medium",
+      "blocking": true,
+      "trigger": "required_onboarding_request_failed_without_cache",
+      "messageKey": "states.onboarding.network_unavailable.title",
+      "recoveryActionKey": "actions.retry",
+      "analyticsEvent": "onboarding_step_viewed"
+    },
+    {
+      "stateId": "auth.apple_sign_in_failed",
+      "surface": "onboarding",
+      "category": "error",
+      "severity": "medium",
+      "blocking": false,
+      "trigger": "apple_identity_exchange_failed",
+      "messageKey": "states.auth.apple_sign_in_failed.title",
+      "recoveryActionKey": "actions.try_again_or_continue_guest",
+      "analyticsEvent": null
+    },
+    {
+      "stateId": "today.no_active_vows",
+      "surface": "today",
+      "category": "empty",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "active_vow_count_is_zero",
+      "messageKey": "states.today.no_active_vows.title",
+      "recoveryActionKey": "actions.create_vow",
+      "analyticsEvent": null
+    },
+    {
+      "stateId": "today.completion_queued_offline",
+      "surface": "today",
+      "category": "offline",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "completion_saved_locally_pending_sync",
+      "messageKey": "states.today.completion_queued_offline.title",
+      "recoveryActionKey": "actions.view_sync_status",
+      "analyticsEvent": "vow_completed"
+    },
+    {
+      "stateId": "today.completion_conflict",
+      "surface": "today",
+      "category": "degraded",
+      "severity": "medium",
+      "blocking": false,
+      "trigger": "server_reconciliation_conflict",
+      "messageKey": "states.today.completion_conflict.title",
+      "recoveryActionKey": "actions.refresh_progress",
+      "analyticsEvent": null
+    },
+    {
+      "stateId": "today.vow_cap_reached",
+      "surface": "today",
+      "category": "limit",
+      "severity": "low",
+      "blocking": true,
+      "trigger": "entitlement_active_vow_cap_reached",
+      "messageKey": "states.today.vow_cap_reached.title",
+      "recoveryActionKey": "actions.archive_or_upgrade",
+      "analyticsEvent": "paywall_viewed"
+    },
+    {
+      "stateId": "world.loading_from_cache",
+      "surface": "world",
+      "category": "loading",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "world_network_fetch_pending_cache_available",
+      "messageKey": "states.world.loading_from_cache.title",
+      "recoveryActionKey": "actions.continue",
+      "analyticsEvent": "world_scene_opened"
+    },
+    {
+      "stateId": "world.degraded_cached_state",
+      "surface": "world",
+      "category": "degraded",
+      "severity": "medium",
+      "blocking": false,
+      "trigger": "world_fetch_failed_cache_available",
+      "messageKey": "states.world.degraded_cached_state.title",
+      "recoveryActionKey": "actions.retry",
+      "analyticsEvent": "world_scene_opened"
+    },
+    {
+      "stateId": "rewards.pending_reconciliation",
+      "surface": "today",
+      "category": "degraded",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "completion_accepted_before_server_reward_resolution",
+      "messageKey": "states.rewards.pending_reconciliation.title",
+      "recoveryActionKey": "actions.check_back",
+      "analyticsEvent": null
+    },
+    {
+      "stateId": "paywall.data_unavailable",
+      "surface": "paywall",
+      "category": "error",
+      "severity": "medium",
+      "blocking": false,
+      "trigger": "paywall_config_or_products_missing",
+      "messageKey": "states.paywall.data_unavailable.title",
+      "recoveryActionKey": "actions.continue_free",
+      "analyticsEvent": "paywall_viewed"
+    },
+    {
+      "stateId": "subscription.restore_failed",
+      "surface": "settings",
+      "category": "error",
+      "severity": "medium",
+      "blocking": false,
+      "trigger": "restore_purchase_request_failed",
+      "messageKey": "states.subscription.restore_failed.title",
+      "recoveryActionKey": "actions.try_restore_again",
+      "analyticsEvent": "subscription_restored"
+    },
+    {
+      "stateId": "permissions.notifications_denied",
+      "surface": "settings",
+      "category": "permission",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "notification_permission_denied",
+      "messageKey": "states.permissions.notifications_denied.title",
+      "recoveryActionKey": "actions.open_system_settings",
+      "analyticsEvent": "notification_permission_result"
+    },
+    {
+      "stateId": "permissions.healthkit_denied",
+      "surface": "settings",
+      "category": "permission",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "healthkit_permission_denied",
+      "messageKey": "states.permissions.healthkit_denied.title",
+      "recoveryActionKey": "actions.use_manual_logging",
+      "analyticsEvent": "healthkit_permission_result"
+    },
+    {
+      "stateId": "account.delete_export_pending",
+      "surface": "settings",
+      "category": "degraded",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "delete_account_request_submitted",
+      "messageKey": "states.account.delete_export_pending.title",
+      "recoveryActionKey": "actions.contact_support_if_needed",
+      "analyticsEvent": null
+    }
+  ]
+}

@@ -1,0 +1,627 @@
+openapi: 3.1.0
+info:
+  title: Aevora API
+  version: v1
+servers:
+  - url: https://api.aevora.example.com
+paths:
+  /v1/auth/guest:
+    post:
+      summary: Create or resume a guest session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [deviceId]
+              properties:
+                deviceId:
+                  type: string
+      responses:
+        "200":
+          description: Guest session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+  /v1/auth/apple:
+    post:
+      summary: Exchange Apple identity token for an app session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [identityToken]
+              properties:
+                identityToken:
+                  type: string
+      responses:
+        "200":
+          description: Registered session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+  /v1/auth/link-account:
+    post:
+      summary: Link a guest account to a registered account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [guestUserId, identityToken]
+              properties:
+                guestUserId:
+                  type: string
+                identityToken:
+                  type: string
+      responses:
+        "200":
+          description: Linked session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+  /v1/profile:
+    get:
+      summary: Fetch profile and avatar snapshot
+      responses:
+        "200":
+          description: Profile snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponse"
+    patch:
+      summary: Update profile fields
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                selectedIdentityShellId:
+                  type: string
+                toneMode:
+                  type: string
+                  enum: [gentle, balanced, driven]
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponse"
+  /v1/avatar:
+    patch:
+      summary: Update avatar cosmetics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                silhouetteId:
+                  type: string
+                paletteId:
+                  type: string
+                accessoryIds:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Updated avatar
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [avatar]
+                properties:
+                  avatar:
+                    $ref: "#/components/schemas/Avatar"
+  /v1/vows:
+    get:
+      summary: List user vows
+      responses:
+        "200":
+          description: Vow list
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [vows]
+                properties:
+                  vows:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Vow"
+    post:
+      summary: Create a new vow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Vow"
+                - type: object
+                  required: [title, type, category, target, schedule]
+                  properties:
+                    schedule:
+                      $ref: "#/components/schemas/VowSchedule"
+      responses:
+        "201":
+          description: Created vow
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [vow]
+                properties:
+                  vow:
+                    $ref: "#/components/schemas/Vow"
+  /v1/vows/{vowId}:
+    patch:
+      summary: Update a vow
+      parameters:
+        - in: path
+          name: vowId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated vow
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [vow]
+                properties:
+                  vow:
+                    $ref: "#/components/schemas/Vow"
+  /v1/vows/{vowId}/archive:
+    post:
+      summary: Archive a vow
+      parameters:
+        - in: path
+          name: vowId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Archived vow
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [vowId, status]
+                properties:
+                  vowId:
+                    type: string
+                  status:
+                    type: string
+                    enum: [archived]
+  /v1/completions:
+    post:
+      summary: Submit a single completion event
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompletionRequest"
+      responses:
+        "200":
+          description: Completion accepted and reconciled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompletionResponse"
+  /v1/sync/operations:
+    post:
+      summary: Submit queued offline operations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [operations]
+              properties:
+                operations:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/QueuedOperation"
+      responses:
+        "200":
+          description: Per-operation reconciliation results
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [results]
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SyncResult"
+  /v1/progression/snapshot:
+    get:
+      summary: Fetch current progression snapshot
+      responses:
+        "200":
+          description: Progression snapshot
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [levelState, emberState, activeChapter]
+                properties:
+                  levelState:
+                    $ref: "#/components/schemas/LevelState"
+                  emberState:
+                    $ref: "#/components/schemas/EmberState"
+                  activeChapter:
+                    $ref: "#/components/schemas/ChapterState"
+  /v1/world-state:
+    get:
+      summary: Fetch district and chapter-facing world state
+      responses:
+        "200":
+          description: World snapshot
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [districtState]
+                properties:
+                  districtState:
+                    $ref: "#/components/schemas/DistrictState"
+  /v1/inventory:
+    get:
+      summary: Fetch inventory items
+      responses:
+        "200":
+          description: Inventory list
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/InventoryItem"
+  /v1/shop/offers:
+    get:
+      summary: Fetch current shop offers
+      responses:
+        "200":
+          description: Shop offers
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [offers]
+                properties:
+                  offers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ShopOffer"
+  /v1/subscription/state:
+    get:
+      summary: Fetch current entitlement state
+      responses:
+        "200":
+          description: Subscription state
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [subscriptionState]
+                properties:
+                  subscriptionState:
+                    $ref: "#/components/schemas/SubscriptionState"
+  /v1/subscription/restore:
+    post:
+      summary: Trigger a purchase restore check
+      responses:
+        "200":
+          description: Restore result
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [subscriptionState]
+                properties:
+                  subscriptionState:
+                    $ref: "#/components/schemas/SubscriptionState"
+  /v1/remote-config:
+    get:
+      summary: Fetch remote config
+      responses:
+        "200":
+          description: Config payload
+          content:
+            application/json:
+              schema:
+                type: object
+  /v1/analytics/events:
+    post:
+      summary: Ingest analytics events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [events]
+              properties:
+                events:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        "202":
+          description: Events accepted
+components:
+  schemas:
+    SessionResponse:
+      type: object
+      required: [accessToken, refreshToken, user]
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        user:
+          type: object
+          required: [id, authMode]
+          properties:
+            id:
+              type: string
+            authMode:
+              type: string
+              enum: [guest, registered]
+    ProfileResponse:
+      type: object
+      required: [profile, avatar, subscriptionState]
+      properties:
+        profile:
+          $ref: "#/components/schemas/Profile"
+        avatar:
+          $ref: "#/components/schemas/Avatar"
+        subscriptionState:
+          $ref: "#/components/schemas/SubscriptionState"
+    Profile:
+      type: object
+      required: [id, userId, selectedIdentityShellId, toneMode, timezone, onboardingState]
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        selectedIdentityShellId:
+          type: string
+        toneMode:
+          type: string
+          enum: [gentle, balanced, driven]
+        timezone:
+          type: string
+        onboardingState:
+          type: string
+          enum: [not_started, in_progress, completed]
+    Avatar:
+      type: object
+      required: [id, userId, silhouetteId, paletteId, accessoryIds]
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        silhouetteId:
+          type: string
+        paletteId:
+          type: string
+        accessoryIds:
+          type: array
+          items:
+            type: string
+    Vow:
+      type: object
+      required: [id, userId, title, type, category, status, difficulty, target]
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+          enum: [binary, count, duration]
+        category:
+          type: string
+        status:
+          type: string
+          enum: [draft, active, archived]
+        difficulty:
+          type: string
+          enum: [gentle, standard, stretch]
+        target:
+          type: object
+    VowSchedule:
+      type: object
+      required: [cadence, activeWeekdays]
+      properties:
+        cadence:
+          type: string
+        activeWeekdays:
+          type: array
+          items:
+            type: string
+        reminderLocalTime:
+          type: [string, "null"]
+    CompletionRequest:
+      type: object
+      required: [clientRequestId, vowId, localDate, source, progressState]
+      properties:
+        clientRequestId:
+          type: string
+        vowId:
+          type: string
+        localDate:
+          type: string
+          format: date
+        source:
+          type: string
+          enum: [manual, healthkit]
+        progressState:
+          type: string
+          enum: [partial, complete]
+        quantity:
+          type: [number, "null"]
+        durationMinutes:
+          type: [number, "null"]
+    CompletionResponse:
+      type: object
+      required: [completionEvent, rewards, reconciliation]
+      properties:
+        completionEvent:
+          type: object
+        rewards:
+          type: array
+          items:
+            type: object
+        reconciliation:
+          type: object
+          required: [status]
+          properties:
+            status:
+              type: string
+              enum: [applied, duplicate, conflict]
+    QueuedOperation:
+      type: object
+      required: [clientRequestId, operationType, payload]
+      properties:
+        clientRequestId:
+          type: string
+        operationType:
+          type: string
+          enum: [vow_create, vow_update, vow_archive, completion_submit]
+        payload:
+          type: object
+    SyncResult:
+      type: object
+      required: [clientRequestId, status]
+      properties:
+        clientRequestId:
+          type: string
+        status:
+          type: string
+          enum: [applied, duplicate, rejected, retry_later]
+        serverSnapshot:
+          type: object
+    LevelState:
+      type: object
+      required: [rank, currentRankResonance, lifetimeResonance]
+      properties:
+        rank:
+          type: integer
+        currentRankResonance:
+          type: integer
+        lifetimeResonance:
+          type: integer
+    EmberState:
+      type: object
+      required: [availableEmbers, heat]
+      properties:
+        availableEmbers:
+          type: integer
+        heat:
+          type: integer
+    ChapterState:
+      type: object
+      required: [chapterId, status, progressPercent]
+      properties:
+        chapterId:
+          type: string
+        status:
+          type: string
+        progressPercent:
+          type: number
+    DistrictState:
+      type: object
+      required: [districtId, restorationStage, problemTemplateId]
+      properties:
+        districtId:
+          type: string
+        restorationStage:
+          type: string
+        problemTemplateId:
+          type: string
+    InventoryItem:
+      type: object
+      required: [id, itemDefinitionId, quantity, bucket, rarity]
+      properties:
+        id:
+          type: string
+        itemDefinitionId:
+          type: string
+        quantity:
+          type: integer
+        bucket:
+          type: string
+        rarity:
+          type: string
+    ShopOffer:
+      type: object
+      required: [id, itemDefinitionId, priceGold, entitlementGate]
+      properties:
+        id:
+          type: string
+        itemDefinitionId:
+          type: string
+        priceGold:
+          type: integer
+        entitlementGate:
+          type: string
+    SubscriptionState:
+      type: object
+      required: [id, tier, billingState, trialEligible]
+      properties:
+        id:
+          type: string
+        tier:
+          type: string
+          enum: [free, trial, premium_monthly, premium_annual]
+        billingState:
+          type: string
+          enum: [active, grace_period, billing_retry, expired]
+        trialEligible:
+          type: boolean
+        expiresAt:
+          type: [string, "null"]

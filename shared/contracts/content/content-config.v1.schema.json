@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "content-config.v1.schema.json",
+  "title": "Aevora Content Config v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "originFamilies",
+    "identityShells",
+    "districts",
+    "npcs",
+    "chapters",
+    "questTemplates",
+    "itemDefinitions",
+    "shopOffers"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "v1"
+    },
+    "originFamilies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "titleKey"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "titleKey": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "identityShells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "originFamilyId",
+          "displayNameKey"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "originFamilyId": {
+            "type": "string"
+          },
+          "displayNameKey": {
+            "type": "string"
+          },
+          "flavorOverlayKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "districts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "npcs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "chapters": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "questTemplates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "itemDefinitions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "shopOffers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+# Replace handles with actual GitHub usernames before enabling branch protection.
+* @founder @cto
+/ios/ @ios-lead
+/backend/ @backend-lead
+/content/ @content-lead
+/assets/ @art-lead
+/docs/ @product-lead
+/shared/contracts/ @cto @backend-lead @ios-lead
+/.github/workflows/ @cto
+/ops/ @cto @product-lead

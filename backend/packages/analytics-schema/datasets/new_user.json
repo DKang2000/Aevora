@@ -1,0 +1,16 @@
+{
+  "scenarioId": "new_user",
+  "user": {
+    "id": "usr_demo_new_001",
+    "authMode": "guest"
+  },
+  "profile": {
+    "identityShellId": "idn_knight",
+    "originFamilyId": "dawnbound",
+    "timezone": "America/New_York"
+  },
+  "vows": [
+    "shared/contracts/fixtures/launch/vow_binary_read.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}

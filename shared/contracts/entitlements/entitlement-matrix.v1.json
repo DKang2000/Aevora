@@ -1,0 +1,50 @@
+{
+  "version": "v1",
+  "tiers": {
+    "free": {
+      "activeVowCap": 3,
+      "identityAccess": "single_selected_identity",
+      "chapterAccess": {
+        "starterArc": "full",
+        "chapterOne": "limited"
+      },
+      "widgets": "basic",
+      "liveActivities": false,
+      "healthkitVerification": false,
+      "logging": "manual_only",
+      "statsHistory": "basic",
+      "inventoryHousingCosmetics": "basic"
+    },
+    "trial": {
+      "inherits": "premium",
+      "trialDays": 7
+    },
+    "premium_monthly": {
+      "activeVowCap": 7,
+      "identityAccess": "all_launch_identities",
+      "chapterAccess": {
+        "starterArc": "full",
+        "chapterOne": "full"
+      },
+      "widgets": "advanced",
+      "liveActivities": true,
+      "healthkitVerification": true,
+      "logging": "manual_plus_verified",
+      "statsHistory": "deep",
+      "inventoryHousingCosmetics": "expanded"
+    },
+    "premium_annual": {
+      "sameAs": "premium_monthly"
+    }
+  },
+  "rules": {
+    "premiumCannot": [
+      "auto_complete_vows",
+      "buy_chains",
+      "bypass_behavior_loop",
+      "buy_permanent_progression_superiority"
+    ],
+    "gracePeriodBehavior": "retain_premium_access_during_storekit_grace",
+    "guestLinkContinuity": "preserve_subscription_state_on_account_link"
+  }
+}

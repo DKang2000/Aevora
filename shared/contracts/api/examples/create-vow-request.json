@@ -1,0 +1,22 @@
+{
+  "title": "Morning walk",
+  "type": "duration",
+  "category": "health",
+  "difficulty": "gentle",
+  "target": {
+    "durationMinutes": 20
+  },
+  "schedule": {
+    "cadence": "daily",
+    "activeWeekdays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ],
+    "reminderLocalTime": "08:00"
+  }
+}

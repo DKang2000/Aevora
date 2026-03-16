@@ -1,0 +1,105 @@
+{
+  "version": "v1",
+  "fixtures": [
+    {
+      "id": "new_free_user",
+      "file": "user_free_new.json",
+      "validates": [
+        "ST-01",
+        "ST-07"
+      ]
+    },
+    {
+      "id": "premium_trial_user",
+      "file": "user_trial_premium.json",
+      "validates": [
+        "ST-01",
+        "ST-07"
+      ]
+    },
+    {
+      "id": "starter_plan_three_vows",
+      "file": "starter_plan_three_vows.json",
+      "validates": [
+        "ST-01",
+        "ST-03",
+        "ST-11"
+      ]
+    },
+    {
+      "id": "binary_vow",
+      "file": "vow_binary_read.json",
+      "validates": [
+        "ST-01"
+      ]
+    },
+    {
+      "id": "count_vow",
+      "file": "vow_count_water.json",
+      "validates": [
+        "ST-01"
+      ]
+    },
+    {
+      "id": "duration_vow",
+      "file": "vow_duration_walk.json",
+      "validates": [
+        "ST-01"
+      ]
+    },
+    {
+      "id": "same_day_chain_example",
+      "file": "same_day_chain_example.json",
+      "validates": [
+        "ST-01",
+        "ST-04"
+      ]
+    },
+    {
+      "id": "cooling_rekindle_example",
+      "file": "cooling_rekindle_example.json",
+      "validates": [
+        "ST-01",
+        "ST-04"
+      ]
+    },
+    {
+      "id": "first_magical_moment_world_state",
+      "file": "first_magical_moment_world_state.json",
+      "validates": [
+        "ST-06"
+      ]
+    },
+    {
+      "id": "partial_district_state",
+      "file": "partial_district_state.json",
+      "validates": [
+        "ST-01",
+        "ST-06"
+      ]
+    },
+    {
+      "id": "shop_inventory_snapshot",
+      "file": "shop_inventory_snapshot.json",
+      "validates": [
+        "ST-01",
+        "ST-06",
+        "ST-07"
+      ]
+    },
+    {
+      "id": "remote_config_defaults_snapshot",
+      "file": "remote_config_defaults_snapshot.json",
+      "validates": [
+        "ST-05"
+      ]
+    },
+    {
+      "id": "analytics_events_sample",
+      "file": "analytics_events_sample.json",
+      "validates": [
+        "ST-04"
+      ]
+    }
+  ]
+}

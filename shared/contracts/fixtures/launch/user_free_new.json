@@ -1,0 +1,9 @@
+{
+  "userId": "usr_fixture_free_001",
+  "authMode": "guest",
+  "selectedIdentityShellId": "idn_baker",
+  "subscriptionState": {
+    "tier": "free",
+    "billingState": "active"
+  }
+}

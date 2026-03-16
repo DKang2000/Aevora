@@ -1,0 +1,14 @@
+{
+  "vowId": "vow_walk_001",
+  "localDate": "2026-03-15",
+  "chainState": {
+    "currentLength": 4,
+    "bestLength": 4,
+    "status": "active"
+  },
+  "completionEvent": {
+    "id": "vce_chain_001",
+    "progressState": "complete",
+    "source": "manual"
+  }
+}

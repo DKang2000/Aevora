@@ -1,0 +1,8 @@
+{
+  "id": "vow_read_001",
+  "title": "Read before bed",
+  "type": "binary",
+  "target": {
+    "completionsPerDay": 1
+  }
+}

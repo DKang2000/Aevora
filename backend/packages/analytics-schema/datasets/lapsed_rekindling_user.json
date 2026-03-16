@@ -1,0 +1,12 @@
+{
+  "scenarioId": "lapsed_rekindling_user",
+  "user": {
+    "id": "usr_demo_rekindle_001",
+    "authMode": "registered"
+  },
+  "progressionState": "shared/contracts/fixtures/launch/cooling_rekindle_example.json",
+  "vows": [
+    "shared/contracts/fixtures/launch/vow_duration_walk.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}

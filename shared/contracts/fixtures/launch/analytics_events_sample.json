@@ -1,0 +1,27 @@
+[
+  {
+    "event_name": "onboarding_completed",
+    "event_version": "v1",
+    "occurred_at_utc": "2026-03-15T09:15:00Z",
+    "local_date": "2026-03-15",
+    "anonymous_device_id": "anon_001",
+    "session_id": "ses_001",
+    "surface": "onboarding",
+    "app_build": "1.0.0",
+    "platform": "ios"
+  },
+  {
+    "event_name": "vow_completed",
+    "event_version": "v1",
+    "occurred_at_utc": "2026-03-15T12:12:00Z",
+    "local_date": "2026-03-15",
+    "user_id": "usr_fixture_free_001",
+    "session_id": "ses_002",
+    "surface": "today",
+    "app_build": "1.0.0",
+    "platform": "ios",
+    "vow_id": "vow_walk_001",
+    "completion_source": "manual",
+    "progress_state": "complete"
+  }
+]

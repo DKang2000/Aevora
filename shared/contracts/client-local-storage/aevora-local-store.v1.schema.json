@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aevora-local-store.v1.schema.json",
+  "title": "Aevora Local Store v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "profile",
+    "subscriptionState",
+    "activeVows",
+    "syncQueue",
+    "todaySnapshot"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "v1"
+    },
+    "profile": {
+      "type": "object"
+    },
+    "avatar": {
+      "type": "object"
+    },
+    "subscriptionState": {
+      "type": "object"
+    },
+    "activeVows": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "progressionSnapshot": {
+      "type": "object"
+    },
+    "districtState": {
+      "type": "object"
+    },
+    "inventorySummary": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "completionDrafts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "rewardHistory": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "syncQueue": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/queuedOperation"
+      }
+    },
+    "remoteConfigCache": {
+      "type": "object"
+    },
+    "permissionState": {
+      "type": "object"
+    },
+    "todaySnapshot": {
+      "$ref": "#/$defs/todaySnapshot"
+    },
+    "liveActivitySnapshot": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "$defs": {
+    "queuedOperation": {
+      "type": "object",
+      "required": [
+        "clientRequestId",
+        "operationType",
+        "createdAt",
+        "attemptCount",
+        "status",
+        "payload"
+      ],
+      "properties": {
+        "clientRequestId": {
+          "type": "string"
+        },
+        "operationType": {
+          "type": "string",
+          "enum": [
+            "vow_create",
+            "vow_update",
+            "vow_archive",
+            "completion_submit"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "attemptCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "lastAttemptAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "dependencyIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "in_flight",
+            "retryable_error",
+            "terminal_error",
+            "applied"
+          ]
+        },
+        "payload": {
+          "type": "object"
+        }
+      }
+    },
+    "todaySnapshot": {
+      "type": "object",
+      "required": [
+        "localDate",
+        "activeVowCount",
+        "completedVowCount",
+        "chainSummary"
+      ],
+      "properties": {
+        "localDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "activeVowCount": {
+          "type": "integer"
+        },
+        "completedVowCount": {
+          "type": "integer"
+        },
+        "chainSummary": {
+          "type": "object"
+        },
+        "chapterSummary": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

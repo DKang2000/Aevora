@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vow-completion-event.schema.json",
+  "allOf": [
+    {
+      "$ref": "common-event.schema.json"
+    },
+    {
+      "type": "object",
+      "required": [
+        "vow_id",
+        "completion_source",
+        "progress_state"
+      ],
+      "properties": {
+        "event_name": {
+          "enum": [
+            "vow_started",
+            "vow_progress_updated",
+            "vow_completed",
+            "day_completed_first_vow",
+            "all_planned_vows_completed",
+            "vow_missed",
+            "vow_rekindled"
+          ]
+        },
+        "vow_id": {
+          "type": "string"
+        },
+        "completion_source": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "healthkit"
+          ]
+        },
+        "progress_state": {
+          "type": "string",
+          "enum": [
+            "partial",
+            "complete"
+          ]
+        },
+        "quantity": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "duration_minutes": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    }
+  ]
+}

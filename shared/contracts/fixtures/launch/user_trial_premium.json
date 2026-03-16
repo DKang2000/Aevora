@@ -1,0 +1,10 @@
+{
+  "userId": "usr_fixture_trial_001",
+  "authMode": "registered",
+  "selectedIdentityShellId": "idn_knight",
+  "subscriptionState": {
+    "tier": "trial",
+    "billingState": "active",
+    "expiresAt": "2026-03-22T09:00:00Z"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "event_name": "vow_completed",
+  "event_version": "v1",
+  "occurred_at_utc": "2026-03-16T12:00:00Z",
+  "local_date": "2026-03-16",
+  "user_id": "5b10ca6f195a9f96aa12c4d7f0d7b3531b8364a84ce854ed84114a23e7c3a6c4",
+  "session_id": "f6d9bcfef7d97fdc8ae24db7c56f5fb7cf0298c5c7d4fa9d4d4ab41f517fe4b1",
+  "surface": "today",
+  "app_build": "1",
+  "platform": "ios",
+  "experiment_assignments": [],
+  "properties": {
+    "vow_id": "vow_read"
+  }
+}

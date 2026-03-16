@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "remote-config.v1.schema.json",
+  "title": "Aevora Remote Config v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "featureFlags",
+    "economy",
+    "onboarding",
+    "paywall",
+    "reminders",
+    "widgets",
+    "liveActivities",
+    "chapterGating"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "v1"
+    },
+    "featureFlags": {
+      "type": "object",
+      "required": [
+        "advanced_widgets_enabled",
+        "live_activities_enabled",
+        "healthkit_verification_enabled",
+        "chapter_one_premium_gate_enabled"
+      ],
+      "properties": {
+        "advanced_widgets_enabled": {
+          "type": "boolean"
+        },
+        "live_activities_enabled": {
+          "type": "boolean"
+        },
+        "healthkit_verification_enabled": {
+          "type": "boolean"
+        },
+        "chapter_one_premium_gate_enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "economy": {
+      "type": "object",
+      "required": [
+        "free_active_vow_cap",
+        "premium_active_vow_cap",
+        "binary_base_resonance",
+        "count_base_resonance",
+        "duration_base_resonance",
+        "embers_cap",
+        "over_completion_reward_cap_percent"
+      ],
+      "properties": {
+        "free_active_vow_cap": {
+          "type": "integer"
+        },
+        "premium_active_vow_cap": {
+          "type": "integer"
+        },
+        "binary_base_resonance": {
+          "type": "integer"
+        },
+        "count_base_resonance": {
+          "type": "integer"
+        },
+        "duration_base_resonance": {
+          "type": "integer"
+        },
+        "chain_bonus_percent_by_milestone": {
+          "type": "object"
+        },
+        "embers_cap": {
+          "type": "integer"
+        },
+        "over_completion_reward_cap_percent": {
+          "type": "integer"
+        }
+      }
+    },
+    "onboarding": {
+      "type": "object"
+    },
+    "paywall": {
+      "type": "object"
+    },
+    "reminders": {
+      "type": "object"
+    },
+    "widgets": {
+      "type": "object"
+    },
+    "liveActivities": {
+      "type": "object"
+    },
+    "chapterGating": {
+      "type": "object"
+    }
+  }
+}

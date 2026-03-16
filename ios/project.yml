@@ -1,0 +1,42 @@
+name: Aevora
+options:
+  createIntermediateGroups: true
+  bundleIdPrefix: com.aevora
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    TARGETED_DEVICE_FAMILY: 1
+    SUPPORTS_MACCATALYST: NO
+targets:
+  Aevora:
+    type: application
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - path: Aevora
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.aevora.app
+        PRODUCT_NAME: Aevora
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Aevora
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone:
+          - UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+    scheme:
+      gatherCoverageData: true
+      testTargets:
+        - AevoraTests
+  AevoraTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - path: AevoraTests
+    dependencies:
+      - target: Aevora
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.aevora.appTests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Aevora.app/Aevora"

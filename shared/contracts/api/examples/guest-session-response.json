@@ -1,0 +1,8 @@
+{
+  "accessToken": "access_demo_123",
+  "refreshToken": "refresh_demo_123",
+  "user": {
+    "id": "usr_demo_001",
+    "authMode": "guest"
+  }
+}

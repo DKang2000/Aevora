@@ -1,0 +1,29 @@
+{
+  "vow": {
+    "id": "vow_walk_001",
+    "userId": "usr_demo_001",
+    "title": "Morning walk",
+    "type": "duration",
+    "category": "health",
+    "status": "active",
+    "difficulty": "gentle",
+    "target": {
+      "durationMinutes": 20
+    },
+    "scheduleId": "vow_walk_001:schedule",
+    "sourceConnectionId": null
+  },
+  "schedule": {
+    "cadence": "daily",
+    "activeWeekdays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ],
+    "reminderLocalTime": "08:00"
+  }
+}

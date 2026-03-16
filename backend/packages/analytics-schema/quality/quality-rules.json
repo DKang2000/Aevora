@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "blocking": [
+    "unknown_event_name",
+    "missing_actor_identifier",
+    "invalid_occurred_at_utc",
+    "missing_session_id",
+    "missing_surface",
+    "missing_app_build"
+  ],
+  "warning": [
+    "missing_experiment_assignments_defaults_to_empty",
+    "root_level_event_specific_fields_are_normalized_into_properties"
+  ]
+}

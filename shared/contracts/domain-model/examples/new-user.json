@@ -1,0 +1,25 @@
+{
+  "user": {
+    "id": "usr_demo_001",
+    "authMode": "guest",
+    "status": "active",
+    "createdAt": "2026-03-15T09:00:00Z"
+  },
+  "profile": {
+    "id": "pro_demo_001",
+    "userId": "usr_demo_001",
+    "selectedIdentityShellId": "idn_baker",
+    "toneMode": "balanced",
+    "timezone": "America/New_York",
+    "onboardingState": "completed"
+  },
+  "avatar": {
+    "id": "ava_demo_001",
+    "userId": "usr_demo_001",
+    "silhouetteId": "hearthkeeper_base",
+    "paletteId": "ember_ochre",
+    "accessoryIds": [
+      "apron_starter"
+    ]
+  }
+}

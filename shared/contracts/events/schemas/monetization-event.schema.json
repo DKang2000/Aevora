@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "monetization-event.schema.json",
+  "allOf": [
+    {
+      "$ref": "common-event.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_name": {
+          "enum": [
+            "paywall_viewed",
+            "trial_started",
+            "purchase_started",
+            "purchase_completed",
+            "purchase_failed",
+            "subscription_restored",
+            "subscription_renewed",
+            "subscription_canceled",
+            "subscription_expired"
+          ]
+        },
+        "subscription_tier": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "free",
+            "trial",
+            "premium_monthly",
+            "premium_annual",
+            null
+          ]
+        },
+        "trial_included": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "failure_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  ]
+}

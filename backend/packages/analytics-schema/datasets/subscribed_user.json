@@ -1,0 +1,12 @@
+{
+  "scenarioId": "subscribed_user",
+  "user": {
+    "id": "usr_demo_premium_001",
+    "authMode": "registered"
+  },
+  "inventoryState": "shared/contracts/fixtures/launch/shop_inventory_snapshot.json",
+  "vows": [
+    "shared/contracts/fixtures/launch/starter_plan_three_vows.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_trial_premium.json"
+}

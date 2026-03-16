@@ -1,0 +1,14 @@
+{
+  "scenarioId": "in_progress_starter_arc",
+  "user": {
+    "id": "usr_demo_arc_001",
+    "authMode": "registered"
+  },
+  "chapterState": "shared/contracts/fixtures/launch/first_magical_moment_world_state.json",
+  "vows": [
+    "shared/contracts/fixtures/launch/vow_binary_read.json",
+    "shared/contracts/fixtures/launch/vow_count_water.json",
+    "shared/contracts/fixtures/launch/vow_duration_walk.json"
+  ],
+  "subscriptionState": "shared/contracts/fixtures/launch/user_free_new.json"
+}
