@@ -13,7 +13,7 @@ struct TodayRootView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(store.copy.text("today.headline", fallback: "Today's vows"))
                             .font(.system(size: 34, weight: .bold, design: .rounded))
-                        Text("Day \(store.chapterState.currentDay) of \(store.chapterState.title)")
+                        Text("Day \(store.chapterState.currentDay) of \(store.chapterState.chapterLength) in \(store.chapterState.title)")
                             .font(.headline)
                             .foregroundStyle(.secondary)
                     }
@@ -63,6 +63,11 @@ struct TodayRootView: View {
                 .foregroundStyle(.secondary)
             ProgressView(value: store.chapterState.progressPercent)
                 .tint(Color(red: 0.89, green: 0.55, blue: 0.25))
+            if store.chapterState.statusNote.isEmpty == false {
+                Text(store.chapterState.statusNote)
+                    .font(.footnote)
+                    .foregroundStyle(Color(red: 0.45, green: 0.24, blue: 0.13))
+            }
             Button {
                 store.isQuestJournalPresented = true
             } label: {
@@ -123,6 +128,19 @@ struct TodayRootView: View {
                 }
             }
 
+            if accountStore.shouldShowHealthKitEducation && store.hasCompletedOnboarding {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(store.copy.text("healthkit.education_title", fallback: "Verified inputs can stay narrow and optional"))
+                        .font(.headline)
+                    Text(store.copy.text("healthkit.education_body", fallback: "If one of your vows matches a supported HealthKit path, you can connect it here and still keep manual logging available."))
+                        .foregroundStyle(.secondary)
+                    Button(store.copy.text("healthkit.connect_cta", fallback: "Connect HealthKit")) {
+                        accountStore.connectHealthKit(using: store)
+                    }
+                    .buttonStyle(.bordered)
+                }
+            }
+
             VStack(alignment: .leading, spacing: 8) {
                 Text(accountStore.supportsAdvancedWidgets ? "Premium witness surfaces are active." : "The free Today widget is ready. Premium adds deeper witness surfaces.")
                     .font(.subheadline)
@@ -147,6 +165,11 @@ struct TodayRootView: View {
                             Text("\(vow.category) • \(vow.targetValue) \(vow.targetUnit)")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
+                            if let badge = store.completionBadge(for: vow.id) {
+                                Text(badge)
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(Color(red: 0.24, green: 0.48, blue: 0.31))
+                            }
                         }
                         Spacer()
                         Text(vow.statusLabel)
@@ -180,6 +203,7 @@ struct TodayRootView: View {
             HStack {
                 statChip(title: store.copy.text("today.chain_title", fallback: "Chains"), value: store.activeVows.map(\.chainLength).max() ?? 0)
                 statChip(title: store.copy.text("today.embers_title", fallback: "Embers"), value: store.availableEmbers)
+                statChip(title: "Gold", value: store.goldBalance)
                 statChip(title: "Rank", value: store.rank)
             }
             Button(store.copy.text("today.world_cta", fallback: "See the district respond")) {

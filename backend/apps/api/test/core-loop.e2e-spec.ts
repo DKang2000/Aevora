@@ -208,6 +208,99 @@ describe("Durable starter arc core loop", () => {
     );
   });
 
+  it("enters Chapter One preview and supports curated shop purchases with durable inventory", async () => {
+    const guest = await request(app.getHttpServer())
+      .post("/v1/auth/guest")
+      .send({ deviceId: "device-chapter-one-shop" })
+      .expect(200)
+      .then((response) => response.body);
+
+    const authHeader = { Authorization: `Bearer ${guest.accessToken}` };
+
+    const vow = await request(app.getHttpServer())
+      .post("/v1/vows")
+      .set(authHeader)
+      .send({
+        title: "Write one journal line",
+        type: "binary",
+        category: "Emotional",
+        difficulty: "gentle",
+        target: {
+          value: 1,
+          unit: "completion"
+        },
+        schedule: {
+          cadence: "daily",
+          activeWeekdays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+        }
+      })
+      .expect(201)
+      .then((response) => response.body.vow);
+
+    const completionDates = [
+      "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-21", "2026-03-22",
+      "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-28", "2026-03-29",
+      "2026-03-30"
+    ];
+
+    for (const [index, localDate] of completionDates.entries()) {
+      await request(app.getHttpServer())
+        .post("/v1/completions")
+        .set(authHeader)
+        .send({
+          clientRequestId: `cmp_chapter_one_${index + 1}`,
+          vowId: vow.id,
+          localDate,
+          source: "manual",
+          progressState: "complete"
+        })
+        .expect(200);
+    }
+
+    const progression = await request(app.getHttpServer())
+      .get("/v1/progression/snapshot")
+      .set(authHeader)
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(progression.activeChapter.chapterId).toBe("chapter_one");
+    expect(progression.activeChapter.status).toBe("preview_capped");
+
+    const offers = await request(app.getHttpServer())
+      .get("/v1/shop/offers")
+      .set(authHeader)
+      .expect(200)
+      .then((response) => response.body.offers);
+
+    const freeOffer = offers.find((offer: { entitlementGate: string; isLocked: boolean; canAfford: boolean }) => offer.entitlementGate === "free" && offer.isLocked === false);
+    expect(freeOffer).toBeDefined();
+    if (!freeOffer) {
+      throw new Error("Expected a free Chapter One offer.");
+    }
+    expect(freeOffer.canAfford).toBe(true);
+    expect(freeOffer.isLocked).toBe(false);
+
+    const purchase = await request(app.getHttpServer())
+      .post(`/v1/shop/offers/${freeOffer.id}/purchase`)
+      .set(authHeader)
+      .send({ source: "world_market" })
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(purchase.offerId).toBe(freeOffer.id);
+    expect(purchase.remainingGold).toBeGreaterThanOrEqual(0);
+
+    const inventory = await request(app.getHttpServer())
+      .get("/v1/inventory")
+      .set(authHeader)
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(inventory.items.map((item: { itemDefinitionId: string }) => item.itemDefinitionId)).toEqual(
+      expect.arrayContaining([freeOffer.itemDefinitionId])
+    );
+  });
+
   it("preserves trial continuity through guest linking, downgrade, restore, and relaunch", async () => {
     const guest = await request(app.getHttpServer())
       .post("/v1/auth/guest")
@@ -282,6 +375,145 @@ describe("Durable starter arc core loop", () => {
 
     expect(relaunchedSubscription.subscriptionState.tier).toBe("trial");
     expect(relaunchedSubscription.subscriptionState.trialEligible).toBe(false);
+  });
+
+  it("accepts verified completions once, suppresses duplicates, and returns a sparse notification plan", async () => {
+    const guest = await request(app.getHttpServer())
+      .post("/v1/auth/guest")
+      .send({ deviceId: "device-verified-inputs" })
+      .expect(200)
+      .then((response) => response.body);
+
+    const authHeader = { Authorization: `Bearer ${guest.accessToken}` };
+
+    const vow = await request(app.getHttpServer())
+      .post("/v1/vows")
+      .set(authHeader)
+      .send({
+        title: "Walk 30 minutes",
+        type: "duration",
+        category: "Physical",
+        difficulty: "gentle",
+        target: {
+          value: 30,
+          unit: "minutes"
+        },
+        schedule: {
+          cadence: "daily",
+          activeWeekdays: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+          reminderLocalTime: "07:30"
+        }
+      })
+      .expect(201)
+      .then((response) => response.body.vow);
+
+    await request(app.getHttpServer())
+      .post("/v1/subscription/trial")
+      .set(authHeader)
+      .send({ source: "paywall" })
+      .expect(200);
+
+    const firstImport = await request(app.getHttpServer())
+      .post("/v1/verified-inputs/completions")
+      .set(authHeader)
+      .send({
+        sourceEventId: "hk_evt_001",
+        sourceType: "healthkit",
+        sourceDomain: "workout",
+        vowId: vow.id,
+        localDate: "2026-03-16",
+        progressState: "complete",
+        durationMinutes: 30
+      })
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(firstImport.reconciliation.status).toBe("applied");
+    expect(firstImport.sourceConnection.authorizationState).toBe("granted");
+
+    const duplicateImport = await request(app.getHttpServer())
+      .post("/v1/verified-inputs/completions")
+      .set(authHeader)
+      .send({
+        sourceEventId: "hk_evt_001",
+        sourceType: "healthkit",
+        sourceDomain: "workout",
+        vowId: vow.id,
+        localDate: "2026-03-16",
+        progressState: "complete",
+        durationMinutes: 30
+      })
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(duplicateImport.reconciliation.status).toBe("duplicate");
+    expect(duplicateImport.completion.rewards[0].gold).toBe(firstImport.completion.rewards[0].gold);
+
+    const plan = await request(app.getHttpServer())
+      .get("/v1/notifications/plan")
+      .set(authHeader)
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(Array.isArray(plan.plan)).toBe(true);
+    expect(plan.plan.some((item: { kind: string; destination: string }) => item.kind === "vow_reminder" && item.destination === "today")).toBe(
+      true
+    );
+    expect(plan.plan.some((item: { kind: string; destination: string }) => item.kind === "witness_prompt" && item.destination === "world")).toBe(
+      true
+    );
+  });
+
+  it("refreshes entitlements from transaction context and applies StoreKit server notifications deterministically", async () => {
+    const guest = await request(app.getHttpServer())
+      .post("/v1/auth/guest")
+      .send({ deviceId: "device-storekit-reconcile" })
+      .expect(200)
+      .then((response) => response.body);
+
+    const authHeader = { Authorization: `Bearer ${guest.accessToken}` };
+
+    const refreshed = await request(app.getHttpServer())
+      .post("/v1/subscription/refresh")
+      .set(authHeader)
+      .send({
+        transactionId: "txn_001",
+        originalTransactionId: "otxn_001",
+        tier: "premium_monthly",
+        billingState: "active"
+      })
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(refreshed.subscriptionState.tier).toBe("premium_monthly");
+    expect(refreshed.authority).toBe("server");
+
+    const billingRetry = await request(app.getHttpServer())
+      .post("/v1/subscription/storekit/notifications")
+      .send({
+        notificationType: "DID_FAIL_TO_RENEW",
+        userId: guest.user.id,
+        tier: "premium_monthly",
+        transactionId: "txn_001"
+      })
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(billingRetry.subscriptionState.billingState).toBe("billing_retry");
+
+    const expired = await request(app.getHttpServer())
+      .post("/v1/subscription/storekit/notifications")
+      .send({
+        notificationType: "EXPIRED",
+        userId: guest.user.id,
+        tier: "premium_monthly",
+        transactionId: "txn_001"
+      })
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(expired.subscriptionState.tier).toBe("free");
+    expect(expired.subscriptionState.restoreTier).toBe("premium_monthly");
   });
 
   it("returns account export and glance snapshots, then deletes the account cleanly", async () => {

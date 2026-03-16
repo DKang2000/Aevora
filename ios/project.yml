@@ -17,9 +17,10 @@ targets:
     sources:
       - path: Aevora
       - path: SharedGlance
-    resources:
       - path: ../content/launch/launch-content.min.v1.json
+        buildPhase: resources
       - path: ../content/launch/copy/en/core.v1.json
+        buildPhase: resources
     dependencies:
       - target: AevoraWidgets
         embed: true

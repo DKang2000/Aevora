@@ -47,6 +47,33 @@
       "npc_cta",
       "quest_marker_title"
     ],
+    "hearth": [
+      "headline",
+      "visible_items_title",
+      "chapter_display_title"
+    ],
+    "inventory": [
+      "headline",
+      "empty_title",
+      "apply_cta",
+      "remove_cta",
+      "stored_title",
+      "applied_title"
+    ],
+    "shop": [
+      "headline",
+      "open_cta",
+      "buy_cta",
+      "owned_label",
+      "locked_label",
+      "offline_title"
+    ],
+    "dialogue": [
+      "headline",
+      "current_objective_title",
+      "next_action_title",
+      "dismiss_cta"
+    ],
     "profile": [
       "identity_title",
       "stats_title"
@@ -64,7 +91,25 @@
     ],
     "notifications": [
       "education_title",
-      "education_body"
+      "education_body",
+      "settings_disabled_title",
+      "settings_disabled_body",
+      "witness_title"
+    ],
+    "healthkit": [
+      "education_title",
+      "education_body",
+      "connect_cta",
+      "sync_cta",
+      "verified_badge",
+      "manual_fallback_body"
+    ],
+    "shortcuts": [
+      "headline",
+      "complete_vow_title",
+      "open_today_title",
+      "open_world_title",
+      "open_quest_title"
     ],
     "rewards": [
       "summary_title",
@@ -78,7 +123,14 @@
       "today.completion_queued_offline.title",
       "today.active_vow_cap_reached.title",
       "world.reward_pending.title",
-      "permissions.notifications_denied.title"
+      "world.npc_dialogue_unavailable.title",
+      "hearth.inventory_empty.title",
+      "shop.offline.title",
+      "shop.purchase_failed.title",
+      "permissions.notifications_denied.title",
+      "permissions.healthkit_denied.title",
+      "verified_inputs.import_failed.title",
+      "notifications.os_delivery_disabled.title"
     ],
     "actions": [
       "retry",
@@ -86,7 +138,11 @@
       "create_vow",
       "open_system_settings",
       "see_world",
-      "return_tomorrow"
+      "return_tomorrow",
+      "use_manual_logging",
+      "open_today",
+      "open_world",
+      "open_quest_journal"
     ],
     "content": [
       "family.dawnbound.title",

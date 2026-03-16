@@ -97,7 +97,9 @@
             "vow_create",
             "vow_update",
             "vow_archive",
-            "completion_submit"
+            "completion_submit",
+            "shop_purchase",
+            "verified_completion"
           ]
         },
         "createdAt": {

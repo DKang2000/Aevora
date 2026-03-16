@@ -5,6 +5,8 @@ enum SyncOperationType: String, Codable {
     case vowUpdate = "vow_update"
     case vowArchive = "vow_archive"
     case completionSubmit = "completion_submit"
+    case shopPurchase = "shop_purchase"
+    case verifiedCompletion = "verified_completion"
     case analyticsEvent = "analytics_event"
 }
 

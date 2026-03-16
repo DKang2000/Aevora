@@ -121,5 +121,13 @@ describePostgres("Postgres-backed durable starter arc core loop", () => {
       .then((response) => response.body);
 
     expect(inventory.items[0].itemDefinitionId).toBe("ember_quay_token");
+
+    const offers = await request(app.getHttpServer())
+      .get("/v1/shop/offers")
+      .set(restoredHeader)
+      .expect(200)
+      .then((response) => response.body.offers);
+
+    expect(Array.isArray(offers)).toBe(true);
   });
 });

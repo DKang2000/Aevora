@@ -40,4 +40,20 @@ export class SubscriptionController {
   async downgradeSubscription(@CurrentUser() user: { id: string }, @Body() body: { reason?: string }) {
     return this.coreLoopService.downgradeSubscription(user.id, body.reason);
   }
+
+  @Post("refresh")
+  @HttpCode(200)
+  async refreshSubscription(
+    @CurrentUser() user: { id: string },
+    @Body()
+    body: {
+      transactionId: string;
+      originalTransactionId?: string | null;
+      tier: "trial" | "premium_monthly" | "premium_annual";
+      billingState?: "active" | "grace_period" | "billing_retry" | "expired";
+      expiresAt?: string | null;
+    }
+  ) {
+    return this.coreLoopService.refreshSubscriptionFromTransaction(user.id, body);
+  }
 }

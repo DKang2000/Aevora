@@ -8,6 +8,8 @@ final class AccountSurfaceStoreTests: XCTestCase {
         let defaults = UserDefaults(suiteName: GlanceSurfacePersistence.suiteName) ?? .standard
         defaults.removeObject(forKey: GlanceSurfacePersistence.payloadKey)
         UserDefaults.standard.removeObject(forKey: "account.notification.permission.v1")
+        UserDefaults.standard.removeObject(forKey: "account.healthkit.permission.v1")
+        UserDefaults.standard.removeObject(forKey: "account.healthkit.last-sync.v1")
     }
 
     func testTrialStatePersistsAcrossStoreRebuild() {
@@ -18,6 +20,7 @@ final class AccountSurfaceStoreTests: XCTestCase {
             analyticsClient: environment.analyticsClient,
             remoteConfigClient: environment.remoteConfigClient,
             notificationManager: notificationManager,
+            healthKitManager: StubHealthKitManager(),
             glanceSurfaceStore: GlanceSurfaceStore(),
             liveActivityCoordinator: LiveActivityCoordinator()
         )
@@ -30,6 +33,7 @@ final class AccountSurfaceStoreTests: XCTestCase {
             analyticsClient: environment.analyticsClient,
             remoteConfigClient: environment.remoteConfigClient,
             notificationManager: notificationManager,
+            healthKitManager: StubHealthKitManager(),
             glanceSurfaceStore: GlanceSurfaceStore(),
             liveActivityCoordinator: LiveActivityCoordinator()
         )
@@ -38,7 +42,7 @@ final class AccountSurfaceStoreTests: XCTestCase {
         XCTAssertFalse(rebuilt.subscriptionState.trialEligible)
     }
 
-    func testSyncPublishesGlancePayloadAndPremiumGating() {
+    func testSyncPublishesGlancePayloadAndPremiumGating() async {
         let environment = AppEnvironment(inMemory: true)
         let notificationManager = StubNotificationManager(status: .authorized)
         let store = AccountSurfaceStore(
@@ -46,21 +50,31 @@ final class AccountSurfaceStoreTests: XCTestCase {
             analyticsClient: environment.analyticsClient,
             remoteConfigClient: environment.remoteConfigClient,
             notificationManager: notificationManager,
+            healthKitManager: StubHealthKitManager(),
             glanceSurfaceStore: GlanceSurfaceStore(),
             liveActivityCoordinator: LiveActivityCoordinator()
         )
 
         let coreLoop = environment.firstPlayableStore
+        environment.accountSurfaceStore = store
+        environment.firstPlayableStore.onStateChanged = { updatedStore in
+            store.syncFromCoreLoop(updatedStore)
+        }
         coreLoop.beginGuestMode()
         coreLoop.generateStarterRecommendations()
         coreLoop.finishOnboarding()
         store.purchase(tier: .premiumAnnual, using: coreLoop)
         store.syncFromCoreLoop(coreLoop)
 
+        await waitForCondition {
+            notificationManager.scheduledPlans.isEmpty == false
+        }
+
         let payload = GlanceSurfacePersistence.load()
         XCTAssertEqual(payload.subscription.tier, .premiumAnnual)
         XCTAssertTrue(payload.liveActivity.isEnabled)
         XCTAssertEqual(payload.today.activeVowCount, coreLoop.activeVows.count)
+        XCTAssertFalse(notificationManager.scheduledPlans.isEmpty)
     }
 
     func testDeleteAccountResetsCoreLoopAndSubscriptionState() {
@@ -71,6 +85,7 @@ final class AccountSurfaceStoreTests: XCTestCase {
             analyticsClient: environment.analyticsClient,
             remoteConfigClient: environment.remoteConfigClient,
             notificationManager: notificationManager,
+            healthKitManager: StubHealthKitManager(),
             glanceSurfaceStore: GlanceSurfaceStore(),
             liveActivityCoordinator: LiveActivityCoordinator()
         )
@@ -86,5 +101,46 @@ final class AccountSurfaceStoreTests: XCTestCase {
         XCTAssertEqual(coreLoop.authMode, "guest")
         XCTAssertFalse(coreLoop.hasCompletedOnboarding)
         XCTAssertEqual(store.subscriptionState.tier, .free)
+    }
+
+    func testHealthKitConnectionImportsVerifiedCompletionWithoutRemovingManualPath() async {
+        let environment = AppEnvironment(inMemory: true)
+        let healthKitManager = StubHealthKitManager(
+            status: .authorized,
+            samples: [
+                VerifiedHealthSample(
+                    sourceEventID: "hk_evt_001",
+                    domain: .workout,
+                    localDate: DateFormatter.aevoraTestLocalDate.string(from: .now),
+                    quantity: nil,
+                    durationMinutes: 30
+                )
+            ]
+        )
+        let store = AccountSurfaceStore(
+            repository: environment.repository,
+            analyticsClient: environment.analyticsClient,
+            remoteConfigClient: environment.remoteConfigClient,
+            notificationManager: StubNotificationManager(),
+            healthKitManager: healthKitManager,
+            glanceSurfaceStore: GlanceSurfaceStore(),
+            liveActivityCoordinator: LiveActivityCoordinator()
+        )
+
+        let coreLoop = environment.firstPlayableStore
+        coreLoop.beginGuestMode()
+        coreLoop.selectedLifeAreas = ["Physical"]
+        coreLoop.generateStarterRecommendations()
+        coreLoop.finishOnboarding()
+        store.purchase(tier: .premiumMonthly, using: coreLoop)
+
+        store.connectHealthKit(using: coreLoop)
+
+        await waitForCondition {
+            store.healthKitPermission == .authorized && coreLoop.matchingVerifiedVowID(for: .workout) != nil
+        }
+
+        XCTAssertEqual(store.healthKitPermission, .authorized)
+        XCTAssertNotNil(coreLoop.matchingVerifiedVowID(for: .workout))
     }
 }

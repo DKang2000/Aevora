@@ -66,6 +66,7 @@ This section defines:
 - `GET /v1/chapters/current`
 - `GET /v1/inventory`
 - `GET /v1/shop/offers`
+- `POST /v1/shop/offers/{offerId}/purchase`
 
 ### Entitlements and runtime config
 - `GET /v1/subscription/state`
@@ -100,6 +101,7 @@ This section defines:
 
 ## Sync and idempotency rules
 - `POST /v1/completions` accepts one completion intent; duplicate `clientRequestId` must return the same logical result.
+- `POST /v1/verified-inputs/completions` accepts one verified completion intent; duplicate `sourceEventId` must return the same logical result without granting duplicate rewards.
 - `POST /v1/sync/operations` accepts a batch of queued offline operations and returns per-operation status.
 - Reward grants are returned as derived results, never accepted as client-authored writes.
 - Conflict results must identify whether the client should replace local state, retry later, or keep the local record but mark it reconciled.
@@ -122,6 +124,8 @@ This section defines:
 - Expired premium during queued writes must not invalidate already-earned manual completions
 - Stale remote config fetch falls back to cached or bundled defaults
 - HealthKit-linked vows still accept manual completion when verification is unavailable
+- Notification-plan reads may be stale, but local reminder preferences remain valid until the next refresh
+- StoreKit server notifications can revise local entitlement assumptions after relaunch or restore
 
 ## Versioning notes
 - The public API is versioned under `/v1`
@@ -136,3 +140,4 @@ Supporting files live in `shared/contracts/api/examples/`.
 - Error semantics and idempotency are explicit
 - Guest mode, Sign in with Apple, linking, and entitlements all have defined transport behavior
 - No out-of-scope endpoints are introduced
+- Verified-input ingestion, notification-plan reads, and StoreKit reconciliation paths are explicit enough for iOS, backend, and QA to share one contract

@@ -90,6 +90,50 @@
       "analyticsEvent": "world_scene_opened"
     },
     {
+      "stateId": "world.npc_dialogue_unavailable",
+      "surface": "world",
+      "category": "degraded",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "npc_dialogue_requested_without_current_cached_context",
+      "messageKey": "states.world.npc_dialogue_unavailable.title",
+      "recoveryActionKey": "actions.retry",
+      "analyticsEvent": "npc_interaction_started"
+    },
+    {
+      "stateId": "hearth.inventory_empty",
+      "surface": "hearth",
+      "category": "empty",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "inventory_count_is_zero",
+      "messageKey": "states.hearth.inventory_empty.title",
+      "recoveryActionKey": "actions.see_world",
+      "analyticsEvent": null
+    },
+    {
+      "stateId": "shop.offline",
+      "surface": "world",
+      "category": "offline",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "shop_purchase_requested_without_network_and_without_cached_commit_path",
+      "messageKey": "states.shop.offline.title",
+      "recoveryActionKey": "actions.retry",
+      "analyticsEvent": "shop_opened"
+    },
+    {
+      "stateId": "shop.purchase_failed",
+      "surface": "world",
+      "category": "error",
+      "severity": "medium",
+      "blocking": false,
+      "trigger": "shop_purchase_rejected_by_server_or_local_validation",
+      "messageKey": "states.shop.purchase_failed.title",
+      "recoveryActionKey": "actions.retry",
+      "analyticsEvent": "shop_purchase_completed"
+    },
+    {
       "stateId": "rewards.pending_reconciliation",
       "surface": "today",
       "category": "degraded",
@@ -143,6 +187,28 @@
       "messageKey": "states.permissions.healthkit_denied.title",
       "recoveryActionKey": "actions.use_manual_logging",
       "analyticsEvent": "healthkit_permission_result"
+    },
+    {
+      "stateId": "verified_inputs.import_failed",
+      "surface": "today",
+      "category": "degraded",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "verified_input_ingestion_rejected_or_unavailable",
+      "messageKey": "states.verified_inputs.import_failed.title",
+      "recoveryActionKey": "actions.use_manual_logging",
+      "analyticsEvent": "verified_completion_imported"
+    },
+    {
+      "stateId": "notifications.os_delivery_disabled",
+      "surface": "settings",
+      "category": "permission",
+      "severity": "low",
+      "blocking": false,
+      "trigger": "notification_schedule_requested_while_os_permission_denied",
+      "messageKey": "states.notifications.os_delivery_disabled.title",
+      "recoveryActionKey": "actions.open_system_settings",
+      "analyticsEvent": "notification_permission_result"
     },
     {
       "stateId": "account.delete_export_pending",

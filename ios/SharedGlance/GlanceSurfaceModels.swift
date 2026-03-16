@@ -110,6 +110,7 @@ enum GlanceSurfaceDeepLinkSource: String, Codable {
     case premiumWidget = "premium_widget"
     case liveActivity = "live_activity"
     case notification = "notification"
+    case shortcut = "shortcut"
 }
 
 enum GlanceSurfacePersistence {

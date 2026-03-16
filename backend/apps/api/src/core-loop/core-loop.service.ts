@@ -13,10 +13,13 @@ import {
   CompletionResponseRecord,
   DistrictStateRecord,
   InventoryItemRecord,
+  NotificationPlanItemRecord,
   PlayerState,
   ProfileRecord,
   QueueOperationRecord,
   SessionResponse,
+  ShopOfferRecord,
+  SourceConnectionRecord,
   SubscriptionTier,
   VowRecord,
   VowScheduleRecord,
@@ -26,6 +29,7 @@ import {
 type LaunchContent = {
   identityShells: Array<{ id: string; originFamilyId: string; defaultAvatar?: { silhouetteId: string; paletteId: string; accessoryIds: string[] } }>;
   chapters: Array<{ id: string; startingQuestId: string; tomorrowCtaKey: string }>;
+  npcs: Array<{ id: string; sceneAnchorId?: string }>;
   starterArcDays: Array<{
     day: number;
     questId: string;
@@ -34,6 +38,19 @@ type LaunchContent = {
     npcIdsVisible: string[];
     tomorrowPromptKey: string;
   }>;
+  chapterOneMilestones?: Array<{
+    id: string;
+    startDay: number;
+    endDay: number;
+    questId: string;
+    restorationStageId: string;
+    worldMomentId: string;
+    npcIdsVisible: string[];
+    tomorrowPromptKey: string;
+  }>;
+  problemTemplates?: Array<{
+    id: string;
+  }>;
   districts: Array<{
     id: string;
     problemTemplateIds: string[];
@@ -41,10 +58,22 @@ type LaunchContent = {
   }>;
   itemDefinitions?: Array<{
     id: string;
+    nameKey?: string;
+    summaryKey?: string;
     bucket: InventoryItemRecord["bucket"];
     rarity: InventoryItemRecord["rarity"];
+    slot?: InventoryItemRecord["slot"];
   }>;
-  shopOffers?: Array<Record<string, unknown>>;
+  shopOffers?: Array<{
+    id: string;
+    itemDefinitionId: string;
+    priceGold: number;
+    entitlementGate: "free" | "premium";
+    vendorNpcId: string;
+    stockLimit: number;
+    chapterGate: "starter_arc" | "chapter_one";
+    repeatable: boolean;
+  }>;
 };
 
 type PersistedCoreLoopState = {
@@ -335,13 +364,23 @@ export class CoreLoopService {
     });
 
     user.levelState = rewards.levelState;
-    user.chapterState = this.buildChapterState(user.completionDates.length);
-    user.districtState = this.buildDistrictState(user.completionDates.length);
+    user.goldBalance += rewards.gold;
+    user.chapterState = this.buildChapterState(user.completionDates.length, user.subscriptionState.tier);
+    user.districtState = this.buildDistrictState(user.completionDates.length, user.subscriptionState.tier);
 
     const inventoryAwards = this.inventoryAwardsForCompletionDay(user.completionDates.length);
     if (inventoryAwards.length > 0) {
       user.inventoryItems = this.mergeInventoryAwards(user.inventoryItems, inventoryAwards, request.localDate);
     }
+    user.rewardLedger.push({
+      id: `rwd_${randomUUID()}`,
+      source: "completion",
+      localDate: request.localDate,
+      resonanceDelta: rewards.resonance,
+      goldDelta: rewards.gold,
+      itemDefinitionIds: inventoryAwards.map((item) => item.itemDefinitionId),
+      note: user.chapterState.chapterId
+    });
 
     const response: CompletionResponseRecord = {
       completionEvent: {
@@ -402,6 +441,36 @@ export class CoreLoopService {
           continue;
         }
 
+        if (operation.operationType === "shop_purchase") {
+          const payload = operation.payload as { offerId: string; source?: string };
+          results.push({
+            clientRequestId: operation.clientRequestId,
+            status: "applied",
+            serverSnapshot: await this.purchaseShopOffer(userId, payload.offerId, payload.source)
+          });
+          continue;
+        }
+
+        if (operation.operationType === "verified_completion") {
+          const payload = operation.payload as {
+            sourceEventId: string;
+            sourceType: "healthkit";
+            sourceDomain: "workout" | "steps" | "sleep";
+            vowId: string;
+            localDate: string;
+            progressState?: "partial" | "complete";
+            quantity?: number | null;
+            durationMinutes?: number | null;
+          };
+          const imported = await this.ingestVerifiedCompletion(userId, payload);
+          results.push({
+            clientRequestId: operation.clientRequestId,
+            status: imported.reconciliation.status,
+            serverSnapshot: imported
+          });
+          continue;
+        }
+
         const response = await this.submitCompletion(userId, operation.payload as unknown as CompletionRequestRecord);
         results.push({
           clientRequestId: operation.clientRequestId,
@@ -419,13 +488,14 @@ export class CoreLoopService {
     return { results };
   }
 
-  async getProgressionSnapshot(userId: string): Promise<{ levelState: PlayerState["levelState"]; emberState: PlayerState["emberState"]; activeChapter: ChapterStateRecord }> {
+  async getProgressionSnapshot(userId: string): Promise<{ levelState: PlayerState["levelState"]; emberState: PlayerState["emberState"]; activeChapter: ChapterStateRecord; goldBalance: number }> {
     await this.ensureStateLoaded();
     const user = this.requireUser(userId);
     return {
       levelState: user.levelState,
       emberState: user.emberState,
-      activeChapter: user.chapterState
+      activeChapter: user.chapterState,
+      goldBalance: user.goldBalance
     };
   }
 
@@ -448,9 +518,182 @@ export class CoreLoopService {
     };
   }
 
-  async getShopOffers(): Promise<{ offers: Array<Record<string, unknown>> }> {
+  async getShopOffers(userId: string): Promise<{ offers: ShopOfferRecord[] }> {
+    await this.ensureStateLoaded();
+    const user = this.requireUser(userId);
     return {
-      offers: this.content.shopOffers ?? []
+      offers: this.buildShopOffersForUser(user)
+    };
+  }
+
+  async getNotificationPlan(userId: string): Promise<{ generatedAt: string; plan: NotificationPlanItemRecord[] }> {
+    await this.ensureStateLoaded();
+    const user = this.requireUser(userId);
+    return {
+      generatedAt: new Date().toISOString(),
+      plan: this.buildNotificationPlan(user)
+    };
+  }
+
+  async ingestVerifiedCompletion(
+    userId: string,
+    request: {
+      sourceEventId: string;
+      sourceType: "healthkit";
+      sourceDomain: "workout" | "steps" | "sleep";
+      vowId: string;
+      localDate: string;
+      progressState?: "partial" | "complete";
+      quantity?: number | null;
+      durationMinutes?: number | null;
+    }
+  ): Promise<{
+    importId: string;
+    completion: CompletionResponseRecord;
+    sourceConnection: SourceConnectionRecord;
+    reconciliation: { status: "applied" | "duplicate" };
+  }> {
+    await this.ensureStateLoaded();
+
+    const user = this.requireUser(userId);
+    if (user.subscriptionState.tier === "free") {
+      throw new ConflictException("Verified inputs require premium breadth.");
+    }
+
+    const existing = user.verifiedCompletionsBySourceEventId[request.sourceEventId];
+    if (existing) {
+      const sourceConnection = this.upsertSourceConnection(user, {
+        sourceType: "healthkit",
+        authorizationState: "granted",
+        supportedDomains: [request.sourceDomain],
+        lastSyncAt: new Date().toISOString()
+      });
+      await this.persistState();
+      return {
+        importId: existing.importId,
+        completion: existing.completionResponse,
+        sourceConnection,
+        reconciliation: { status: "duplicate" }
+      };
+    }
+
+    const vow = user.vows.find((entry) => entry.id === request.vowId);
+    if (!vow) {
+      throw new NotFoundException("Vow not found.");
+    }
+    if (!this.isVerifiedDomainEligibleForVow(vow, request.sourceDomain)) {
+      throw new ConflictException("Verified source does not match this vow.");
+    }
+
+    const completion = await this.submitCompletion(userId, {
+      clientRequestId: `verified_${request.sourceEventId}`,
+      vowId: request.vowId,
+      localDate: request.localDate,
+      source: "healthkit",
+      progressState: request.progressState ?? "complete",
+      quantity: request.quantity ?? null,
+      durationMinutes: request.durationMinutes ?? null
+    });
+    const importId = `imp_${randomUUID()}`;
+    const sourceConnection = this.upsertSourceConnection(user, {
+      sourceType: "healthkit",
+      authorizationState: "granted",
+      supportedDomains: [request.sourceDomain],
+      lastSyncAt: new Date().toISOString()
+    });
+    user.verifiedCompletionsBySourceEventId[request.sourceEventId] = {
+      importId,
+      sourceEventId: request.sourceEventId,
+      sourceType: request.sourceType,
+      sourceDomain: request.sourceDomain,
+      vowId: request.vowId,
+      localDate: request.localDate,
+      completionResponse: completion
+    };
+    await this.persistState();
+
+    return {
+      importId,
+      completion,
+      sourceConnection,
+      reconciliation: { status: "applied" }
+    };
+  }
+
+  async purchaseShopOffer(userId: string, offerId: string, source = "world_market"): Promise<{ purchaseId: string; offerId: string; item: InventoryItemRecord; remainingGold: number; source: string }> {
+    await this.ensureStateLoaded();
+
+    const user = this.requireUser(userId);
+    const offer = this.buildShopOffersForUser(user).find((entry) => entry.id === offerId);
+    if (!offer) {
+      throw new NotFoundException("Shop offer not found.");
+    }
+    if (offer.isLocked) {
+      throw new ConflictException("Shop offer is locked.");
+    }
+    if (!offer.canAfford) {
+      throw new ConflictException("Not enough Gold.");
+    }
+    if (offer.remainingStock <= 0) {
+      throw new ConflictException("Shop offer is sold out.");
+    }
+
+    const definition = this.content.itemDefinitions?.find((entry) => entry.id === offer.itemDefinitionId);
+    if (!definition) {
+      throw new NotFoundException("Item definition not found.");
+    }
+
+    user.goldBalance -= offer.priceGold;
+    const existingIndex = user.inventoryItems.findIndex(
+      (item) => item.itemDefinitionId === offer.itemDefinitionId && definition.bucket === "reward_token"
+    );
+    let item: InventoryItemRecord;
+    if (existingIndex >= 0) {
+      user.inventoryItems[existingIndex] = {
+        ...user.inventoryItems[existingIndex],
+        quantity: user.inventoryItems[existingIndex].quantity + 1
+      };
+      item = user.inventoryItems[existingIndex];
+    } else {
+      item = {
+        id: `itm_${randomUUID()}`,
+        itemDefinitionId: offer.itemDefinitionId,
+        bucket: definition.bucket,
+        rarity: definition.rarity,
+        quantity: 1,
+        earnedFrom: `shop:${offer.id}`,
+        status: "stored",
+        slot: definition.slot ?? "display"
+      };
+      user.inventoryItems = [...user.inventoryItems, item];
+    }
+
+    const purchaseId = `pur_${randomUUID()}`;
+    user.shopPurchaseHistory.push({
+      id: purchaseId,
+      offerId: offer.id,
+      itemDefinitionId: offer.itemDefinitionId,
+      purchasedAt: new Date().toISOString(),
+      priceGold: offer.priceGold,
+      remainingGold: user.goldBalance
+    });
+    user.rewardLedger.push({
+      id: `rwd_${randomUUID()}`,
+      source: "shop_purchase",
+      localDate: new Date().toISOString().slice(0, 10),
+      resonanceDelta: 0,
+      goldDelta: -offer.priceGold,
+      itemDefinitionIds: [offer.itemDefinitionId],
+      note: offer.id
+    });
+    await this.persistState();
+
+    return {
+      purchaseId,
+      offerId: offer.id,
+      item,
+      remainingGold: user.goldBalance,
+      source
     };
   }
 
@@ -477,6 +720,8 @@ export class CoreLoopService {
       restoreTier: "trial",
       expiresAt: this.futureIsoDate(this.trialDurationDays)
     };
+    user.chapterState = this.buildChapterState(user.completionDates.length, user.subscriptionState.tier);
+    user.districtState = this.buildDistrictState(user.completionDates.length, user.subscriptionState.tier);
     await this.persistState();
 
     return {
@@ -501,6 +746,8 @@ export class CoreLoopService {
       restoreTier: tier,
       expiresAt: null
     };
+    user.chapterState = this.buildChapterState(user.completionDates.length, user.subscriptionState.tier);
+    user.districtState = this.buildDistrictState(user.completionDates.length, user.subscriptionState.tier);
     await this.persistState();
 
     return {
@@ -527,6 +774,8 @@ export class CoreLoopService {
       billingState: "active",
       expiresAt: restoreTier === "trial" ? this.futureIsoDate(this.trialDurationDays) : null
     };
+    user.chapterState = this.buildChapterState(user.completionDates.length, user.subscriptionState.tier);
+    user.districtState = this.buildDistrictState(user.completionDates.length, user.subscriptionState.tier);
     await this.persistState();
 
     return {
@@ -547,11 +796,103 @@ export class CoreLoopService {
       restoreTier: previousTier === "free" ? user.subscriptionState.restoreTier ?? null : previousTier,
       expiresAt: new Date().toISOString()
     };
+    user.chapterState = this.buildChapterState(user.completionDates.length, user.subscriptionState.tier);
+    user.districtState = this.buildDistrictState(user.completionDates.length, user.subscriptionState.tier);
     await this.persistState();
 
     return {
       subscriptionState: user.subscriptionState,
       reason
+    };
+  }
+
+  async refreshSubscriptionFromTransaction(
+    userId: string,
+    request: {
+      transactionId: string;
+      originalTransactionId?: string | null;
+      tier: "trial" | "premium_monthly" | "premium_annual";
+      billingState?: PlayerState["subscriptionState"]["billingState"];
+      expiresAt?: string | null;
+    }
+  ): Promise<{ subscriptionState: PlayerState["subscriptionState"]; transactionId: string; authority: "server" }> {
+    await this.ensureStateLoaded();
+
+    const user = this.requireUser(userId);
+    user.subscriptionState = {
+      ...user.subscriptionState,
+      tier: request.tier,
+      billingState: request.billingState ?? "active",
+      trialEligible: false,
+      restoreTier: request.tier,
+      expiresAt: request.expiresAt ?? (request.tier === "trial" ? this.futureIsoDate(this.trialDurationDays) : null)
+    };
+    user.chapterState = this.buildChapterState(user.completionDates.length, user.subscriptionState.tier);
+    user.districtState = this.buildDistrictState(user.completionDates.length, user.subscriptionState.tier);
+    await this.persistState();
+
+    return {
+      subscriptionState: user.subscriptionState,
+      transactionId: request.transactionId,
+      authority: "server"
+    };
+  }
+
+  async applyStoreKitServerNotification(request: {
+    notificationType: "DID_RENEW" | "DID_FAIL_TO_RENEW" | "DID_RECOVER" | "EXPIRED";
+    subtype?: string | null;
+    userId: string;
+    tier?: "trial" | "premium_monthly" | "premium_annual" | null;
+    transactionId?: string | null;
+    expiresAt?: string | null;
+  }): Promise<{ status: "applied"; notificationType: string; subscriptionState: PlayerState["subscriptionState"] }> {
+    await this.ensureStateLoaded();
+
+    const user = this.requireUser(request.userId);
+    const nextTier = request.tier ?? (user.subscriptionState.restoreTier ?? user.subscriptionState.tier);
+
+    switch (request.notificationType) {
+      case "DID_RENEW":
+      case "DID_RECOVER":
+        user.subscriptionState = {
+          ...user.subscriptionState,
+          tier: nextTier,
+          billingState: "active",
+          trialEligible: false,
+          restoreTier: nextTier === "free" ? user.subscriptionState.restoreTier : nextTier,
+          expiresAt: request.expiresAt ?? (nextTier === "trial" ? this.futureIsoDate(this.trialDurationDays) : null)
+        };
+        break;
+      case "DID_FAIL_TO_RENEW":
+        user.subscriptionState = {
+          ...user.subscriptionState,
+          tier: nextTier,
+          billingState: "billing_retry",
+          trialEligible: false,
+          restoreTier: nextTier === "free" ? user.subscriptionState.restoreTier : nextTier,
+          expiresAt: request.expiresAt ?? user.subscriptionState.expiresAt
+        };
+        break;
+      case "EXPIRED":
+        user.subscriptionState = {
+          ...user.subscriptionState,
+          tier: "free",
+          billingState: "expired",
+          trialEligible: false,
+          restoreTier: nextTier === "free" ? user.subscriptionState.restoreTier : nextTier,
+          expiresAt: request.expiresAt ?? new Date().toISOString()
+        };
+        break;
+    }
+
+    user.chapterState = this.buildChapterState(user.completionDates.length, user.subscriptionState.tier);
+    user.districtState = this.buildDistrictState(user.completionDates.length, user.subscriptionState.tier);
+    await this.persistState();
+
+    return {
+      status: "applied",
+      notificationType: request.notificationType,
+      subscriptionState: user.subscriptionState
     };
   }
 
@@ -638,8 +979,8 @@ export class CoreLoopService {
   private makeNewUser(input: { authMode: "guest" | "registered" }): PlayerState {
     const userId = `usr_${randomUUID()}`;
     const identity = this.content.identityShells.find((entry) => entry.id === "idn_baker") ?? this.content.identityShells[0];
-    const chapter = this.buildChapterState(0);
-    const district = this.buildDistrictState(0);
+    const chapter = this.buildChapterState(0, "free");
+    const district = this.buildDistrictState(0, "free");
 
     return {
       user: {
@@ -691,9 +1032,26 @@ export class CoreLoopService {
         currentRankResonance: 0,
         lifetimeResonance: 0
       },
+      goldBalance: 0,
       chapterState: chapter,
       districtState: district,
-      inventoryItems: []
+      inventoryItems: [],
+      rewardLedger: [],
+      shopPurchaseHistory: [],
+      notificationPreference: {
+        userId,
+        remindersEnabled: true,
+        rewardMomentsEnabled: true,
+        weeklyArcEnabled: true
+      },
+      sourceConnections: [
+        {
+          sourceType: "healthkit",
+          authorizationState: "not_requested",
+          supportedDomains: []
+        }
+      ],
+      verifiedCompletionsBySourceEventId: {}
     };
   }
 
@@ -717,7 +1075,25 @@ export class CoreLoopService {
       throw new NotFoundException("User not found.");
     }
 
+    this.normalizeUserState(user);
     return user;
+  }
+
+  private normalizeUserState(user: PlayerState): void {
+    user.notificationPreference ??= {
+      userId: user.user.id,
+      remindersEnabled: true,
+      rewardMomentsEnabled: true,
+      weeklyArcEnabled: true
+    };
+    user.sourceConnections ??= [
+      {
+        sourceType: "healthkit",
+        authorizationState: "not_requested",
+        supportedDomains: []
+      }
+    ];
+    user.verifiedCompletionsBySourceEventId ??= {};
   }
 
   private calculateProgressPercent(vow: VowRecord, request: CompletionRequestRecord): number {
@@ -847,34 +1223,82 @@ export class CoreLoopService {
     };
   }
 
-  private buildChapterState(completionDayCount: number): ChapterStateRecord {
-    const chapter = this.content.chapters.find((entry) => entry.id === "starter_arc") ?? this.content.chapters[0];
-    const boundedDay = Math.max(0, Math.min(Math.max(completionDayCount, 1), this.content.starterArcDays.length));
-    const dayConfig = this.content.starterArcDays[Math.max(0, boundedDay - 1)] ?? this.content.starterArcDays[0];
+  private buildChapterState(completionDayCount: number, tier: SubscriptionTier): ChapterStateRecord {
+    const starterChapter = this.content.chapters.find((entry) => entry.id === "starter_arc") ?? this.content.chapters[0];
+    if (completionDayCount <= this.content.starterArcDays.length) {
+      const boundedDay = Math.max(0, Math.min(Math.max(completionDayCount, 1), this.content.starterArcDays.length));
+      const dayConfig = this.content.starterArcDays[Math.max(0, boundedDay - 1)] ?? this.content.starterArcDays[0];
+
+      return {
+        chapterId: "starter_arc",
+        status: completionDayCount >= this.content.starterArcDays.length ? "completed" : completionDayCount === 0 ? "not_started" : "in_progress",
+        progressPercent: Math.min((completionDayCount / this.content.starterArcDays.length) * 100, 100),
+        currentDay: Math.max(Math.min(completionDayCount, this.content.starterArcDays.length), 1),
+        activeQuestId: completionDayCount === 0 ? starterChapter.startingQuestId : dayConfig.questId,
+        tomorrowPromptKey: dayConfig.tomorrowPromptKey ?? starterChapter.tomorrowCtaKey,
+        entitlementStatus: "free_preview",
+        accessibleDayCap: this.content.starterArcDays.length
+      };
+    }
+
+    const chapterOne = this.content.chapters.find((entry) => entry.id === "chapter_one") ?? starterChapter;
+    const totalChapterDays = 30;
+    const rawChapterDay = Math.min(completionDayCount - this.content.starterArcDays.length, totalChapterDays);
+    const premiumFull = tier !== "free";
+    const accessibleDayCap = premiumFull ? totalChapterDays : 7;
+    const accessibleDay = Math.max(1, Math.min(rawChapterDay, accessibleDayCap));
+    const milestone = this.resolveChapterOneMilestone(accessibleDay);
 
     return {
-      chapterId: "starter_arc",
-      status: completionDayCount >= 7 ? "completed" : completionDayCount === 0 ? "not_started" : "in_progress",
-      progressPercent: Math.min((completionDayCount / 7) * 100, 100),
-      currentDay: Math.max(Math.min(completionDayCount, 7), 1),
-      activeQuestId: completionDayCount === 0 ? chapter.startingQuestId : dayConfig.questId,
-      tomorrowPromptKey: dayConfig.tomorrowPromptKey ?? chapter.tomorrowCtaKey
+      chapterId: "chapter_one",
+      status: premiumFull ? (rawChapterDay >= totalChapterDays ? "completed" : "active") : (rawChapterDay > accessibleDayCap ? "preview_capped" : "active"),
+      progressPercent: Math.min((accessibleDay / totalChapterDays) * 100, 100),
+      currentDay: accessibleDay,
+      activeQuestId: milestone?.questId ?? chapterOne.startingQuestId,
+      tomorrowPromptKey: milestone?.tomorrowPromptKey ?? chapterOne.tomorrowCtaKey,
+      entitlementStatus: premiumFull ? "premium_full" : "free_preview",
+      accessibleDayCap
     };
   }
 
-  private buildDistrictState(completionDayCount: number): DistrictStateRecord {
+  private buildDistrictState(completionDayCount: number, tier: SubscriptionTier): DistrictStateRecord {
     const district = this.content.districts.find((entry) => entry.id === "ember_quay") ?? this.content.districts[0];
-    const stageId = completionDayCount >= 7 ? "rekindled" : completionDayCount >= 3 ? "rebuilding" : completionDayCount >= 1 ? "stirring" : "dim";
-    const dayConfig = completionDayCount === 0 ? this.content.starterArcDays[0] : this.content.starterArcDays[Math.min(completionDayCount - 1, this.content.starterArcDays.length - 1)];
+    if (completionDayCount <= this.content.starterArcDays.length) {
+      const stageId =
+        completionDayCount >= 7 ? "rekindled" : completionDayCount >= 3 ? "rebuilding" : completionDayCount >= 1 ? "stirring" : "dim";
+      const dayConfig =
+        completionDayCount === 0
+          ? this.content.starterArcDays[0]
+          : this.content.starterArcDays[Math.min(completionDayCount - 1, this.content.starterArcDays.length - 1)];
+      const stageConfig = district.restorationStages.find((entry) => entry.id === stageId) ?? district.restorationStages[0];
+
+      return {
+        districtId: "ember_quay",
+        restorationStage: stageId,
+        problemTemplateId: district.problemTemplateIds[0],
+        visibleNpcIds: dayConfig.npcIdsVisible,
+        currentMomentId: dayConfig.worldMomentId,
+        worldChangeKey: stageConfig.worldChangeKey,
+        problemState: completionDayCount >= 7 ? "resolved" : "stabilizing",
+        problemProgressPercent: Math.min(Math.round((completionDayCount / this.content.starterArcDays.length) * 100), 100)
+      };
+    }
+
+    const rawChapterDay = Math.min(completionDayCount - this.content.starterArcDays.length, 30);
+    const accessibleDay = tier === "free" ? Math.min(rawChapterDay, 7) : rawChapterDay;
+    const milestone = this.resolveChapterOneMilestone(accessibleDay);
+    const stageId = milestone?.restorationStageId ?? "market_waking";
     const stageConfig = district.restorationStages.find((entry) => entry.id === stageId) ?? district.restorationStages[0];
 
     return {
       districtId: "ember_quay",
       restorationStage: stageId,
-      problemTemplateId: district.problemTemplateIds[0],
-      visibleNpcIds: dayConfig.npcIdsVisible,
-      currentMomentId: dayConfig.worldMomentId,
-      worldChangeKey: stageConfig.worldChangeKey
+      problemTemplateId: district.problemTemplateIds.at(-1) ?? district.problemTemplateIds[0],
+      visibleNpcIds: milestone?.npcIdsVisible ?? this.content.starterArcDays.at(-1)?.npcIdsVisible ?? [],
+      currentMomentId: milestone?.worldMomentId ?? "oven_glow",
+      worldChangeKey: stageConfig.worldChangeKey,
+      problemState: accessibleDay >= 30 ? "resolved" : accessibleDay >= 19 ? "stewarding" : accessibleDay >= 13 ? "repairing" : "waking",
+      problemProgressPercent: Math.min(Math.round((accessibleDay / 30) * 100), 100)
     };
   }
 
@@ -892,7 +1316,9 @@ export class CoreLoopService {
           bucket: token.bucket,
           rarity: token.rarity,
           quantity: 1,
-          earnedFrom: "starter_day_1_reward"
+          earnedFrom: "starter_day_1_reward",
+          status: "stored",
+          slot: token.slot ?? "keepsake"
         });
       }
     }
@@ -906,7 +1332,41 @@ export class CoreLoopService {
           bucket: cosmetic.bucket,
           rarity: cosmetic.rarity,
           quantity: 1,
-          earnedFrom: "starter_day_7_chest"
+          earnedFrom: "starter_day_7_chest",
+          status: "stored",
+          slot: cosmetic.slot ?? "attire"
+        });
+      }
+    }
+
+    if (completionDayCount === 14) {
+      const prop = definitionsById.get("lantern_rack_prop");
+      if (prop) {
+        awards.push({
+          id: `itm_${randomUUID()}`,
+          itemDefinitionId: prop.id,
+          bucket: prop.bucket,
+          rarity: prop.rarity,
+          quantity: 1,
+          earnedFrom: "chapter_one_preview_reward",
+          status: "stored",
+          slot: prop.slot ?? "display"
+        });
+      }
+    }
+
+    if (completionDayCount === 37) {
+      const rare = definitionsById.get("archive_map_cosmetic");
+      if (rare) {
+        awards.push({
+          id: `itm_${randomUUID()}`,
+          itemDefinitionId: rare.id,
+          bucket: rare.bucket,
+          rarity: rare.rarity,
+          quantity: 1,
+          earnedFrom: "chapter_one_completion_reward",
+          status: "stored",
+          slot: rare.slot ?? "display"
         });
       }
     }
@@ -927,6 +1387,137 @@ export class CoreLoopService {
     }
 
     return merged;
+  }
+
+  private resolveChapterOneMilestone(chapterDay: number) {
+    return this.content.chapterOneMilestones?.find((entry) => chapterDay >= entry.startDay && chapterDay <= entry.endDay);
+  }
+
+  private buildShopOffersForUser(user: PlayerState): ShopOfferRecord[] {
+    const ownedDefinitionIds = new Set(user.inventoryItems.map((item) => item.itemDefinitionId));
+
+    return (this.content.shopOffers ?? []).map((offer) => {
+      const purchaseCount = user.shopPurchaseHistory.filter((entry) => entry.offerId === offer.id).length;
+      const requiresPremium = offer.entitlementGate === "premium" && user.subscriptionState.tier === "free";
+      const chapterLocked = offer.chapterGate === "chapter_one" && user.completionDates.length <= this.content.starterArcDays.length;
+      const isOwned = ownedDefinitionIds.has(offer.itemDefinitionId) && !offer.repeatable;
+      const remainingStock = Math.max(0, offer.stockLimit - purchaseCount);
+
+      return {
+        id: offer.id,
+        itemDefinitionId: offer.itemDefinitionId,
+        priceGold: offer.priceGold,
+        entitlementGate: offer.entitlementGate,
+        vendorNpcId: offer.vendorNpcId,
+        stockLimit: offer.stockLimit,
+        chapterGate: offer.chapterGate,
+        repeatable: offer.repeatable,
+        canAfford: user.goldBalance >= offer.priceGold,
+        isOwned,
+        isLocked: requiresPremium || chapterLocked || isOwned || remainingStock <= 0,
+        remainingStock
+      };
+    });
+  }
+
+  private buildNotificationPlan(user: PlayerState): NotificationPlanItemRecord[] {
+    const activeVows = user.vows.filter((entry) => entry.status === "active");
+    const plan: NotificationPlanItemRecord[] = [];
+
+    if (user.notificationPreference.remindersEnabled) {
+      for (const vow of activeVows) {
+        const reminderTime = vow.schedule.reminderLocalTime;
+        if (!reminderTime) {
+          continue;
+        }
+        const [hour, minute] = reminderTime.split(":").map((value) => Number.parseInt(value, 10));
+        plan.push({
+          id: `notif_vow_${vow.id}`,
+          kind: "vow_reminder",
+          title: "Today's vow reminder",
+          body: `Return to ${vow.title} and keep Ember Quay moving.`,
+          deliveryHourLocal: Number.isFinite(hour) ? hour : 8,
+          deliveryMinuteLocal: Number.isFinite(minute) ? minute : 0,
+          destination: "today",
+          vowId: vow.id
+        });
+      }
+    }
+
+    if (user.notificationPreference.rewardMomentsEnabled && user.completionDates.length > 0) {
+      plan.push({
+        id: "notif_witness_prompt",
+        kind: "witness_prompt",
+        title: "The district is waiting",
+        body: this.resolveCopyFallback(user.chapterState.tomorrowPromptKey, "Return tonight. Ember Quay is ready to answer."),
+        deliveryHourLocal: 20,
+        deliveryMinuteLocal: 0,
+        destination: "world",
+        vowId: null
+      });
+    }
+
+    const hasCoolingChain = Object.values(user.chainStates).some((entry) => entry.status === "cooling");
+    if (hasCoolingChain) {
+      plan.push({
+        id: "notif_streak_risk",
+        kind: "streak_risk",
+        title: "A promise is cooling",
+        body: "A quick return is enough. Manual logging still counts tonight.",
+        deliveryHourLocal: 18,
+        deliveryMinuteLocal: 30,
+        destination: "today",
+        vowId: null
+      });
+    }
+
+    if (user.chapterState.status === "completed" || user.chapterState.status === "preview_capped") {
+      plan.push({
+        id: "notif_chapter_ready",
+        kind: "chapter_ready",
+        title: "Your next chapter beat is ready",
+        body: "Open the Quest Journal and see what Ember Quay is asking next.",
+        deliveryHourLocal: 21,
+        deliveryMinuteLocal: 0,
+        destination: "quest_journal",
+        vowId: null
+      });
+    }
+
+    return plan.slice(0, 4);
+  }
+
+  private upsertSourceConnection(user: PlayerState, patch: SourceConnectionRecord): SourceConnectionRecord {
+    const existingIndex = user.sourceConnections.findIndex((entry) => entry.sourceType === patch.sourceType);
+    if (existingIndex >= 0) {
+      const mergedDomains = Array.from(new Set([...user.sourceConnections[existingIndex].supportedDomains, ...patch.supportedDomains]));
+      user.sourceConnections[existingIndex] = {
+        ...user.sourceConnections[existingIndex],
+        ...patch,
+        supportedDomains: mergedDomains
+      };
+      return user.sourceConnections[existingIndex];
+    }
+
+    user.sourceConnections.push(patch);
+    return patch;
+  }
+
+  private isVerifiedDomainEligibleForVow(vow: VowRecord, domain: "workout" | "steps" | "sleep"): boolean {
+    if (domain === "workout") {
+      return vow.type === "duration" && vow.category === "Physical";
+    }
+    if (domain === "steps") {
+      return vow.type === "count" && vow.category === "Physical";
+    }
+    return vow.type === "duration" && ["Rest", "Emotional", "Physical"].includes(vow.category);
+  }
+
+  private resolveCopyFallback(key: string, fallback: string): string {
+    if (!key || key.trim().length === 0) {
+      return fallback;
+    }
+    return key.replace(/^content\./, "").replaceAll(".", " ").replaceAll("_", " ");
   }
 
   private resolveStorePath(): string {

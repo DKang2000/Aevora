@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Param, Post, UseGuards } from "@nestjs/common";
 
 import { CurrentUser } from "../common/auth/current-user.decorator";
 import { SessionAuthGuard } from "../common/auth/session-auth.guard";
@@ -42,7 +42,41 @@ export class ProgressionController {
   }
 
   @Get("shop/offers")
-  async getShopOffers() {
-    return this.coreLoopService.getShopOffers();
+  async getShopOffers(@CurrentUser() user: { id: string }) {
+    return this.coreLoopService.getShopOffers(user.id);
+  }
+
+  @Post("shop/offers/:offerId/purchase")
+  @HttpCode(200)
+  async purchaseShopOffer(
+    @CurrentUser() user: { id: string },
+    @Param("offerId") offerId: string,
+    @Body() body: { source?: string }
+  ) {
+    return this.coreLoopService.purchaseShopOffer(user.id, offerId, body?.source);
+  }
+
+  @Get("notifications/plan")
+  async getNotificationPlan(@CurrentUser() user: { id: string }) {
+    return this.coreLoopService.getNotificationPlan(user.id);
+  }
+
+  @Post("verified-inputs/completions")
+  @HttpCode(200)
+  async ingestVerifiedCompletion(
+    @CurrentUser() user: { id: string },
+    @Body()
+    body: {
+      sourceEventId: string;
+      sourceType: "healthkit";
+      sourceDomain: "workout" | "steps" | "sleep";
+      vowId: string;
+      localDate: string;
+      progressState?: "partial" | "complete";
+      quantity?: number | null;
+      durationMinutes?: number | null;
+    }
+  ) {
+    return this.coreLoopService.ingestVerifiedCompletion(user.id, body);
   }
 }

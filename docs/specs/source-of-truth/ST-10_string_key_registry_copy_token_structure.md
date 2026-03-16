@@ -34,10 +34,15 @@ This section defines:
 - `vow.*`
 - `world.*`
 - `hearth.*`
+- `inventory.*`
+- `shop.*`
+- `dialogue.*`
 - `profile.*`
 - `settings.*`
 - `paywall.*`
 - `notifications.*`
+- `healthkit.*`
+- `shortcuts.*`
 - `rewards.*`
 - `states.*`
 - `actions.*`

@@ -90,6 +90,8 @@ export interface ChapterStateRecord {
   currentDay: number;
   activeQuestId: string;
   tomorrowPromptKey: string;
+  entitlementStatus: "free_preview" | "premium_full";
+  accessibleDayCap: number;
 }
 
 export interface DistrictStateRecord {
@@ -99,6 +101,8 @@ export interface DistrictStateRecord {
   visibleNpcIds: string[];
   currentMomentId: string;
   worldChangeKey: string;
+  problemState: string;
+  problemProgressPercent: number;
 }
 
 export interface InventoryItemRecord {
@@ -108,7 +112,78 @@ export interface InventoryItemRecord {
   rarity: "common" | "uncommon" | "rare";
   quantity: number;
   earnedFrom: string;
+  status: "stored" | "applied";
+  slot: "display" | "attire" | "keepsake";
 }
+
+export interface ShopOfferRecord {
+  id: string;
+  itemDefinitionId: string;
+  priceGold: number;
+  entitlementGate: "free" | "premium";
+  vendorNpcId: string;
+  stockLimit: number;
+  chapterGate: "starter_arc" | "chapter_one";
+  repeatable: boolean;
+  canAfford: boolean;
+  isOwned: boolean;
+  isLocked: boolean;
+  remainingStock: number;
+}
+
+export interface RewardLedgerRecord {
+  id: string;
+  source: "completion" | "chapter_milestone" | "shop_purchase";
+  localDate: string;
+  resonanceDelta: number;
+  goldDelta: number;
+  itemDefinitionIds: string[];
+  note: string;
+}
+
+export interface ShopPurchaseRecord {
+  id: string;
+  offerId: string;
+  itemDefinitionId: string;
+  purchasedAt: string;
+  priceGold: number;
+  remainingGold: number;
+}
+
+export interface NotificationPreferenceRecord {
+  userId: string;
+  remindersEnabled: boolean;
+  rewardMomentsEnabled: boolean;
+  weeklyArcEnabled: boolean;
+}
+
+export interface SourceConnectionRecord {
+  sourceType: "healthkit";
+  authorizationState: "not_requested" | "requested" | "granted" | "denied";
+  supportedDomains: Array<"workout" | "steps" | "sleep">;
+  lastSyncAt?: string | null;
+}
+
+export interface NotificationPlanItemRecord {
+  id: string;
+  kind: "vow_reminder" | "witness_prompt" | "streak_risk" | "chapter_ready";
+  title: string;
+  body: string;
+  deliveryHourLocal: number;
+  deliveryMinuteLocal: number;
+  destination: "today" | "world" | "quest_journal";
+  vowId?: string | null;
+}
+
+export interface VerifiedCompletionImportRecord {
+  importId: string;
+  sourceEventId: string;
+  sourceType: "healthkit";
+  sourceDomain: "workout" | "steps" | "sleep";
+  vowId: string;
+  localDate: string;
+  completionResponse: CompletionResponseRecord;
+ }
 
 export interface CompletionRequestRecord {
   clientRequestId: string;
@@ -164,13 +239,19 @@ export interface PlayerState {
   chainStates: Record<string, ChainStateRecord>;
   emberState: EmberStateRecord;
   levelState: LevelStateRecord;
+  goldBalance: number;
   chapterState: ChapterStateRecord;
   districtState: DistrictStateRecord;
   inventoryItems: InventoryItemRecord[];
+  rewardLedger: RewardLedgerRecord[];
+  shopPurchaseHistory: ShopPurchaseRecord[];
+  notificationPreference: NotificationPreferenceRecord;
+  sourceConnections: SourceConnectionRecord[];
+  verifiedCompletionsBySourceEventId: Record<string, VerifiedCompletionImportRecord>;
 }
 
 export interface QueueOperationRecord {
   clientRequestId: string;
-  operationType: "vow_create" | "vow_update" | "vow_archive" | "completion_submit";
+  operationType: "vow_create" | "vow_update" | "vow_archive" | "completion_submit" | "shop_purchase" | "verified_completion";
   payload: Record<string, unknown>;
 }

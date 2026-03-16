@@ -56,12 +56,16 @@ struct OnboardingAvatarDraft: Equatable, Codable {
 }
 
 struct ChapterCardState: Equatable, Codable {
+    var chapterID: String
     var title: String
     var summary: String
     var currentDay: Int
+    var chapterLength: Int
     var progressPercent: Double
     var tomorrowPrompt: String
     var objectiveTitle: String
+    var statusNote: String
+    var entitlementStatus: String
 }
 
 struct DistrictWitnessState: Equatable, Codable {
@@ -72,6 +76,9 @@ struct DistrictWitnessState: Equatable, Codable {
     var magicalMomentTitle: String
     var magicalMomentBody: String
     var visibleNPCIDs: [String]
+    var problemTitle: String
+    var problemSummary: String
+    var problemProgressPercent: Double
 }
 
 struct RewardPresentationState: Identifiable, Equatable {
@@ -89,9 +96,80 @@ struct InventoryItemState: Identifiable, Equatable, Codable {
     let id: String
     let itemDefinitionId: String
     let name: String
+    let summary: String
     let bucket: String
     let rarity: String
     let earnedFrom: String
+    var status: String
+    let slot: String
+
+    init(
+        id: String,
+        itemDefinitionId: String,
+        name: String,
+        summary: String,
+        bucket: String,
+        rarity: String,
+        earnedFrom: String,
+        status: String,
+        slot: String
+    ) {
+        self.id = id
+        self.itemDefinitionId = itemDefinitionId
+        self.name = name
+        self.summary = summary
+        self.bucket = bucket
+        self.rarity = rarity
+        self.earnedFrom = earnedFrom
+        self.status = status
+        self.slot = slot
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case itemDefinitionId
+        case name
+        case summary
+        case bucket
+        case rarity
+        case earnedFrom
+        case status
+        case slot
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        itemDefinitionId = try container.decode(String.self, forKey: .itemDefinitionId)
+        name = try container.decode(String.self, forKey: .name)
+        summary = try container.decodeIfPresent(String.self, forKey: .summary) ?? name
+        bucket = try container.decode(String.self, forKey: .bucket)
+        rarity = try container.decode(String.self, forKey: .rarity)
+        earnedFrom = try container.decode(String.self, forKey: .earnedFrom)
+        status = try container.decodeIfPresent(String.self, forKey: .status) ?? "stored"
+        slot = try container.decodeIfPresent(String.self, forKey: .slot) ?? "display"
+    }
+}
+
+struct ShopOfferState: Identifiable, Equatable {
+    let id: String
+    let itemDefinitionId: String
+    let itemName: String
+    let itemSummary: String
+    let priceGold: Int
+    let vendorNpcID: String
+    let entitlementGate: String
+    let chapterGate: String
+    let canAfford: Bool
+    let isOwned: Bool
+    let isLocked: Bool
+    let remainingStock: Int
+}
+
+struct WorldAnchorState: Identifiable, Equatable {
+    let id: String
+    let title: String
+    let npcIDs: [String]
 }
 
 struct HearthState: Equatable {
@@ -105,6 +183,21 @@ struct ReminderPromptState: Identifiable, Equatable {
     let id: String
     let title: String
     let body: String
+}
+
+enum LocalCompletionSource: String, Codable {
+    case manual
+    case healthkit
+    case shortcut
+
+    var apiValue: String {
+        switch self {
+        case .healthkit:
+            return "healthkit"
+        case .manual, .shortcut:
+            return "manual"
+        }
+    }
 }
 
 private struct CoreLoopSnapshot: Codable {
@@ -132,6 +225,128 @@ private struct CoreLoopSnapshot: Codable {
     var dayCompletionCounts: [String: Int]
     var hasShownSoftPaywall: Bool
     var inventoryItems: [InventoryItemState]
+    var currentWorldAnchorID: String?
+    var verifiedSourceEventIDs: [String]
+    var verifiedCompletionDatesByVowID: [String: [String]]
+
+    init(
+        onboardingStep: Int,
+        hasStartedOnboarding: Bool,
+        hasCompletedOnboarding: Bool,
+        authMode: String,
+        selectedGoals: [String],
+        selectedLifeAreas: [String],
+        selectedBlocker: String,
+        dailyLoad: Int,
+        toneMode: String,
+        selectedFamilyID: String,
+        selectedIdentityID: String,
+        avatarDraft: OnboardingAvatarDraft,
+        recommendedVows: [PlayableVow],
+        activeVows: [PlayableVow],
+        availableEmbers: Int,
+        heat: Int,
+        rank: Int,
+        lifetimeResonance: Int,
+        todayGold: Int,
+        completionDayCount: Int,
+        completedDates: [String],
+        dayCompletionCounts: [String: Int],
+        hasShownSoftPaywall: Bool,
+        inventoryItems: [InventoryItemState],
+        currentWorldAnchorID: String?,
+        verifiedSourceEventIDs: [String],
+        verifiedCompletionDatesByVowID: [String: [String]]
+    ) {
+        self.onboardingStep = onboardingStep
+        self.hasStartedOnboarding = hasStartedOnboarding
+        self.hasCompletedOnboarding = hasCompletedOnboarding
+        self.authMode = authMode
+        self.selectedGoals = selectedGoals
+        self.selectedLifeAreas = selectedLifeAreas
+        self.selectedBlocker = selectedBlocker
+        self.dailyLoad = dailyLoad
+        self.toneMode = toneMode
+        self.selectedFamilyID = selectedFamilyID
+        self.selectedIdentityID = selectedIdentityID
+        self.avatarDraft = avatarDraft
+        self.recommendedVows = recommendedVows
+        self.activeVows = activeVows
+        self.availableEmbers = availableEmbers
+        self.heat = heat
+        self.rank = rank
+        self.lifetimeResonance = lifetimeResonance
+        self.todayGold = todayGold
+        self.completionDayCount = completionDayCount
+        self.completedDates = completedDates
+        self.dayCompletionCounts = dayCompletionCounts
+        self.hasShownSoftPaywall = hasShownSoftPaywall
+        self.inventoryItems = inventoryItems
+        self.currentWorldAnchorID = currentWorldAnchorID
+        self.verifiedSourceEventIDs = verifiedSourceEventIDs
+        self.verifiedCompletionDatesByVowID = verifiedCompletionDatesByVowID
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case onboardingStep
+        case hasStartedOnboarding
+        case hasCompletedOnboarding
+        case authMode
+        case selectedGoals
+        case selectedLifeAreas
+        case selectedBlocker
+        case dailyLoad
+        case toneMode
+        case selectedFamilyID
+        case selectedIdentityID
+        case avatarDraft
+        case recommendedVows
+        case activeVows
+        case availableEmbers
+        case heat
+        case rank
+        case lifetimeResonance
+        case todayGold
+        case completionDayCount
+        case completedDates
+        case dayCompletionCounts
+        case hasShownSoftPaywall
+        case inventoryItems
+        case currentWorldAnchorID
+        case verifiedSourceEventIDs
+        case verifiedCompletionDatesByVowID
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        onboardingStep = try container.decode(Int.self, forKey: .onboardingStep)
+        hasStartedOnboarding = try container.decode(Bool.self, forKey: .hasStartedOnboarding)
+        hasCompletedOnboarding = try container.decode(Bool.self, forKey: .hasCompletedOnboarding)
+        authMode = try container.decode(String.self, forKey: .authMode)
+        selectedGoals = try container.decode([String].self, forKey: .selectedGoals)
+        selectedLifeAreas = try container.decode([String].self, forKey: .selectedLifeAreas)
+        selectedBlocker = try container.decode(String.self, forKey: .selectedBlocker)
+        dailyLoad = try container.decode(Int.self, forKey: .dailyLoad)
+        toneMode = try container.decode(String.self, forKey: .toneMode)
+        selectedFamilyID = try container.decode(String.self, forKey: .selectedFamilyID)
+        selectedIdentityID = try container.decode(String.self, forKey: .selectedIdentityID)
+        avatarDraft = try container.decode(OnboardingAvatarDraft.self, forKey: .avatarDraft)
+        recommendedVows = try container.decode([PlayableVow].self, forKey: .recommendedVows)
+        activeVows = try container.decode([PlayableVow].self, forKey: .activeVows)
+        availableEmbers = try container.decode(Int.self, forKey: .availableEmbers)
+        heat = try container.decode(Int.self, forKey: .heat)
+        rank = try container.decode(Int.self, forKey: .rank)
+        lifetimeResonance = try container.decode(Int.self, forKey: .lifetimeResonance)
+        todayGold = try container.decode(Int.self, forKey: .todayGold)
+        completionDayCount = try container.decode(Int.self, forKey: .completionDayCount)
+        completedDates = try container.decode([String].self, forKey: .completedDates)
+        dayCompletionCounts = try container.decode([String: Int].self, forKey: .dayCompletionCounts)
+        hasShownSoftPaywall = try container.decode(Bool.self, forKey: .hasShownSoftPaywall)
+        inventoryItems = try container.decode([InventoryItemState].self, forKey: .inventoryItems)
+        currentWorldAnchorID = try container.decodeIfPresent(String.self, forKey: .currentWorldAnchorID)
+        verifiedSourceEventIDs = try container.decodeIfPresent([String].self, forKey: .verifiedSourceEventIDs) ?? []
+        verifiedCompletionDatesByVowID = try container.decodeIfPresent([String: [String]].self, forKey: .verifiedCompletionDatesByVowID) ?? [:]
+    }
 }
 
 @MainActor
@@ -164,6 +379,7 @@ final class FirstPlayableStore: ObservableObject {
     @Published var progressSheetVowID: String?
     @Published var progressSheetValue = 1
     @Published var isSoftPaywallPresented = false
+    @Published var currentWorldAnchorID = "oven_square"
 
     @Published var availableEmbers = 2
     @Published var heat = 0
@@ -183,6 +399,46 @@ final class FirstPlayableStore: ObservableObject {
     private var hasShownSoftPaywall = false
     private var completedDates: [String] = []
     private var dayCompletionCounts: [String: Int] = [:]
+    private var verifiedSourceEventIDs: [String] = []
+    private var verifiedCompletionDatesByVowID: [String: [String]] = [:]
+
+    var goldBalance: Int {
+        todayGold
+    }
+
+    var worldAnchors: [WorldAnchorState] {
+        [
+            WorldAnchorState(id: "quay_gate", title: "Quay Gate", npcIDs: visibleNPCIDs(for: "quay_gate")),
+            WorldAnchorState(id: "oven_square", title: "Oven Square", npcIDs: visibleNPCIDs(for: "oven_square")),
+            WorldAnchorState(id: "lantern_stall", title: "Lantern Stall", npcIDs: visibleNPCIDs(for: "lantern_stall"))
+        ]
+    }
+
+    var availableShopOffers: [ShopOfferState] {
+        let subscription = currentSubscriptionSnapshot()
+        return content.shopOffers.map { offer in
+            let definition = content.itemDefinitions.first(where: { $0.id == offer.itemDefinitionId })
+            let owned = inventoryItems.contains(where: { $0.itemDefinitionId == offer.itemDefinitionId }) && !(offer.repeatable ?? false)
+            let chapterLocked = (offer.chapterGate ?? "starter_arc") == "chapter_one" && completionDayCount < 7
+            let premiumLocked = offer.entitlementGate == "premium" && !subscription.hasPremiumBreadth
+            let remainingStock = owned ? 0 : max(1, offer.stockLimit ?? 1)
+
+            return ShopOfferState(
+                id: offer.id,
+                itemDefinitionId: offer.itemDefinitionId,
+                itemName: copy.text(definition?.nameKey ?? "", fallback: offer.itemDefinitionId),
+                itemSummary: copy.text(definition?.summaryKey ?? "", fallback: copy.text("shop.locked_label", fallback: "")),
+                priceGold: offer.priceGold,
+                vendorNpcID: offer.vendorNpcId ?? "maerin_vale",
+                entitlementGate: offer.entitlementGate,
+                chapterGate: offer.chapterGate ?? "starter_arc",
+                canAfford: todayGold >= offer.priceGold,
+                isOwned: owned,
+                isLocked: owned || chapterLocked || premiumLocked,
+                remainingStock: remainingStock
+            )
+        }
+    }
 
     init(
         repository: SwiftDataRepository,
@@ -199,8 +455,18 @@ final class FirstPlayableStore: ObservableObject {
         self.copy = copy
         self.content = (try? contentLoader.load()) ?? .fallback
 
-        let initialChapter = Self.chapterState(from: self.content, copy: copy, completionDayCount: 0)
-        let initialDistrict = Self.districtState(from: self.content, copy: copy, completionDayCount: 0)
+        let initialChapter = Self.chapterState(
+            from: self.content,
+            copy: copy,
+            completionDayCount: 0,
+            subscription: .free
+        )
+        let initialDistrict = Self.districtState(
+            from: self.content,
+            copy: copy,
+            completionDayCount: 0,
+            subscription: .free
+        )
         chapterState = initialChapter
         districtState = initialDistrict
         hearthState = Self.hearthState(from: self.content, copy: copy, completionDayCount: 0, inventoryItems: [])
@@ -338,10 +604,18 @@ final class FirstPlayableStore: ObservableObject {
     }
 
     func recordCompletion(vowID: String, amount: Int) {
-        recordCompletion(vowID: vowID, amount: amount, localDate: Self.localDateString())
+        recordCompletion(vowID: vowID, amount: amount, localDate: Self.localDateString(), source: .manual)
+    }
+
+    func recordShortcutCompletion(vowID: String, amount: Int) {
+        recordCompletion(vowID: vowID, amount: amount, localDate: Self.localDateString(), source: .shortcut)
     }
 
     func recordCompletion(vowID: String, amount: Int, localDate: String) {
+        recordCompletion(vowID: vowID, amount: amount, localDate: localDate, source: .manual)
+    }
+
+    func recordCompletion(vowID: String, amount: Int, localDate: String, source: LocalCompletionSource, enqueueSync: Bool = true) {
         guard let index = activeVows.firstIndex(where: { $0.id == vowID }) else { return }
         var vow = activeVows[index]
 
@@ -420,16 +694,51 @@ final class FirstPlayableStore: ObservableObject {
             unlockedItemNames: unlockedNames
         )
 
-        enqueueCompletionPayload(for: vow, localDate: localDate, progress: progress, isComplete: isComplete)
+        if enqueueSync {
+            enqueueCompletionPayload(for: vow, localDate: localDate, progress: progress, isComplete: isComplete, source: source)
+        }
         persistSnapshot()
         track(.vowCompleted, surface: "today", properties: ["vow_id": vow.id, "progress_percent": "\(progressPercent)"])
         track(.resonanceAwarded, surface: "reward", properties: ["amount": "\(resonance)"])
         track(.goldAwarded, surface: "reward", properties: ["amount": "\(gold)"])
+        if source == .shortcut {
+            track(.shortcutInvoked, surface: "today", properties: ["vow_id": vow.id])
+        }
         if wasFirstCompletionForDay {
             track(.dayCompletedFirstVow, surface: "today", properties: ["local_date": localDate])
             track(.firstMagicalMomentViewed, surface: "reward", properties: ["moment_id": content.starterArcDays.first?.worldMomentId ?? "oven_glow"])
             track(.districtProgressed, surface: "world", properties: ["district_id": "ember_quay", "stage_id": districtState.stageID])
         }
+    }
+
+    func recordVerifiedCompletion(
+        vowID: String,
+        sourceEventID: String,
+        localDate: String,
+        domain: HealthKitDomain,
+        amount: Int
+    ) {
+        guard verifiedSourceEventIDs.contains(sourceEventID) == false else {
+            return
+        }
+        verifiedSourceEventIDs.append(sourceEventID)
+        verifiedCompletionDatesByVowID[vowID, default: []].append(localDate)
+
+        let alreadyCompletedLocally = activeVows.first(where: { $0.id == vowID })?.history.contains(where: { $0.localDate == localDate }) ?? false
+        if !alreadyCompletedLocally {
+            recordCompletion(vowID: vowID, amount: amount, localDate: localDate, source: .healthkit, enqueueSync: false)
+        } else {
+            persistSnapshot()
+        }
+
+        enqueueVerifiedCompletionPayload(
+            vowID: vowID,
+            sourceEventID: sourceEventID,
+            localDate: localDate,
+            domain: domain,
+            amount: amount
+        )
+        track(.verifiedCompletionImported, surface: "today", properties: ["vow_id": vowID, "domain": domain.rawValue])
     }
 
     func questStatus(for day: Int) -> String {
@@ -456,11 +765,107 @@ final class FirstPlayableStore: ObservableObject {
         return copy.text(npc.displayNameKey, fallback: npc.displayNameKey)
     }
 
+    func dialogueLine(for npcID: String) -> String {
+        let key: String
+        if chapterState.chapterID == "starter_arc" {
+            switch (npcID, chapterState.currentDay) {
+            case ("maerin_vale", 5...): key = "content.dialogue.maerin_vale.day_5"
+            case ("maerin_vale", _): key = "content.dialogue.maerin_vale.day_1"
+            case ("sera_quill", _): key = "content.dialogue.sera_quill.day_3"
+            case ("tovan_hearth", 7...): key = "content.dialogue.tovan_hearth.day_7"
+            case ("tovan_hearth", _): key = "content.dialogue.tovan_hearth.day_1"
+            case ("brigant_hal", _): key = "content.dialogue.brigant_hal.day_4"
+            case ("ilya_fen", _): key = "content.dialogue.ilya_fen.day_4"
+            case ("pollen", _): key = "content.dialogue.pollen.day_3"
+            default: key = "content.dialogue.maerin_vale.day_1"
+            }
+        } else if chapterState.currentDay >= 25 {
+            key = "content.dialogue.\(npcID).chapter_one_end"
+        } else if chapterState.currentDay >= 13 {
+            key = "content.dialogue.\(npcID).chapter_one_mid"
+        } else {
+            key = "content.dialogue.\(npcID).chapter_one_intro"
+        }
+
+        return copy.text(key, fallback: npcSummary(for: npcID))
+    }
+
+    func nextActionText(for npcID: String) -> String {
+        if chapterState.statusNote.isEmpty == false {
+            return chapterState.statusNote
+        }
+        return chapterState.tomorrowPrompt
+    }
+
+    func matchingVerifiedVowID(for domain: HealthKitDomain) -> String? {
+        activeVows.first(where: { supportsVerifiedDomain(domain, for: $0) })?.id
+    }
+
+    func completionBadge(for vowID: String) -> String? {
+        let today = Self.localDateString()
+        guard verifiedCompletionDatesByVowID[vowID]?.contains(today) == true else {
+            return nil
+        }
+        return copy.text("healthkit.verified_badge", fallback: "Verified")
+    }
+
     func itemName(for itemDefinitionID: String) -> String {
         guard let item = content.itemDefinitions.first(where: { $0.id == itemDefinitionID }) else {
             return itemDefinitionID
         }
         return copy.text(item.nameKey, fallback: itemDefinitionID)
+    }
+
+    func moveAvatar(to anchorID: String) {
+        currentWorldAnchorID = anchorID
+        track(.worldSceneOpened, surface: "world", properties: ["anchor_id": anchorID, "chapter_id": chapterState.chapterID])
+        persistSnapshot()
+    }
+
+    func toggleItemApplied(_ itemID: String) {
+        guard let index = inventoryItems.firstIndex(where: { $0.id == itemID }) else { return }
+        inventoryItems[index].status = inventoryItems[index].status == "applied" ? "stored" : "applied"
+        refreshDerivedState()
+        persistSnapshot()
+    }
+
+    func purchaseOffer(_ offerID: String) {
+        guard let offer = availableShopOffers.first(where: { $0.id == offerID }), !offer.isLocked, offer.canAfford else {
+            return
+        }
+        guard let definition = content.itemDefinitions.first(where: { $0.id == offer.itemDefinitionId }) else {
+            return
+        }
+
+        todayGold -= offer.priceGold
+        inventoryItems.append(
+            InventoryItemState(
+                id: UUID().uuidString,
+                itemDefinitionId: definition.id,
+                name: copy.text(definition.nameKey, fallback: definition.id),
+                summary: copy.text(definition.summaryKey ?? "", fallback: definition.id),
+                bucket: definition.bucket,
+                rarity: definition.rarity,
+                earnedFrom: "shop:\(offer.id)",
+                status: "stored",
+                slot: definition.slot ?? "display"
+            )
+        )
+
+        let payload: [String: Any] = [
+            "offerId": offer.id,
+            "source": "world_market"
+        ]
+        if let data = try? JSONSerialization.data(withJSONObject: payload) {
+            Task {
+                await syncQueue.enqueue(SyncOperation(operationType: .shopPurchase, endpointPath: "v1/shop/offers/\(offer.id)/purchase", payload: data))
+                await syncStatusStore.refresh()
+            }
+        }
+
+        track(.shopPurchaseCompleted, surface: "world", properties: ["offer_id": offer.id, "item_definition_id": offer.itemDefinitionId])
+        refreshDerivedState()
+        persistSnapshot()
     }
 
     func rewardDismissed() {
@@ -505,6 +910,7 @@ final class FirstPlayableStore: ObservableObject {
         activeVows = []
         rewardPresentation = nil
         inventoryItems = []
+        currentWorldAnchorID = "oven_square"
         isQuestJournalPresented = false
         isProgressSheetPresented = false
         progressSheetVowID = nil
@@ -519,6 +925,8 @@ final class FirstPlayableStore: ObservableObject {
         hasShownSoftPaywall = false
         completedDates = []
         dayCompletionCounts = [:]
+        verifiedSourceEventIDs = []
+        verifiedCompletionDatesByVowID = [:]
         updateAvatarDefaults()
         refreshDerivedState()
         persistSnapshot()
@@ -554,6 +962,9 @@ final class FirstPlayableStore: ObservableObject {
         dayCompletionCounts = snapshot.dayCompletionCounts
         hasShownSoftPaywall = snapshot.hasShownSoftPaywall
         inventoryItems = snapshot.inventoryItems
+        currentWorldAnchorID = snapshot.currentWorldAnchorID ?? "oven_square"
+        verifiedSourceEventIDs = snapshot.verifiedSourceEventIDs
+        verifiedCompletionDatesByVowID = snapshot.verifiedCompletionDatesByVowID
     }
 
     private func persistSnapshot() {
@@ -581,7 +992,10 @@ final class FirstPlayableStore: ObservableObject {
             completedDates: completedDates,
             dayCompletionCounts: dayCompletionCounts,
             hasShownSoftPaywall: hasShownSoftPaywall,
-            inventoryItems: inventoryItems
+            inventoryItems: inventoryItems,
+            currentWorldAnchorID: currentWorldAnchorID,
+            verifiedSourceEventIDs: verifiedSourceEventIDs,
+            verifiedCompletionDatesByVowID: verifiedCompletionDatesByVowID
         )
 
         if let data = try? JSONEncoder().encode(snapshot) {
@@ -591,8 +1005,9 @@ final class FirstPlayableStore: ObservableObject {
     }
 
     private func refreshDerivedState() {
-        chapterState = Self.chapterState(from: content, copy: copy, completionDayCount: completionDayCount)
-        districtState = Self.districtState(from: content, copy: copy, completionDayCount: completionDayCount)
+        let subscription = currentSubscriptionSnapshot()
+        chapterState = Self.chapterState(from: content, copy: copy, completionDayCount: completionDayCount, subscription: subscription)
+        districtState = Self.districtState(from: content, copy: copy, completionDayCount: completionDayCount, subscription: subscription)
         hearthState = Self.hearthState(from: content, copy: copy, completionDayCount: completionDayCount, inventoryItems: inventoryItems)
         reminderPrompts = buildReminderPrompts()
     }
@@ -600,7 +1015,9 @@ final class FirstPlayableStore: ObservableObject {
     private func unlockInventoryIfNeeded() {
         let awardDefinitions: [(requiredDay: Int, itemID: String, earnedFrom: String)] = [
             (1, "ember_quay_token", "starter_day_1_reward"),
-            (7, "hearth_apron_common", "starter_day_7_chest")
+            (7, "hearth_apron_common", "starter_day_7_chest"),
+            (14, "lantern_rack_prop", "chapter_one_preview_reward"),
+            (37, "archive_map_cosmetic", "chapter_one_completion_reward")
         ]
 
         let localDate = completedDates.last ?? Self.localDateString()
@@ -614,9 +1031,12 @@ final class FirstPlayableStore: ObservableObject {
                     id: UUID().uuidString,
                     itemDefinitionId: definition.id,
                     name: copy.text(definition.nameKey, fallback: definition.id),
+                    summary: copy.text(definition.summaryKey ?? "", fallback: definition.id),
                     bucket: definition.bucket,
                     rarity: definition.rarity,
-                    earnedFrom: "\(award.earnedFrom):\(localDate)"
+                    earnedFrom: "\(award.earnedFrom):\(localDate)",
+                    status: "stored",
+                    slot: definition.slot ?? "display"
                 )
             )
         }
@@ -634,7 +1054,7 @@ final class FirstPlayableStore: ObservableObject {
             )
         }
 
-        if completionDayCount > 0 && completionDayCount < 7 {
+        if completionDayCount > 0 {
             prompts.append(
                 ReminderPromptState(
                     id: "witness",
@@ -657,6 +1077,20 @@ final class FirstPlayableStore: ObservableObject {
         return prompts
     }
 
+    private func currentSubscriptionSnapshot() -> LocalSubscriptionSnapshot {
+        guard let record = try? repository.fetchSubscriptionState(),
+              let snapshot = try? JSONDecoder().decode(LocalSubscriptionSnapshot.self, from: record.payload) else {
+            return .free
+        }
+        return snapshot
+    }
+
+    private func visibleNPCIDs(for anchorID: String) -> [String] {
+        districtState.visibleNPCIDs.filter { npcID in
+            content.npcs.first(where: { $0.id == npcID })?.sceneAnchorId == anchorID
+        }
+    }
+
     private func advanceChainState(for vow: PlayableVow, localDate: String) -> (chainLength: Int, statusLabel: String) {
         guard let lastCompletedLocalDate = vow.lastCompletedLocalDate else {
             return (1, "Completed")
@@ -676,12 +1110,12 @@ final class FirstPlayableStore: ObservableObject {
         return (1, "Cooling")
     }
 
-    private func enqueueCompletionPayload(for vow: PlayableVow, localDate: String, progress: Int, isComplete: Bool) {
+    private func enqueueCompletionPayload(for vow: PlayableVow, localDate: String, progress: Int, isComplete: Bool, source: LocalCompletionSource) {
         let payload: [String: Any] = [
             "clientRequestId": "ios_\(UUID().uuidString)",
             "vowId": vow.id,
             "localDate": localDate,
-            "source": "manual",
+            "source": source.apiValue,
             "progressState": isComplete ? "complete" : "partial",
             "quantity": vow.type == "count" ? progress : NSNull(),
             "durationMinutes": vow.type == "duration" ? progress : NSNull()
@@ -695,6 +1129,43 @@ final class FirstPlayableStore: ObservableObject {
         }
     }
 
+    private func enqueueVerifiedCompletionPayload(
+        vowID: String,
+        sourceEventID: String,
+        localDate: String,
+        domain: HealthKitDomain,
+        amount: Int
+    ) {
+        let payload: [String: Any] = [
+            "sourceEventId": sourceEventID,
+            "sourceType": "healthkit",
+            "sourceDomain": domain.rawValue,
+            "vowId": vowID,
+            "localDate": localDate,
+            "progressState": "complete",
+            "quantity": domain == .steps ? amount : NSNull(),
+            "durationMinutes": domain == .workout || domain == .sleep ? amount : NSNull()
+        ]
+
+        if let data = try? JSONSerialization.data(withJSONObject: payload) {
+            Task {
+                await syncQueue.enqueue(SyncOperation(operationType: .verifiedCompletion, endpointPath: "v1/verified-inputs/completions", payload: data))
+                await syncStatusStore.refresh()
+            }
+        }
+    }
+
+    private func supportsVerifiedDomain(_ domain: HealthKitDomain, for vow: PlayableVow) -> Bool {
+        switch domain {
+        case .workout:
+            return vow.type == "duration" && vow.category == "Physical"
+        case .steps:
+            return vow.type == "count" && vow.category == "Physical"
+        case .sleep:
+            return vow.type == "duration" && ["Rest", "Physical", "Emotional"].contains(vow.category)
+        }
+    }
+
     private func updateAvatarDefaults() {
         guard let identity = content.identityShells.first(where: { $0.id == selectedIdentityID }) else { return }
         avatarDraft.silhouetteId = identity.defaultAvatar?.silhouetteId ?? avatarDraft.silhouetteId
@@ -705,7 +1176,7 @@ final class FirstPlayableStore: ObservableObject {
         }
     }
 
-    private func track(_ eventName: AnalyticsEventName, surface: String, properties: [String: String]) {
+    func track(_ eventName: AnalyticsEventName, surface: String, properties: [String: String]) {
         Task {
             try? await analyticsClient.track(AnalyticsEvent(name: eventName, surface: surface, properties: properties))
         }
@@ -735,39 +1206,116 @@ final class FirstPlayableStore: ObservableObject {
         )
     }
 
-    private static func chapterState(from content: LaunchContent, copy: CopyCatalog, completionDayCount: Int) -> ChapterCardState {
-        let chapter = content.chapters.first(where: { $0.id == "starter_arc" }) ?? content.chapters[0]
-        let dayIndex = completionDayCount == 0 ? 0 : min(completionDayCount - 1, content.starterArcDays.count - 1)
-        let day = content.starterArcDays[dayIndex]
-        let quest = content.questTemplates.first(where: { $0.id == day.questId }) ?? content.questTemplates[0]
+    private static func chapterState(
+        from content: LaunchContent,
+        copy: CopyCatalog,
+        completionDayCount: Int,
+        subscription: LocalSubscriptionSnapshot
+    ) -> ChapterCardState {
+        let hasPremium = subscription.hasPremiumBreadth
+        if completionDayCount <= content.starterArcDays.count {
+            let chapter = content.chapters.first(where: { $0.id == "starter_arc" }) ?? content.chapters[0]
+            let dayIndex = completionDayCount == 0 ? 0 : min(completionDayCount - 1, content.starterArcDays.count - 1)
+            let day = content.starterArcDays[dayIndex]
+            let quest = content.questTemplates.first(where: { $0.id == day.questId }) ?? content.questTemplates[0]
+
+            return ChapterCardState(
+                chapterID: "starter_arc",
+                title: copy.text(chapter.titleKey, fallback: chapter.titleKey),
+                summary: copy.text(quest.summaryKey, fallback: quest.summaryKey),
+                currentDay: max(1, min(max(completionDayCount, 1), content.starterArcDays.count)),
+                chapterLength: content.starterArcDays.count,
+                progressPercent: min(Double(completionDayCount) / Double(max(content.starterArcDays.count, 1)), 1.0),
+                tomorrowPrompt: copy.text(day.tomorrowPromptKey, fallback: day.tomorrowPromptKey),
+                objectiveTitle: copy.text(quest.titleKey, fallback: quest.titleKey),
+                statusNote: "",
+                entitlementStatus: "free_preview"
+            )
+        }
+
+        let chapter = content.chapters.first(where: { $0.id == "chapter_one" }) ?? content.chapters[0]
+        guard let firstMilestone = content.chapterOneMilestones.first else {
+            return ChapterCardState(
+                chapterID: "chapter_one",
+                title: copy.text(chapter.titleKey, fallback: chapter.titleKey),
+                summary: copy.text(chapter.summaryKey, fallback: chapter.summaryKey),
+                currentDay: 1,
+                chapterLength: hasPremium ? 30 : 7,
+                progressPercent: 0,
+                tomorrowPrompt: copy.text(chapter.tomorrowCtaKey, fallback: chapter.tomorrowCtaKey),
+                objectiveTitle: copy.text(chapter.titleKey, fallback: chapter.titleKey),
+                statusNote: "",
+                entitlementStatus: hasPremium ? "premium_full" : "free_preview"
+            )
+        }
+        let rawDay = min(completionDayCount - content.starterArcDays.count, 30)
+        let accessibleDay = hasPremium ? rawDay : min(rawDay, 7)
+        let milestone = content.chapterOneMilestones.first(where: { accessibleDay >= $0.startDay && accessibleDay <= $0.endDay }) ?? firstMilestone
+        let quest = content.questTemplates.first(where: { $0.id == milestone.questId }) ?? content.questTemplates[0]
+        let statusNote = hasPremium
+            ? (accessibleDay >= 30 ? copy.text("content.chapter.chapter_one.complete_note", fallback: "") : "")
+            : copy.text("content.chapter.chapter_one.preview_note", fallback: "")
 
         return ChapterCardState(
+            chapterID: "chapter_one",
             title: copy.text(chapter.titleKey, fallback: chapter.titleKey),
             summary: copy.text(quest.summaryKey, fallback: quest.summaryKey),
-            currentDay: max(1, min(max(completionDayCount, 1), 7)),
-            progressPercent: min(Double(completionDayCount) / 7.0, 1.0),
-            tomorrowPrompt: copy.text(day.tomorrowPromptKey, fallback: day.tomorrowPromptKey),
-            objectiveTitle: copy.text(quest.titleKey, fallback: quest.titleKey)
+            currentDay: max(1, accessibleDay),
+            chapterLength: hasPremium ? 30 : 7,
+            progressPercent: min(Double(max(accessibleDay, 1)) / 30.0, 1.0),
+            tomorrowPrompt: copy.text(milestone.tomorrowPromptKey, fallback: milestone.tomorrowPromptKey),
+            objectiveTitle: copy.text(quest.titleKey, fallback: quest.titleKey),
+            statusNote: statusNote,
+            entitlementStatus: hasPremium ? "premium_full" : "free_preview"
         )
     }
 
-    private static func districtState(from content: LaunchContent, copy: CopyCatalog, completionDayCount: Int) -> DistrictWitnessState {
+    private static func districtState(
+        from content: LaunchContent,
+        copy: CopyCatalog,
+        completionDayCount: Int,
+        subscription: LocalSubscriptionSnapshot
+    ) -> DistrictWitnessState {
         let district = content.districts.first(where: { $0.id == "ember_quay" }) ?? content.districts[0]
+        let problemTitleKey: String
+        let problemSummaryKey: String
         let stageID: String
-        switch completionDayCount {
-        case 7...:
-            stageID = "rekindled"
-        case 3...:
-            stageID = "rebuilding"
-        case 1...:
-            stageID = "stirring"
-        default:
-            stageID = district.startStageId
+        let visibleNPCIDs: [String]
+        let momentID: String
+        let problemProgress: Double
+
+        if completionDayCount <= content.starterArcDays.count {
+            switch completionDayCount {
+            case 7...:
+                stageID = "rekindled"
+            case 3...:
+                stageID = "rebuilding"
+            case 1...:
+                stageID = "stirring"
+            default:
+                stageID = district.startStageId
+            }
+
+            let day = content.starterArcDays[max(0, min(max(completionDayCount, 1) - 1, content.starterArcDays.count - 1))]
+            visibleNPCIDs = day.npcIdsVisible
+            momentID = day.worldMomentId
+            problemTitleKey = "content.problem.starter_oven_crisis.title"
+            problemSummaryKey = completionDayCount >= 7 ? "content.problem.starter_oven_crisis.resolution" : "content.problem.starter_oven_crisis.summary"
+            problemProgress = min(Double(completionDayCount) / Double(max(content.starterArcDays.count, 1)), 1.0)
+        } else {
+            let rawDay = min(completionDayCount - content.starterArcDays.count, 30)
+            let accessibleDay = subscription.hasPremiumBreadth ? rawDay : min(rawDay, 7)
+            let milestone = content.chapterOneMilestones.first(where: { accessibleDay >= $0.startDay && accessibleDay <= $0.endDay }) ?? content.chapterOneMilestones.first ?? LaunchContent.ChapterOneMilestone(id: "fallback", startDay: 1, endDay: 30, questId: content.questTemplates.first?.id ?? "", restorationStageId: "market_waking", worldMomentId: content.magicalMoments.first?.id ?? "oven_glow", npcIdsVisible: [], tomorrowPromptKey: content.chapters.first?.tomorrowCtaKey ?? "")
+            stageID = milestone.restorationStageId
+            visibleNPCIDs = milestone.npcIdsVisible
+            momentID = milestone.worldMomentId
+            problemTitleKey = "content.problem.market_memory_crisis.title"
+            problemSummaryKey = accessibleDay >= 30 ? "content.problem.market_memory_crisis.resolution" : "content.problem.market_memory_crisis.summary"
+            problemProgress = min(Double(max(accessibleDay, 1)) / 30.0, 1.0)
         }
 
         let stage = district.restorationStages.first(where: { $0.id == stageID }) ?? district.restorationStages[0]
-        let day = content.starterArcDays[max(0, min(max(completionDayCount, 1) - 1, content.starterArcDays.count - 1))]
-        let moment = content.magicalMoments.first(where: { $0.id == day.worldMomentId }) ?? content.magicalMoments[0]
+        let moment = content.magicalMoments.first(where: { $0.id == momentID }) ?? content.magicalMoments[0]
 
         return DistrictWitnessState(
             stageID: stageID,
@@ -776,16 +1324,23 @@ final class FirstPlayableStore: ObservableObject {
             worldChangeText: copy.text(stage.worldChangeKey, fallback: stage.worldChangeKey),
             magicalMomentTitle: copy.text(moment.titleKey, fallback: moment.titleKey),
             magicalMomentBody: copy.text(moment.summaryKey, fallback: moment.summaryKey),
-            visibleNPCIDs: day.npcIdsVisible
+            visibleNPCIDs: visibleNPCIDs,
+            problemTitle: copy.text(problemTitleKey, fallback: problemTitleKey),
+            problemSummary: copy.text(problemSummaryKey, fallback: problemSummaryKey),
+            problemProgressPercent: problemProgress
         )
     }
 
     private static func hearthState(from content: LaunchContent, copy: CopyCatalog, completionDayCount: Int, inventoryItems: [InventoryItemState]) -> HearthState {
-        let props = inventoryItems.filter { $0.bucket == "cosmetic" || $0.bucket == "prop" }.map(\.name)
+        let props = inventoryItems.filter { ($0.bucket == "cosmetic" || $0.bucket == "prop" || $0.bucket == "chapter_reward") && $0.status == "applied" }.map(\.name)
         let summary: String
         switch completionDayCount {
+        case 37...:
+            summary = "Your Hearth now holds proof of a district that learned to gather again."
+        case 14...:
+            summary = "Chapter One rewards can now be placed here so your home keeps pace with the district."
         case 7...:
-            summary = "The bakery hearth is warm again, and your earned props now live here."
+            summary = "The bakery hearth is warm again, and your earned props can now stay visible here."
         case 3...:
             summary = "The hearth is gathering small signs of repair as Ember Quay rebuilds."
         case 1...:
@@ -795,7 +1350,7 @@ final class FirstPlayableStore: ObservableObject {
         }
 
         return HearthState(
-            title: "Hearth",
+            title: copy.text("hearth.headline", fallback: "Hearth"),
             summary: summary,
             unlockedPropNames: props,
             chapterClosureReady: completionDayCount >= 7

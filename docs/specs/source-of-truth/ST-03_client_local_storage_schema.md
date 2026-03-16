@@ -63,6 +63,8 @@ Supported operation types:
 - `vow_update`
 - `vow_archive`
 - `completion_submit`
+- `shop_purchase`
+- `verified_completion`
 
 ## Local-first rules
 - Logging and local vow edits write to the device store immediately.
@@ -94,6 +96,7 @@ Supported operation types:
 - app relaunch during sync: queue items resume from durable local state
 - guest-to-account link: preserve queue and merge server identifiers during token refresh
 - denied HealthKit permission: source connection remains local with denied state; manual logging remains available
+- duplicate verified-input import: preserve the local source-connection record, mark the queued item reconciled, and do not grant duplicate rewards
 
 ## Versioning notes
 - local store schema version is `v1`

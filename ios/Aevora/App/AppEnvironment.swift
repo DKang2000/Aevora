@@ -23,6 +23,7 @@ final class AppEnvironment: ObservableObject {
     let glanceSurfaceStore: GlanceSurfaceStore
     let liveActivityCoordinator: LiveActivityCoordinator
     let notificationManager: NotificationManaging
+    let healthKitManager: HealthKitManaging
     var accountSurfaceStore: AccountSurfaceStore
     private var childStoreCancellables: Set<AnyCancellable> = []
 
@@ -66,6 +67,7 @@ final class AppEnvironment: ObservableObject {
         glanceSurfaceStore = GlanceSurfaceStore()
         liveActivityCoordinator = LiveActivityCoordinator()
         notificationManager = SystemNotificationManager()
+        healthKitManager = SystemHealthKitManager()
         firstPlayableStore = FirstPlayableStore(
             repository: repository,
             syncQueue: syncQueue,
@@ -77,11 +79,22 @@ final class AppEnvironment: ObservableObject {
             analyticsClient: analyticsClient,
             remoteConfigClient: remoteConfigClient,
             notificationManager: notificationManager,
+            healthKitManager: healthKitManager,
             glanceSurfaceStore: glanceSurfaceStore,
             liveActivityCoordinator: liveActivityCoordinator
         )
         firstPlayableStore.onStateChanged = { [weak self] store in
             self?.accountSurfaceStore.syncFromCoreLoop(store)
+        }
+        AppIntentRouter.shared.openHandler = { [weak self] destination in
+            self?.open(destination: destination)
+        }
+        AppIntentRouter.shared.completeVowHandler = { [weak self] vowID in
+            guard let self, let vow = self.firstPlayableStore.activeVows.first(where: { $0.id == vowID }) else {
+                return
+            }
+            self.open(destination: .today)
+            self.firstPlayableStore.recordShortcutCompletion(vowID: vow.id, amount: vow.targetValue)
         }
         wireChildStores()
         accountSurfaceStore.syncFromCoreLoop(firstPlayableStore)
@@ -92,25 +105,42 @@ final class AppEnvironment: ObservableObject {
               let source = components.queryItems?.first(where: { $0.name == "source" })?.value else {
             return
         }
+        let destinationValue = components.queryItems?.first(where: { $0.name == "destination" })?.value
+        let destination = destinationValue.flatMap(AppDeepLinkDestination.init(rawValue:))
 
         let eventName: AnalyticsEventName
         switch source {
         case GlanceSurfaceDeepLinkSource.liveActivity.rawValue:
             eventName = .liveActivityTapped
-            selectedTab = .world
+            open(destination: destination ?? .world)
         case GlanceSurfaceDeepLinkSource.notification.rawValue:
             eventName = .notificationOpened
-            selectedTab = .today
+            open(destination: destination ?? .today)
         case GlanceSurfaceDeepLinkSource.premiumWidget.rawValue:
             eventName = .widgetTapped
             selectedTab = .profile
+        case GlanceSurfaceDeepLinkSource.shortcut.rawValue:
+            eventName = .shortcutInvoked
+            open(destination: destination ?? .today)
         default:
             eventName = .widgetTapped
-            selectedTab = .today
+            open(destination: destination ?? .today)
         }
 
         Task {
             try? await analyticsClient.track(AnalyticsEvent(name: eventName, surface: "glance", properties: ["source": source]))
+        }
+    }
+
+    private func open(destination: AppDeepLinkDestination) {
+        switch destination {
+        case .today:
+            selectedTab = .today
+        case .world:
+            selectedTab = .world
+        case .questJournal:
+            selectedTab = .today
+            firstPlayableStore.isQuestJournalPresented = true
         }
     }
 

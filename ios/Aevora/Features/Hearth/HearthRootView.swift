@@ -6,6 +6,8 @@ struct HearthRootView: View {
     var body: some View {
         NavigationStack {
             let store = environment.firstPlayableStore
+            let storedItems = store.inventoryItems.filter { $0.status != "applied" }
+            let appliedItems = store.inventoryItems.filter { $0.status == "applied" }
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -15,8 +17,10 @@ struct HearthRootView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text(store.hearthState.summary)
                             .foregroundStyle(.secondary)
+                        Text("Gold on hand: \(store.goldBalance)")
+                            .font(.headline)
                         if store.hearthState.chapterClosureReady {
-                            Text("The Ember That Returned is complete. Your earned keepsakes now live here.")
+                            Text("The starter arc is complete. Chapter One keepsakes can now stay visible here.")
                                 .font(.headline)
                         }
                     }
@@ -25,35 +29,31 @@ struct HearthRootView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Inventory")
+                        Text(store.copy.text("inventory.stored_title", fallback: "In your pack"))
                             .font(.headline)
-                        if store.inventoryItems.isEmpty {
-                            Text("Rewards and props you earn during the starter arc will gather here.")
+                        if storedItems.isEmpty {
+                            Text(store.copy.text("states.hearth.inventory_empty.title", fallback: "Your Hearth is still waiting for its first keepsake."))
                                 .foregroundStyle(.secondary)
                         } else {
-                            ForEach(store.inventoryItems) { item in
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(item.name)
-                                        .font(.headline)
-                                    Text("\(item.bucket.capitalized) • \(item.rarity.capitalized)")
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
+                            ForEach(storedItems) { item in
+                                itemCard(item: item, buttonTitle: store.copy.text("inventory.apply_cta", fallback: "Place in Hearth")) {
+                                    store.toggleItemApplied(item.id)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(14)
-                                .background(Color.white.opacity(0.85))
-                                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                             }
                         }
                     }
 
-                    if !store.hearthState.unlockedPropNames.isEmpty {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Visible at home")
-                                .font(.headline)
-                            ForEach(store.hearthState.unlockedPropNames, id: \.self) { prop in
-                                Text(prop)
-                                    .padding(.vertical, 6)
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text(store.copy.text("inventory.applied_title", fallback: "Already visible"))
+                            .font(.headline)
+                        if appliedItems.isEmpty {
+                            Text("Place a prop or keepsake here to make your progress visible at home.")
+                                .foregroundStyle(.secondary)
+                        } else {
+                            ForEach(appliedItems) { item in
+                                itemCard(item: item, buttonTitle: store.copy.text("inventory.remove_cta", fallback: "Return to pack")) {
+                                    store.toggleItemApplied(item.id)
+                                }
                             }
                         }
                     }
@@ -62,5 +62,24 @@ struct HearthRootView: View {
             }
             .navigationTitle("Hearth")
         }
+    }
+
+    private func itemCard(item: InventoryItemState, buttonTitle: String, action: @escaping () -> Void) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(item.name)
+                .font(.headline)
+            Text(item.summary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Text("\(item.bucket.capitalized) • \(item.rarity.capitalized)")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Button(buttonTitle, action: action)
+                .buttonStyle(.bordered)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(14)
+        .background(Color.white.opacity(0.85))
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }

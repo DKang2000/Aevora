@@ -5,7 +5,7 @@ import UserNotifications
 protocol NotificationManaging {
     func authorizationStatus() async -> NotificationPermissionSnapshot
     func requestAuthorization() async -> NotificationPermissionSnapshot
-    func scheduleStarterArcNotifications(using payload: GlanceSurfacePayload) async
+    func scheduleNotifications(using plan: NotificationPlan) async
 }
 
 @MainActor
@@ -39,52 +39,41 @@ final class SystemNotificationManager: NotificationManaging {
         }
     }
 
-    func scheduleStarterArcNotifications(using payload: GlanceSurfacePayload) async {
+    func scheduleNotifications(using plan: NotificationPlan) async {
         guard await authorizationStatus() == .authorized else {
             return
         }
 
-        center.removePendingNotificationRequests(withIdentifiers: ["starter-reminder", "starter-witness"])
+        center.removePendingNotificationRequests(withIdentifiers: plan.items.map(\.id))
 
-        var reminderComponents = DateComponents()
-        reminderComponents.hour = payload.today.reminderHour
-        reminderComponents.minute = payload.today.reminderMinute
+        for item in plan.items {
+            var components = DateComponents()
+            components.hour = item.deliveryHourLocal
+            components.minute = item.deliveryMinuteLocal
 
-        let reminderContent = UNMutableNotificationContent()
-        reminderContent.title = "Today's vow reminder"
-        reminderContent.body = "Open Aevora and keep your cadence moving."
-        reminderContent.userInfo = ["source": GlanceSurfaceDeepLinkSource.notification.rawValue]
+            let content = UNMutableNotificationContent()
+            content.title = item.title
+            content.body = item.body
+            content.userInfo = [
+                "source": GlanceSurfaceDeepLinkSource.notification.rawValue,
+                "destination": item.destination.rawValue,
+                "vowId": item.vowID ?? ""
+            ]
 
-        let reminderRequest = UNNotificationRequest(
-            identifier: "starter-reminder",
-            content: reminderContent,
-            trigger: UNCalendarNotificationTrigger(dateMatching: reminderComponents, repeats: true)
-        )
-
-        var witnessComponents = DateComponents()
-        witnessComponents.hour = 20
-        witnessComponents.minute = 0
-
-        let witnessContent = UNMutableNotificationContent()
-        witnessContent.title = "The district is waiting"
-        witnessContent.body = payload.today.witnessPrompt
-        witnessContent.userInfo = ["source": GlanceSurfaceDeepLinkSource.notification.rawValue]
-
-        let witnessRequest = UNNotificationRequest(
-            identifier: "starter-witness",
-            content: witnessContent,
-            trigger: UNCalendarNotificationTrigger(dateMatching: witnessComponents, repeats: true)
-        )
-
-        try? await center.add(reminderRequest)
-        try? await center.add(witnessRequest)
+            let request = UNNotificationRequest(
+                identifier: item.id,
+                content: content,
+                trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            )
+            try? await center.add(request)
+        }
     }
 }
 
 @MainActor
 final class StubNotificationManager: NotificationManaging {
     var status: NotificationPermissionSnapshot
-    private(set) var scheduledPayloads: [GlanceSurfacePayload] = []
+    private(set) var scheduledPlans: [NotificationPlan] = []
 
     init(status: NotificationPermissionSnapshot = .notDetermined) {
         self.status = status
@@ -98,7 +87,7 @@ final class StubNotificationManager: NotificationManaging {
         status
     }
 
-    func scheduleStarterArcNotifications(using payload: GlanceSurfacePayload) async {
-        scheduledPayloads.append(payload)
+    func scheduleNotifications(using plan: NotificationPlan) async {
+        scheduledPlans.append(plan)
     }
 }

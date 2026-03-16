@@ -347,6 +347,54 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ShopOffer"
+  /v1/shop/offers/{offerId}/purchase:
+    post:
+      summary: Purchase a curated shop offer
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShopPurchaseRequest"
+      responses:
+        "200":
+          description: Shop purchase completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShopPurchaseResponse"
+  /v1/notifications/plan:
+    get:
+      summary: Fetch the current sparse reminder and witness notification plan
+      responses:
+        "200":
+          description: Notification plan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationPlanResponse"
+  /v1/verified-inputs/completions:
+    post:
+      summary: Ingest one verified completion intent from a narrow source such as HealthKit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifiedCompletionRequest"
+      responses:
+        "200":
+          description: Verified completion import result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifiedCompletionResponse"
   /v1/subscription/state:
     get:
       summary: Fetch current entitlement state
@@ -432,6 +480,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubscriptionDowngradeResponse"
+  /v1/subscription/refresh:
+    post:
+      summary: Reconcile local StoreKit transaction context with the current server-authoritative entitlement state
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionRefreshRequest"
+      responses:
+        "200":
+          description: Refreshed subscription state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionRefreshResponse"
+  /v1/subscription/storekit/notifications:
+    post:
+      summary: Accept a StoreKit server notification and update entitlement state deterministically
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreKitNotificationRequest"
+      responses:
+        "200":
+          description: StoreKit notification accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreKitNotificationResponse"
   /v1/account:
     get:
       summary: Fetch account continuity and subscription summary
@@ -695,7 +775,7 @@ components:
           type: integer
     ChapterState:
       type: object
-      required: [chapterId, status, progressPercent]
+      required: [chapterId, status, progressPercent, currentDay, activeQuestId, entitlementStatus, accessibleDayCap]
       properties:
         chapterId:
           type: string
@@ -703,9 +783,17 @@ components:
           type: string
         progressPercent:
           type: number
+        currentDay:
+          type: integer
+        activeQuestId:
+          type: string
+        entitlementStatus:
+          type: string
+        accessibleDayCap:
+          type: integer
     DistrictState:
       type: object
-      required: [districtId, restorationStage, problemTemplateId]
+      required: [districtId, restorationStage, problemTemplateId, visibleNpcIds, currentMomentId, worldChangeKey, problemState, problemProgressPercent]
       properties:
         districtId:
           type: string
@@ -713,9 +801,21 @@ components:
           type: string
         problemTemplateId:
           type: string
+        visibleNpcIds:
+          type: array
+          items:
+            type: string
+        currentMomentId:
+          type: string
+        worldChangeKey:
+          type: string
+        problemState:
+          type: string
+        problemProgressPercent:
+          type: integer
     InventoryItem:
       type: object
-      required: [id, itemDefinitionId, quantity, bucket, rarity]
+      required: [id, itemDefinitionId, quantity, bucket, rarity, status, slot, earnedFrom]
       properties:
         id:
           type: string
@@ -727,9 +827,15 @@ components:
           type: string
         rarity:
           type: string
+        status:
+          type: string
+        slot:
+          type: string
+        earnedFrom:
+          type: string
     ShopOffer:
       type: object
-      required: [id, itemDefinitionId, priceGold, entitlementGate]
+      required: [id, itemDefinitionId, priceGold, entitlementGate, vendorNpcId, stockLimit, chapterGate, repeatable, canAfford, isOwned, isLocked, remainingStock]
       properties:
         id:
           type: string
@@ -739,6 +845,133 @@ components:
           type: integer
         entitlementGate:
           type: string
+        vendorNpcId:
+          type: string
+        stockLimit:
+          type: integer
+        chapterGate:
+          type: string
+        repeatable:
+          type: boolean
+        canAfford:
+          type: boolean
+        isOwned:
+          type: boolean
+        isLocked:
+          type: boolean
+        remainingStock:
+          type: integer
+    ShopPurchaseRequest:
+      type: object
+      properties:
+        source:
+          type: string
+    ShopPurchaseResponse:
+      type: object
+      required: [purchaseId, offerId, item, remainingGold]
+      properties:
+        purchaseId:
+          type: string
+        offerId:
+          type: string
+        item:
+          $ref: "#/components/schemas/InventoryItem"
+        remainingGold:
+          type: integer
+        source:
+          type: string
+    NotificationPlanItem:
+      type: object
+      required: [id, kind, title, body, deliveryHourLocal, deliveryMinuteLocal, destination]
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+          enum: [vow_reminder, witness_prompt, streak_risk, chapter_ready]
+        title:
+          type: string
+        body:
+          type: string
+        deliveryHourLocal:
+          type: integer
+        deliveryMinuteLocal:
+          type: integer
+        destination:
+          type: string
+          enum: [today, world, quest_journal]
+        vowId:
+          type: [string, "null"]
+    NotificationPlanResponse:
+      type: object
+      required: [generatedAt, plan]
+      properties:
+        generatedAt:
+          type: string
+          format: date-time
+        plan:
+          type: array
+          items:
+            $ref: "#/components/schemas/NotificationPlanItem"
+    SourceConnection:
+      type: object
+      required: [sourceType, authorizationState, supportedDomains]
+      properties:
+        sourceType:
+          type: string
+          enum: [healthkit]
+        authorizationState:
+          type: string
+          enum: [not_requested, requested, granted, denied]
+        supportedDomains:
+          type: array
+          items:
+            type: string
+            enum: [workout, steps, sleep]
+        lastSyncAt:
+          type: [string, "null"]
+          format: date-time
+    VerifiedCompletionRequest:
+      type: object
+      required: [sourceEventId, sourceType, sourceDomain, vowId, localDate]
+      properties:
+        sourceEventId:
+          type: string
+        sourceType:
+          type: string
+          enum: [healthkit]
+        sourceDomain:
+          type: string
+          enum: [workout, steps, sleep]
+        vowId:
+          type: string
+        localDate:
+          type: string
+          format: date
+        progressState:
+          type: string
+          enum: [partial, complete]
+        quantity:
+          type: [integer, "null"]
+        durationMinutes:
+          type: [integer, "null"]
+    VerifiedCompletionResponse:
+      type: object
+      required: [importId, completion, sourceConnection, reconciliation]
+      properties:
+        importId:
+          type: string
+        completion:
+          $ref: "#/components/schemas/CompletionResponse"
+        sourceConnection:
+          $ref: "#/components/schemas/SourceConnection"
+        reconciliation:
+          type: object
+          required: [status]
+          properties:
+            status:
+              type: string
+              enum: [applied, duplicate]
     SubscriptionState:
       type: object
       required: [id, tier, billingState, trialEligible]
@@ -782,6 +1015,64 @@ components:
           $ref: "#/components/schemas/SubscriptionState"
         reason:
           type: string
+    SubscriptionRefreshRequest:
+      type: object
+      required: [transactionId, tier]
+      properties:
+        transactionId:
+          type: string
+        originalTransactionId:
+          type: [string, "null"]
+        tier:
+          type: string
+          enum: [trial, premium_monthly, premium_annual]
+        billingState:
+          type: string
+          enum: [active, grace_period, billing_retry, expired]
+        expiresAt:
+          type: [string, "null"]
+          format: date-time
+    SubscriptionRefreshResponse:
+      type: object
+      required: [subscriptionState, transactionId, authority]
+      properties:
+        subscriptionState:
+          $ref: "#/components/schemas/SubscriptionState"
+        transactionId:
+          type: string
+        authority:
+          type: string
+          enum: [server]
+    StoreKitNotificationRequest:
+      type: object
+      required: [notificationType, userId]
+      properties:
+        notificationType:
+          type: string
+          enum: [DID_RENEW, DID_FAIL_TO_RENEW, DID_RECOVER, EXPIRED]
+        subtype:
+          type: [string, "null"]
+        userId:
+          type: string
+        tier:
+          type: [string, "null"]
+          enum: [trial, premium_monthly, premium_annual, null]
+        transactionId:
+          type: [string, "null"]
+        expiresAt:
+          type: [string, "null"]
+          format: date-time
+    StoreKitNotificationResponse:
+      type: object
+      required: [status, notificationType, subscriptionState]
+      properties:
+        status:
+          type: string
+          enum: [applied]
+        notificationType:
+          type: string
+        subscriptionState:
+          $ref: "#/components/schemas/SubscriptionState"
     AccountSummaryResponse:
       type: object
       required: [account, subscriptionState]

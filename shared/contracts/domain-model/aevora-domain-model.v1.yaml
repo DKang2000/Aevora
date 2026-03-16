@@ -119,8 +119,12 @@ entities:
       id: string
       userId: string
       chapterId: string
-      status: [locked, active, completed]
+      status: [locked, active, preview_capped, completed]
       progressPercent: number
+      currentDay: number
+      activeQuestId: string
+      entitlementStatus: [free_preview, premium_full]
+      accessibleDayCap: number
   QuestState:
     idPrefix: qst_
     fields:
@@ -135,8 +139,13 @@ entities:
       id: string
       userId: string
       districtId: string
-      restorationStage: [dim, stirring, rebuilding, rekindled]
+      restorationStage: [dim, stirring, rebuilding, rekindled, market_waking, market_mended, lantern_garden, festival_ready]
       problemTemplateId: string
+      visibleNpcIds: array
+      currentMomentId: string
+      worldChangeKey: string
+      problemState: string
+      problemProgressPercent: number
   InventoryItem:
     idPrefix: itm_
     fields:
@@ -144,8 +153,11 @@ entities:
       userId: string
       itemDefinitionId: string
       quantity: number
-      bucket: [cosmetic, prop, consumable, token]
-      rarity: [common, uncommon, rare, epic]
+      bucket: [reward_token, prop, cosmetic, chapter_reward]
+      rarity: [common, uncommon, rare]
+      status: [stored, applied]
+      slot: [display, attire, keepsake]
+      earnedFrom: string
   ShopOffer:
     idPrefix: sho_
     fields:
@@ -153,6 +165,10 @@ entities:
       itemDefinitionId: string
       priceGold: number
       entitlementGate: [free, premium]
+      vendorNpcId: string
+      stockLimit: number
+      chapterGate: [starter_arc, chapter_one]
+      repeatable: boolean
       featureFlag: [string, "null"]
   NotificationPreference:
     fields:

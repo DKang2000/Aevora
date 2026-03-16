@@ -4,15 +4,43 @@
       "id": "itm_001",
       "itemDefinitionId": "hearth_apron_common",
       "quantity": 1,
-      "bucket": "cosmetic"
+      "bucket": "cosmetic",
+      "rarity": "common",
+      "status": "applied",
+      "slot": "attire",
+      "earnedFrom": "starter_day_7_chest:2026-03-22"
+    },
+    {
+      "id": "itm_002",
+      "itemDefinitionId": "lantern_rack_prop",
+      "quantity": 1,
+      "bucket": "prop",
+      "rarity": "common",
+      "status": "stored",
+      "slot": "display",
+      "earnedFrom": "chapter_one_preview_reward:2026-03-29"
     }
   ],
   "shopOffers": [
     {
-      "id": "offer_hearth_apron_common",
-      "itemDefinitionId": "hearth_apron_common",
-      "priceGold": 50,
-      "entitlementGate": "free"
+      "id": "offer_market_table_prop",
+      "itemDefinitionId": "market_table_prop",
+      "priceGold": 28,
+      "entitlementGate": "free",
+      "vendorNpcId": "tovan_hearth",
+      "stockLimit": 1,
+      "chapterGate": "chapter_one",
+      "repeatable": false
+    },
+    {
+      "id": "offer_festival_kettle_cosmetic",
+      "itemDefinitionId": "festival_kettle_cosmetic",
+      "priceGold": 68,
+      "entitlementGate": "premium",
+      "vendorNpcId": "sera_quill",
+      "stockLimit": 1,
+      "chapterGate": "chapter_one",
+      "repeatable": false
     }
   ]
 }

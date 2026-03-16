@@ -51,12 +51,17 @@ This section defines:
 - world state loading
 - world state degraded from cache
 - reward grant pending reconciliation
+- inventory empty while the player has not earned or bought props yet
+- shop unavailable or purchase blocked while offline
+- NPC dialogue unavailable while cached world data is incomplete
 
 ### Monetization and permissions
 - paywall data unavailable
 - purchase restore failed
 - notification permission denied
 - HealthKit permission denied
+- verified-input import failed or unavailable
+- notification scheduling unavailable while OS delivery is disabled
 
 ### Settings and account
 - delete account export pending
@@ -77,6 +82,7 @@ This section defines:
 - a user can still log manually while offline or while HealthKit is denied
 - premium downgrade can lock breadth but cannot invalidate historical rewards
 - if cached world state exists, prefer degraded cached rendering over a blank failure screen
+- failed verified-input reconciliation cannot leave the vow unloggable or erase a manual completion path
 
 ## Versioning notes
 - state catalog version is `v1`

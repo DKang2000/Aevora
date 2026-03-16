@@ -33,7 +33,8 @@ struct ProfileRootView: View {
                 .foregroundStyle(.secondary)
             Text("Identity: \(store.copy.text(store.content.identityShells.first(where: { $0.id == store.selectedIdentityID })?.displayNameKey ?? "", fallback: store.selectedIdentityID))")
             Text("Rank \(store.rank) • \(store.lifetimeResonance) Resonance")
-            Text("Starter arc progress: \(store.completionDayCount)/7 days")
+            Text("Gold: \(store.goldBalance)")
+            Text("\(store.chapterState.title): day \(store.chapterState.currentDay) of \(store.chapterState.chapterLength)")
             Text("Inventory: \(store.inventoryItems.count) rewards")
                 .foregroundStyle(.secondary)
         }
@@ -91,6 +92,32 @@ struct ProfileRootView: View {
                 accountStore.requestNotifications(using: store)
             }
             .buttonStyle(.bordered)
+            if let plan = accountStore.lastNotificationPlan {
+                Text("Scheduled return prompts: \(plan.items.count)")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Divider()
+            Text("HealthKit: \(accountStore.healthKitPermission.rawValue)")
+                .foregroundStyle(.secondary)
+            if accountStore.canUseVerifiedInputs {
+                Button(store.copy.text("healthkit.connect_cta", fallback: "Connect HealthKit")) {
+                    accountStore.connectHealthKit(using: store)
+                }
+                .buttonStyle(.bordered)
+                Button(store.copy.text("healthkit.sync_cta", fallback: "Refresh verified inputs")) {
+                    accountStore.refreshVerifiedInputs(using: store)
+                }
+                .buttonStyle(.bordered)
+            } else {
+                Text("Verified inputs unlock with premium breadth.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Divider()
+            Text("Shortcuts: ready after setup")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             Text(accountStore.supportsLiveActivities ? "Live Activities are active for premium breadth." : "Live Activities unlock after premium upgrade.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)

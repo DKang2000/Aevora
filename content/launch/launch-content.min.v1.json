@@ -222,10 +222,35 @@
           "titleKey": "content.district.ember_quay.stage.rekindled",
           "sceneMoodKey": "content.district.ember_quay.mood.rekindled",
           "worldChangeKey": "content.district.ember_quay.change.rekindled"
+        },
+        {
+          "id": "market_waking",
+          "titleKey": "content.district.ember_quay.stage.market_waking",
+          "sceneMoodKey": "content.district.ember_quay.mood.market_waking",
+          "worldChangeKey": "content.district.ember_quay.change.market_waking"
+        },
+        {
+          "id": "market_mended",
+          "titleKey": "content.district.ember_quay.stage.market_mended",
+          "sceneMoodKey": "content.district.ember_quay.mood.market_mended",
+          "worldChangeKey": "content.district.ember_quay.change.market_mended"
+        },
+        {
+          "id": "lantern_garden",
+          "titleKey": "content.district.ember_quay.stage.lantern_garden",
+          "sceneMoodKey": "content.district.ember_quay.mood.lantern_garden",
+          "worldChangeKey": "content.district.ember_quay.change.lantern_garden"
+        },
+        {
+          "id": "festival_ready",
+          "titleKey": "content.district.ember_quay.stage.festival_ready",
+          "sceneMoodKey": "content.district.ember_quay.mood.festival_ready",
+          "worldChangeKey": "content.district.ember_quay.change.festival_ready"
         }
       ],
       "problemTemplateIds": [
-        "starter_oven_crisis"
+        "starter_oven_crisis",
+        "market_memory_crisis"
       ]
     }
   ],
@@ -236,7 +261,8 @@
       "summaryKey": "content.npc.maerin_vale.summary",
       "districtId": "ember_quay",
       "dialogueSetKey": "content.dialogue.maerin_vale",
-      "role": "warden"
+      "role": "warden",
+      "sceneAnchorId": "quay_gate"
     },
     {
       "id": "sera_quill",
@@ -244,7 +270,8 @@
       "summaryKey": "content.npc.sera_quill.summary",
       "districtId": "ember_quay",
       "dialogueSetKey": "content.dialogue.sera_quill",
-      "role": "archivist"
+      "role": "archivist",
+      "sceneAnchorId": "lantern_stall"
     },
     {
       "id": "tovan_hearth",
@@ -252,7 +279,8 @@
       "summaryKey": "content.npc.tovan_hearth.summary",
       "districtId": "ember_quay",
       "dialogueSetKey": "content.dialogue.tovan_hearth",
-      "role": "baker"
+      "role": "baker",
+      "sceneAnchorId": "oven_square"
     },
     {
       "id": "brigant_hal",
@@ -260,7 +288,8 @@
       "summaryKey": "content.npc.brigant_hal.summary",
       "districtId": "ember_quay",
       "dialogueSetKey": "content.dialogue.brigant_hal",
-      "role": "captain_in_training"
+      "role": "captain_in_training",
+      "sceneAnchorId": "quay_gate"
     },
     {
       "id": "ilya_fen",
@@ -268,7 +297,8 @@
       "summaryKey": "content.npc.ilya_fen.summary",
       "districtId": "ember_quay",
       "dialogueSetKey": "content.dialogue.ilya_fen",
-      "role": "charter_clerk"
+      "role": "charter_clerk",
+      "sceneAnchorId": "lantern_stall"
     },
     {
       "id": "pollen",
@@ -276,7 +306,8 @@
       "summaryKey": "content.npc.pollen.summary",
       "districtId": "ember_quay",
       "dialogueSetKey": "content.dialogue.pollen",
-      "role": "lantern_fox"
+      "role": "lantern_fox",
+      "sceneAnchorId": "oven_square"
     }
   ],
   "chapters": [
@@ -303,7 +334,11 @@
       "summaryKey": "content.chapter.chapter_one.summary",
       "entitlementGate": "premium",
       "questIds": [
-        "chapter_one_market_memory"
+        "chapter_one_market_memory",
+        "chapter_one_open_stall",
+        "chapter_one_supply_chain",
+        "chapter_one_lantern_ledger",
+        "chapter_one_gathering_table"
       ],
       "startingQuestId": "chapter_one_market_memory",
       "tomorrowCtaKey": "content.chapter.chapter_one.tomorrow"
@@ -365,6 +400,46 @@
       "rewardTableId": "starter_arc_completion_rewards",
       "restorationStageId": "rekindled",
       "dialogueSetKey": "content.dialogue.quest.day_7"
+    },
+    {
+      "id": "chapter_one_market_memory",
+      "titleKey": "content.quest.chapter_one_market_memory.title",
+      "summaryKey": "content.quest.chapter_one_market_memory.summary",
+      "rewardTableId": "chapter_one_phase_rewards",
+      "restorationStageId": "market_waking",
+      "dialogueSetKey": "content.dialogue.quest.chapter_one_market_memory"
+    },
+    {
+      "id": "chapter_one_open_stall",
+      "titleKey": "content.quest.chapter_one_open_stall.title",
+      "summaryKey": "content.quest.chapter_one_open_stall.summary",
+      "rewardTableId": "chapter_one_phase_rewards",
+      "restorationStageId": "market_waking",
+      "dialogueSetKey": "content.dialogue.quest.chapter_one_open_stall"
+    },
+    {
+      "id": "chapter_one_supply_chain",
+      "titleKey": "content.quest.chapter_one_supply_chain.title",
+      "summaryKey": "content.quest.chapter_one_supply_chain.summary",
+      "rewardTableId": "chapter_one_phase_rewards",
+      "restorationStageId": "market_mended",
+      "dialogueSetKey": "content.dialogue.quest.chapter_one_supply_chain"
+    },
+    {
+      "id": "chapter_one_lantern_ledger",
+      "titleKey": "content.quest.chapter_one_lantern_ledger.title",
+      "summaryKey": "content.quest.chapter_one_lantern_ledger.summary",
+      "rewardTableId": "chapter_one_phase_rewards",
+      "restorationStageId": "lantern_garden",
+      "dialogueSetKey": "content.dialogue.quest.chapter_one_lantern_ledger"
+    },
+    {
+      "id": "chapter_one_gathering_table",
+      "titleKey": "content.quest.chapter_one_gathering_table.title",
+      "summaryKey": "content.quest.chapter_one_gathering_table.summary",
+      "rewardTableId": "chapter_one_completion_rewards",
+      "restorationStageId": "festival_ready",
+      "dialogueSetKey": "content.dialogue.quest.chapter_one_gathering_table"
     }
   ],
   "problemTemplates": [
@@ -373,6 +448,12 @@
       "titleKey": "content.problem.starter_oven_crisis.title",
       "summaryKey": "content.problem.starter_oven_crisis.summary",
       "resolutionKey": "content.problem.starter_oven_crisis.resolution"
+    },
+    {
+      "id": "market_memory_crisis",
+      "titleKey": "content.problem.market_memory_crisis.title",
+      "summaryKey": "content.problem.market_memory_crisis.summary",
+      "resolutionKey": "content.problem.market_memory_crisis.resolution"
     }
   ],
   "starterVowTemplates": [
@@ -642,26 +723,187 @@
       "tomorrowPromptKey": "content.tomorrow.day_7"
     }
   ],
+  "chapterOneMilestones": [
+    {
+      "id": "chapter_one_m1_market_memory",
+      "startDay": 1,
+      "endDay": 6,
+      "questId": "chapter_one_market_memory",
+      "restorationStageId": "market_waking",
+      "worldMomentId": "ward_lantern",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "tovan_hearth",
+        "sera_quill"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.chapter_one.1"
+    },
+    {
+      "id": "chapter_one_m2_open_stall",
+      "startDay": 7,
+      "endDay": 12,
+      "questId": "chapter_one_open_stall",
+      "restorationStageId": "market_waking",
+      "worldMomentId": "oven_glow",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "tovan_hearth",
+        "ilya_fen",
+        "pollen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.chapter_one.2"
+    },
+    {
+      "id": "chapter_one_m3_supply_chain",
+      "startDay": 13,
+      "endDay": 18,
+      "questId": "chapter_one_supply_chain",
+      "restorationStageId": "market_mended",
+      "worldMomentId": "canal_gate",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "brigant_hal",
+        "ilya_fen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.chapter_one.3"
+    },
+    {
+      "id": "chapter_one_m4_lantern_ledger",
+      "startDay": 19,
+      "endDay": 24,
+      "questId": "chapter_one_lantern_ledger",
+      "restorationStageId": "lantern_garden",
+      "worldMomentId": "pollen_emerges",
+      "npcIdsVisible": [
+        "sera_quill",
+        "ilya_fen",
+        "pollen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.chapter_one.4"
+    },
+    {
+      "id": "chapter_one_m5_gathering_table",
+      "startDay": 25,
+      "endDay": 30,
+      "questId": "chapter_one_gathering_table",
+      "restorationStageId": "festival_ready",
+      "worldMomentId": "oven_glow",
+      "npcIdsVisible": [
+        "maerin_vale",
+        "tovan_hearth",
+        "sera_quill",
+        "brigant_hal",
+        "ilya_fen",
+        "pollen"
+      ],
+      "tomorrowPromptKey": "content.tomorrow.chapter_one.5"
+    }
+  ],
   "itemDefinitions": [
     {
       "id": "hearth_apron_common",
       "nameKey": "content.item.hearth_apron_common.name",
+      "summaryKey": "content.item.hearth_apron_common.summary",
       "bucket": "cosmetic",
-      "rarity": "common"
+      "rarity": "common",
+      "slot": "attire",
+      "applyMode": "display"
     },
     {
       "id": "ember_quay_token",
       "nameKey": "content.item.ember_quay_token.name",
+      "summaryKey": "content.item.ember_quay_token.summary",
       "bucket": "reward_token",
-      "rarity": "uncommon"
+      "rarity": "uncommon",
+      "slot": "keepsake",
+      "applyMode": "display"
+    },
+    {
+      "id": "lantern_rack_prop",
+      "nameKey": "content.item.lantern_rack_prop.name",
+      "summaryKey": "content.item.lantern_rack_prop.summary",
+      "bucket": "prop",
+      "rarity": "common",
+      "slot": "display",
+      "applyMode": "display"
+    },
+    {
+      "id": "market_table_prop",
+      "nameKey": "content.item.market_table_prop.name",
+      "summaryKey": "content.item.market_table_prop.summary",
+      "bucket": "prop",
+      "rarity": "uncommon",
+      "slot": "display",
+      "applyMode": "display"
+    },
+    {
+      "id": "baker_banner_prop",
+      "nameKey": "content.item.baker_banner_prop.name",
+      "summaryKey": "content.item.baker_banner_prop.summary",
+      "bucket": "prop",
+      "rarity": "uncommon",
+      "slot": "display",
+      "applyMode": "display"
+    },
+    {
+      "id": "archive_map_cosmetic",
+      "nameKey": "content.item.archive_map_cosmetic.name",
+      "summaryKey": "content.item.archive_map_cosmetic.summary",
+      "bucket": "chapter_reward",
+      "rarity": "rare",
+      "slot": "display",
+      "applyMode": "display"
+    },
+    {
+      "id": "festival_kettle_cosmetic",
+      "nameKey": "content.item.festival_kettle_cosmetic.name",
+      "summaryKey": "content.item.festival_kettle_cosmetic.summary",
+      "bucket": "cosmetic",
+      "rarity": "rare",
+      "slot": "attire",
+      "applyMode": "display"
     }
   ],
   "shopOffers": [
     {
-      "id": "offer_hearth_apron_common",
-      "itemDefinitionId": "hearth_apron_common",
-      "priceGold": 50,
-      "entitlementGate": "free"
+      "id": "offer_lantern_rack_prop",
+      "itemDefinitionId": "lantern_rack_prop",
+      "priceGold": 18,
+      "entitlementGate": "free",
+      "vendorNpcId": "maerin_vale",
+      "stockLimit": 1,
+      "chapterGate": "chapter_one",
+      "repeatable": false
+    },
+    {
+      "id": "offer_market_table_prop",
+      "itemDefinitionId": "market_table_prop",
+      "priceGold": 28,
+      "entitlementGate": "free",
+      "vendorNpcId": "tovan_hearth",
+      "stockLimit": 1,
+      "chapterGate": "chapter_one",
+      "repeatable": false
+    },
+    {
+      "id": "offer_baker_banner_prop",
+      "itemDefinitionId": "baker_banner_prop",
+      "priceGold": 42,
+      "entitlementGate": "free",
+      "vendorNpcId": "tovan_hearth",
+      "stockLimit": 1,
+      "chapterGate": "chapter_one",
+      "repeatable": false
+    },
+    {
+      "id": "offer_festival_kettle_cosmetic",
+      "itemDefinitionId": "festival_kettle_cosmetic",
+      "priceGold": 68,
+      "entitlementGate": "premium",
+      "vendorNpcId": "sera_quill",
+      "stockLimit": 1,
+      "chapterGate": "chapter_one",
+      "repeatable": false
     }
   ]
 }
