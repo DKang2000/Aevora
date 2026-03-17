@@ -1,0 +1,285 @@
+{
+  "meta": {
+    "name": "Aevora v1 Design Tokens",
+    "section": "ART-03",
+    "status": "canonical",
+    "source_of_truth": [
+      "docs/product/08_Art_UI_System_Spec.md",
+      "docs/specs/art/ART-01-visual-target-sheets-pack.md",
+      "docs/specs/art/ART-01-visual-target-sheets-prompt-log.md",
+      "docs/specs/art/ART-03-color-typography-design-token-kit.md"
+    ],
+    "token_path_convention": "dot-path references such as color.surface.cardPrimary and gradient.chapter.primary"
+  },
+  "color": {
+    "parchmentStone": {
+      "050": "#FAF5EB",
+      "100": "#F2EDE3",
+      "200": "#E6DCCF",
+      "300": "#CDBEAC"
+    },
+    "dawnGold": {
+      "300": "#F0CF7A",
+      "500": "#D9A647",
+      "700": "#A87925"
+    },
+    "emberCopper": {
+      "300": "#E7A46C",
+      "500": "#E38C40",
+      "700": "#733D21"
+    },
+    "moonIndigo": {
+      "300": "#5C6788",
+      "500": "#2E3654",
+      "700": "#1D2338",
+      "900": "#111522"
+    },
+    "mossGreen": {
+      "300": "#9CC193",
+      "500": "#3D7A4F",
+      "700": "#285438"
+    },
+    "ashPlum": {
+      "300": "#A28AA3",
+      "500": "#6B536E",
+      "700": "#47364A"
+    },
+    "signalRed": {
+      "500": "#B53A32",
+      "700": "#7F201C"
+    },
+    "text": {
+      "primary": "#1F1B17",
+      "secondary": "#5C554D",
+      "tertiary": "#8A8177",
+      "inverse": "#F9F5ED",
+      "success": "#285438",
+      "warning": "#7F201C"
+    },
+    "surface": {
+      "app": "#F7F3EC",
+      "cardPrimary": "#FAF5EB",
+      "cardSecondary": "#F2EDE3",
+      "cardElevated": "#FFF9F0",
+      "darkShell": "#1D2338",
+      "disabled": "#E6DCCF"
+    },
+    "border": {
+      "subtle": "#DDD3C7",
+      "default": "#CDBEAC",
+      "focus": "#D9A647",
+      "success": "#3D7A4F",
+      "warning": "#B53A32"
+    },
+    "action": {
+      "primaryFill": "#733D21",
+      "primaryText": "#F9F5ED",
+      "secondaryFill": "#F2EDE3",
+      "secondaryText": "#1F1B17",
+      "progress": "#D9A647",
+      "reward": "#E38C40"
+    },
+    "state": {
+      "successFill": "#3D7A4F",
+      "successWash": "#EAF4E8",
+      "warningFill": "#B53A32",
+      "dissonantFill": "#6B536E",
+      "lockedWash": "#EEE7DC"
+    }
+  },
+  "gradient": {
+    "chapter": {
+      "primary": [
+        "#F5E6CF",
+        "#EDD1AB"
+      ]
+    },
+    "reward": {
+      "warm": [
+        "#F0CF7A",
+        "#E38C40"
+      ]
+    },
+    "world": {
+      "deep": [
+        "#2E3654",
+        "#111522"
+      ]
+    },
+    "restoration": {
+      "soft": [
+        "#EAF4E8",
+        "#F5E6CF"
+      ]
+    }
+  },
+  "type": {
+    "display": {
+      "large": {
+        "family": "system-rounded",
+        "size": 34,
+        "weight": "bold",
+        "lineHeight": 40
+      },
+      "medium": {
+        "family": "system-rounded",
+        "size": 28,
+        "weight": "bold",
+        "lineHeight": 34
+      }
+    },
+    "title": {
+      "card": {
+        "family": "system",
+        "size": 20,
+        "weight": "bold",
+        "lineHeight": 24
+      }
+    },
+    "headline": {
+      "family": "system",
+      "size": 17,
+      "weight": "semibold",
+      "lineHeight": 22
+    },
+    "body": {
+      "family": "system",
+      "size": 17,
+      "weight": "regular",
+      "lineHeight": 22
+    },
+    "subheadline": {
+      "family": "system",
+      "size": 15,
+      "weight": "regular",
+      "lineHeight": 20
+    },
+    "footnote": {
+      "family": "system",
+      "size": 13,
+      "weight": "regular",
+      "lineHeight": 18
+    },
+    "caption": {
+      "family": "system",
+      "size": 12,
+      "weight": "semibold",
+      "lineHeight": 16
+    },
+    "button": {
+      "family": "system",
+      "size": 17,
+      "weight": "semibold",
+      "lineHeight": 22
+    }
+  },
+  "space": {
+    "4": 4,
+    "8": 8,
+    "12": 12,
+    "14": 14,
+    "18": 18,
+    "20": 20,
+    "24": 24,
+    "32": 32
+  },
+  "radius": {
+    "sm": 18,
+    "md": 22,
+    "lg": 24,
+    "xl": 26,
+    "pill": 999
+  },
+  "stroke": {
+    "hairline": 1,
+    "default": 1.5,
+    "strong": 2
+  },
+  "elevation": {
+    "none": {
+      "shadowY": 0,
+      "blur": 0,
+      "opacity": 0
+    },
+    "card": {
+      "shadowY": 2,
+      "blur": 8,
+      "opacity": 0.08
+    },
+    "modal": {
+      "shadowY": 8,
+      "blur": 24,
+      "opacity": 0.12
+    },
+    "reward": {
+      "shadowY": 12,
+      "blur": 32,
+      "opacity": 0.16
+    }
+  },
+  "tap": {
+    "minimum": 44,
+    "comfortable": 48
+  },
+  "component": {
+    "today": {
+      "chapterCard": {
+        "background": "gradient.chapter.primary",
+        "progress": "color.action.progress"
+      },
+      "vowCard": {
+        "background": "color.surface.cardPrimary",
+        "progress": {
+          "default": "color.action.progress",
+          "complete": "color.state.successFill"
+        }
+      },
+      "primaryButton": {
+        "fill": "color.action.primaryFill",
+        "text": "color.action.primaryText"
+      },
+      "statChip": {
+        "background": "color.surface.cardSecondary"
+      },
+      "reminderStrip": {
+        "background": "color.surface.cardSecondary"
+      },
+      "returnSurfaceCard": {
+        "background": "color.surface.cardSecondary"
+      }
+    },
+    "world": {
+      "sceneChrome": {
+        "deep": "gradient.world.deep"
+      },
+      "districtCard": {
+        "background": "color.surface.cardPrimary"
+      },
+      "promenadeCard": {
+        "background": "color.surface.cardSecondary"
+      },
+      "repairAccent": "gradient.restoration.soft",
+      "npcHighlight": "color.emberCopper.300"
+    },
+    "hearth": {
+      "panel": {
+        "background": "color.surface.cardPrimary"
+      },
+      "itemTile": {
+        "background": "color.surface.cardElevated",
+        "border": "color.border.default"
+      }
+    },
+    "npcDialogue": {
+      "shell": "color.surface.darkShell",
+      "body": "color.surface.cardPrimary"
+    },
+    "shop": {
+      "card": "color.surface.cardPrimary"
+    },
+    "inventory": {
+      "tile": "color.surface.cardPrimary",
+      "ownedBadge": "color.mossGreen.500"
+    }
+  }
+}
