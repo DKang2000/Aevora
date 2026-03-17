@@ -18,8 +18,8 @@ Aevora already has its core product surfaces implemented. The missing piece is a
 - `ios/Aevora/Features/World/WorldRootView.swift`
 - `ios/Aevora/Features/World/WorldScene.swift`
 - `ios/Aevora/Features/Hearth/HearthRootView.swift`
-- `/Users/donghokang/Downloads/Aevora_ART-01_visual_target_sheets_kickoff_pack.md`
-- `/Users/donghokang/Downloads/Aevora_ART-01_art_generation_execution_workflow_v2.md`
+
+Initial kickoff and workflow notes originally lived outside the repo. Their required direction has been absorbed into this pack, the prompt log, and the local renderer workflow so the canonical ART-01 record is now repo-local.
 
 ## Output / canonical artifact
 - Canonical pack: `docs/specs/art/ART-01-visual-target-sheets-pack.md`
@@ -36,6 +36,14 @@ Aevora already has its core product surfaces implemented. The missing piece is a
 
 ## Execution note
 This workspace does not have a configured external image-generation client or API key. To keep `ART-01` moving without inventing a second workflow, this pack uses the kickoff prompts as the design input and renders the selected directions locally into portrait target sheets. The exact prompt language is preserved in the prompt log so the same set can later be rerun through an external image-model bake-off if desired.
+
+## Renderer QA gate
+A target sheet cannot be marked final if any of the following is true:
+- annotation text is truncated
+- a callout is covered by an inset or figure
+- a label sits underneath a silhouette or body block
+- the primary phone or UI composition reads as crowded instead of intentional
+- a support note becomes harder to scan than the focal visual
 
 ## Visual thesis recap
 - Aevora should feel like heroic coziness in a living mythic city.
@@ -298,3 +306,6 @@ The strip keeps strong family groupings while letting civilian and scholarly sil
 - Do civilian, scholarly, and mercantile fantasies read as strongly as martial ones?
 - Does Cyrane feel like a specific city with civic memory instead of a fantasy kitbash?
 - Can these sheets hand off directly into tokens, UI kit, avatar, NPC, tile, prop, repair-state, item, and FX production?
+
+## Signoff status
+The cleanup rerender requested by the ART-01 addendum is complete. With the Today, World, and NPC sheets corrected and the repo-local workflow tightened by the renderer QA gate, ART-01 should now be treated as fully approved and ready to hand off into `ART-03`, `ART-04`, one polished Today pass, and the later production-tool bake-off for sprite, tile, and animation work.

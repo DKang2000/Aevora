@@ -269,25 +269,35 @@ def draw_world_sheet() -> None:
     sigil = sigil.filter(ImageFilter.GaussianBlur(4))
     image.alpha_composite(sigil)
 
-    draw.rounded_rectangle((230, 1380, 1260, 1550), radius=30, fill=rgba(PALETTE["cream"], 214))
-    draw.text((270, 1422), "Repair-state cue: soot clears, lantern warmth returns, bustle grows, geometry resolves.", font=font("body", 34), fill=rgba(PALETTE["ink"]))
+    callout_box = (214, 1366, 964, 1566)
+    draw.rounded_rectangle(callout_box, radius=30, fill=rgba(PALETTE["cream"], 222))
+    draw.text((250, 1402), "Repair-state cue", font=font("accent", 28), fill=rgba(PALETTE["ash"]))
+    draw_text_block(
+        draw,
+        "Soot clears. Lantern warmth returns. Bustle grows. Geometry resolves into order.",
+        (250, 1442),
+        font("body", 31),
+        rgba(PALETTE["ink"]),
+        620,
+        line_gap=6,
+    )
 
-    inset_box = (1080, 1380, 1365, 1660)
+    inset_box = (1048, 1450, 1324, 1690)
     panel(image, inset_box, PALETTE["indigo_deep"], PALETTE["stone"], radius=30)
-    draw.text((1116, 1412), "Before / After", font=font("accent", 28), fill=rgba(PALETTE["cream"]))
-    draw.rounded_rectangle((1114, 1464, 1220, 1608), radius=18, fill=rgba(PALETTE["ash"]))
-    draw.rounded_rectangle((1234, 1464, 1340, 1608), radius=18, fill=rgba(PALETTE["moss"]))
-    glow_circle(image, (1288, 1528), 42, PALETTE["dawn"], 120)
+    draw.text((1076, 1482), "Before / After", font=font("accent", 26), fill=rgba(PALETTE["cream"]))
+    draw.rounded_rectangle((1080, 1534, 1188, 1652), radius=18, fill=rgba(PALETTE["ash"]))
+    draw.rounded_rectangle((1198, 1534, 1306, 1652), radius=18, fill=rgba(PALETTE["moss"]))
+    glow_circle(image, (1252, 1592), 38, PALETTE["dawn"], 120)
 
     for x, y, fill in [(640, 1250, PALETTE["parchment"]), (885, 1010, PALETTE["moss"]), (1125, 1015, PALETTE["parchment"])]:
         draw.ellipse((x - 22, y - 22, x + 22, y + 22), fill=rgba(fill))
         draw.rectangle((x - 10, y + 22, x + 10, y + 54), fill=rgba(fill))
 
     swatches = [("Moon Indigo", PALETTE["indigo"]), ("Dawn Gold", PALETTE["dawn"]), ("Ember Copper", PALETTE["ember"]), ("Moss Green", PALETTE["moss"])]
-    base_x = MARGIN
+    base_x = 84
     for label, color in swatches:
-        swatch(draw, label, color, (base_x, 1610))
-        base_x += 170
+        swatch(draw, label, color, (base_x, 1720))
+        base_x += 190
 
     footer_notes(image, meta)
     image.save(OUT_DIR / meta.filename)
@@ -425,18 +435,37 @@ def draw_npc_sheet() -> None:
         row = index // 3
         x = start_x + col * gap_x
         y = start_y + row * gap_y
-        panel(image, (x, y, x + 330, y + 320), PALETTE["cream"], PALETTE["stone"], radius=28)
-        draw.ellipse((x + 104, y + 40, x + 226, y + 162), fill=rgba(accent))
-        draw.rounded_rectangle((x + 80, y + 152, x + 250, y + 282), radius=28, fill=rgba(PALETTE["indigo"], 180))
+        panel(image, (x, y, x + 330, y + 344), PALETTE["cream"], PALETTE["stone"], radius=28)
+        draw.ellipse((x + 104, y + 30, x + 226, y + 152), fill=rgba(accent))
+        draw.rounded_rectangle((x + 80, y + 134, x + 250, y + 244), radius=28, fill=rgba(PALETTE["indigo"], 180))
         if name == "Pollen":
-            glow_circle(image, (x + 170, y + 120), 72, PALETTE["dawn"], 140)
-            draw.polygon([(x + 110, y + 120), (x + 150, y + 90), (x + 136, y + 148)], fill=rgba(PALETTE["cream"]))
-            draw.polygon([(x + 230, y + 120), (x + 190, y + 90), (x + 204, y + 148)], fill=rgba(PALETTE["cream"]))
+            glow_circle(image, (x + 170, y + 106), 60, PALETTE["dawn"], 130)
+            draw.polygon([(x + 118, y + 106), (x + 150, y + 80), (x + 138, y + 136)], fill=rgba(PALETTE["cream"]))
+            draw.polygon([(x + 222, y + 106), (x + 190, y + 80), (x + 202, y + 136)], fill=rgba(PALETTE["cream"]))
+            draw.arc((x + 124, y + 118, x + 216, y + 206), start=15, end=150, fill=rgba(PALETTE["cream"]), width=8)
         else:
-            draw.rectangle((x + 152, y + 188, x + 178, y + 250), fill=rgba(accent))
-        draw.text((x + 26, y + 232), name, font=font("accent", 25), fill=rgba(PALETTE["ink"]))
-        draw.text((x + 26, y + 266), role, font=font("body", 23), fill=rgba(PALETTE["ash"]))
-        draw.text((x + 26, y + 292), prop, font=font("body", 21), fill=rgba(PALETTE["ember"]))
+            draw.rectangle((x + 154, y + 166, x + 176, y + 224), fill=rgba(accent))
+
+        prop_y = y + 214
+        if name == "Maerin Vale":
+            draw.ellipse((x + 42, prop_y, x + 82, prop_y + 40), fill=rgba(PALETTE["ember"]))
+        elif name == "Sera Quill":
+            draw.rectangle((x + 38, prop_y - 2, x + 84, prop_y + 34), fill=rgba(PALETTE["silver"]))
+            draw.line([(x + 46, prop_y + 10), (x + 76, prop_y + 10)], fill=rgba(PALETTE["indigo"]), width=3)
+        elif name == "Tovan Hearth":
+            draw.rectangle((x + 40, prop_y + 6, x + 52, prop_y + 56), fill=rgba(PALETTE["ember"]))
+            draw.ellipse((x + 34, prop_y, x + 58, prop_y + 18), fill=rgba(PALETTE["dawn"]))
+        elif name == "Brigant Hal":
+            draw.rectangle((x + 40, prop_y - 2, x + 50, prop_y + 58), fill=rgba(PALETTE["moss"]))
+            draw.polygon([(x + 50, prop_y + 2), (x + 74, prop_y + 12), (x + 50, prop_y + 22)], fill=rgba(PALETTE["silver"]))
+        elif name == "Ilya Fen":
+            draw.rectangle((x + 36, prop_y, x + 84, prop_y + 38), fill=rgba(PALETTE["stone"]))
+            draw.ellipse((x + 74, prop_y + 4, x + 88, prop_y + 18), fill=rgba(PALETTE["ember"]))
+
+        label_y = y + 252
+        draw.text((x + 24, label_y), name, font=font("accent", 23), fill=rgba(PALETTE["ink"]))
+        draw.text((x + 24, label_y + 30), role, font=font("body", 21), fill=rgba(PALETTE["ash"]))
+        draw.text((x + 24, label_y + 58), prop, font=font("body", 19), fill=rgba(PALETTE["ember"]))
 
     draw.rounded_rectangle((160, 1590, 1376, 1735), radius=30, fill=rgba(PALETTE["cream"], 220))
     draw_text_block(
@@ -558,36 +587,39 @@ def draw_today_sheet() -> None:
     draw.rounded_rectangle((chapter[0] + 34, chapter[1] + 250, chapter[0] + 430, chapter[1] + 276), radius=12, fill=rgba(PALETTE["dawn"]))
     glow_circle(image, (chapter[2] - 90, chapter[1] + 108), 70, PALETTE["dawn"], 90)
 
-    y = chapter[3] + 30
+    y = chapter[3] + 26
     cards = [
         ("Morning walk", "Manual logging still takes priority over world browsing.", 0.7, True),
         ("Read ten pages", "Readable progress and completion state, not ornamental framing.", 0.45, False),
         ("Journal one line", "Gentle magical polish appears only after action succeeds.", 1.0, True),
     ]
-    for title, subtitle, progress, done in cards:
-        card = (content[0], y, content[2], y + 242)
+    for index, (title, subtitle, progress, done) in enumerate(cards):
+        card_height = 232 if index < 2 else 198
+        card = (content[0], y, content[2], y + card_height)
         panel(image, card, PALETTE["cream"], PALETTE["stone"], radius=36)
         draw.text((card[0] + 34, card[1] + 30), title, font=font("accent", 36), fill=rgba(PALETTE["ink"]))
-        draw_text_block(draw, subtitle, (card[0] + 34, card[1] + 82), font("body", 28), rgba(PALETTE["ash"]), 650)
-        draw.rounded_rectangle((card[0] + 34, card[1] + 162, card[2] - 240, card[1] + 184), radius=10, fill=rgba(PALETTE["parchment_deep"]))
-        draw.rounded_rectangle((card[0] + 34, card[1] + 162, int(card[0] + 34 + (card[2] - card[0] - 274) * progress), card[1] + 184), radius=10, fill=rgba(PALETTE["moss"] if done else PALETTE["dawn"]))
+        draw_text_block(draw, subtitle, (card[0] + 34, card[1] + 82), font("body", 28), rgba(PALETTE["ash"]), 620)
+        progress_y = card[1] + card_height - 54
+        draw.rounded_rectangle((card[0] + 34, progress_y, card[2] - 240, progress_y + 22), radius=10, fill=rgba(PALETTE["parchment_deep"]))
+        draw.rounded_rectangle((card[0] + 34, progress_y, int(card[0] + 34 + (card[2] - card[0] - 274) * progress), progress_y + 22), radius=10, fill=rgba(PALETTE["moss"] if done else PALETTE["dawn"]))
         btn_fill = PALETTE["moss"] if done else PALETTE["ember"]
-        btn_box = (card[2] - 208, card[1] + 62, card[2] - 34, card[1] + 176)
+        btn_box = (card[2] - 208, card[1] + 56, card[2] - 34, card[1] + 164)
         draw.rounded_rectangle(btn_box, radius=28, fill=rgba(btn_fill))
         draw.text((btn_box[0] + 34, btn_box[1] + 34), "Done" if done else "Log", font=font("accent", 34), fill=rgba(PALETTE["white"]))
         if done:
-            glow_circle(image, (card[2] - 132, card[1] + 118), 54, PALETTE["dawn"], 78)
-        y += 268
+            glow_circle(image, (card[2] - 132, card[1] + 108), 46, PALETTE["dawn"], 72)
+        y += card_height + 22
 
-    stat_y = phone[3] - 220
+    stat_y = y + 26
     for idx, (label, value) in enumerate([("Chains", "4"), ("Embers", "2"), ("Gold", "85"), ("Rank", "3")]):
         x = content[0] + idx * 185
         draw.rounded_rectangle((x, stat_y, x + 160, stat_y + 112), radius=28, fill=rgba(PALETTE["parchment"]))
         draw.text((x + 22, stat_y + 24), label, font=font("body", 24), fill=rgba(PALETTE["ash"]))
         draw.text((x + 22, stat_y + 56), value, font=font("accent", 32), fill=rgba(PALETTE["ink"]))
 
-    draw.rounded_rectangle((content[2] - 310, stat_y, content[2], stat_y + 112), radius=28, fill=rgba(PALETTE["indigo"]))
-    draw.text((content[2] - 274, stat_y + 36), "See the district respond", font=font("body", 26), fill=rgba(PALETTE["white"]))
+    cta_box = (content[2] - 348, stat_y, content[2], stat_y + 112)
+    draw.rounded_rectangle(cta_box, radius=28, fill=rgba(PALETTE["indigo"]))
+    draw.text((cta_box[0] + 28, stat_y + 36), "See district response", font=font("body", 25), fill=rgba(PALETTE["white"]))
 
     footer_notes(image, meta)
     image.save(OUT_DIR / meta.filename)
