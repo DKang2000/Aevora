@@ -14,10 +14,10 @@ struct OnboardingRootView: View {
             VStack(spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Aevora")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                        .font(AevoraTokens.Typography.caption)
+                        .foregroundStyle(AevoraTokens.Color.text.secondary)
                     ProgressView(value: Double(store.onboardingStep), total: 6)
-                        .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                        .tint(AevoraTokens.Color.action.progress)
                 }
 
                 ScrollView {
@@ -46,19 +46,12 @@ struct OnboardingRootView: View {
                         }
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                    .tint(AevoraTokens.Color.action.primaryFill)
                     .disabled(store.onboardingStep == 0 && !store.hasStartedOnboarding)
                 }
             }
             .padding(24)
-            .background(
-                LinearGradient(
-                    colors: [Color(red: 0.96, green: 0.93, blue: 0.88), Color(red: 0.86, green: 0.78, blue: 0.67)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-            )
+            .background(AevoraTokens.Gradient.chapter.primary.ignoresSafeArea())
         }
     }
 
@@ -68,10 +61,10 @@ struct OnboardingRootView: View {
         case 0:
             VStack(alignment: .leading, spacing: 16) {
                 Text(store.copy.text("onboarding.welcome_title", fallback: "Level up in Aevora as you level up in real life."))
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
+                    .font(AevoraTokens.Typography.displayLarge)
                 Text(store.copy.text("onboarding.welcome_body", fallback: "Keep a few meaningful vows, and the city will answer."))
-                    .font(.title3)
-                    .foregroundStyle(.secondary)
+                    .font(AevoraTokens.Typography.headline)
+                    .foregroundStyle(AevoraTokens.Color.text.secondary)
                 SignInWithAppleButton(.continue) { request in
                     request.requestedScopes = [.fullName]
                 } onCompletion: { result in
@@ -93,12 +86,12 @@ struct OnboardingRootView: View {
                     store.advanceOnboarding()
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                .tint(AevoraTokens.Color.action.primaryFill)
 
                 if let authErrorMessage = store.authErrorMessage {
                     Text(authErrorMessage)
-                        .font(.footnote)
-                        .foregroundStyle(.red)
+                        .font(AevoraTokens.Typography.footnote)
+                        .foregroundStyle(AevoraTokens.Color.text.warning)
                 }
             }
         case 1:
@@ -129,7 +122,7 @@ struct OnboardingRootView: View {
         case 3:
             VStack(alignment: .leading, spacing: 20) {
                 Text(store.copy.text("onboarding.daily_load_title", fallback: "How many daily vows can you realistically keep?"))
-                    .font(.title3.bold())
+                    .font(AevoraTokens.Typography.headline)
                 Picker("Daily load", selection: $store.dailyLoad) {
                     Text("3").tag(3)
                     Text("5").tag(5)
@@ -142,7 +135,7 @@ struct OnboardingRootView: View {
         case 4:
             VStack(alignment: .leading, spacing: 20) {
                 Text(store.copy.text("onboarding.family_title", fallback: "Choose your origin family"))
-                    .font(.title3.bold())
+                    .font(AevoraTokens.Typography.headline)
                 ForEach(store.content.originFamilies) { family in
                     choiceCard(
                         title: store.copy.text(family.titleKey, fallback: family.id),
@@ -159,7 +152,7 @@ struct OnboardingRootView: View {
         case 5:
             VStack(alignment: .leading, spacing: 20) {
                 Text(store.copy.text("onboarding.identity_title", fallback: "Choose your path"))
-                    .font(.title3.bold())
+                    .font(AevoraTokens.Typography.headline)
                 ForEach(store.content.identityShells.filter { $0.originFamilyId == store.selectedFamilyID }) { identity in
                     choiceCard(
                         title: store.copy.text(identity.displayNameKey, fallback: identity.id),
@@ -173,32 +166,31 @@ struct OnboardingRootView: View {
         case 6:
             VStack(alignment: .leading, spacing: 20) {
                 Text(store.copy.text("onboarding.avatar_title", fallback: "Shape your arrival"))
-                    .font(.title3.bold())
-                TextField("Name", text: $store.avatarDraft.displayName)
-                    .textFieldStyle(.roundedBorder)
-                TextField("Pronouns (optional)", text: $store.avatarDraft.pronouns)
-                    .textFieldStyle(.roundedBorder)
+                    .font(AevoraTokens.Typography.headline)
+                tokenTextField("Name", text: $store.avatarDraft.displayName)
+                tokenTextField("Pronouns (optional)", text: $store.avatarDraft.pronouns)
                 VStack(alignment: .leading, spacing: 12) {
                     Text(store.copy.text("onboarding.vows_title", fallback: "Your starter vows"))
-                        .font(.title3.bold())
+                        .font(AevoraTokens.Typography.headline)
                     ForEach(store.recommendedVows) { vow in
                         HStack(alignment: .top, spacing: 12) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(vow.title)
-                                    .font(.headline)
+                                    .font(AevoraTokens.Typography.headline)
                                 Text("\(vow.category) • \(vow.targetValue) \(vow.targetUnit)")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
+                                    .font(AevoraTokens.Typography.subheadline)
+                                    .foregroundStyle(AevoraTokens.Color.text.secondary)
                             }
                             Spacer()
                             Button("Replace") {
                                 store.replaceRecommendation(vow.id)
                             }
-                            .font(.footnote.bold())
+                            .font(AevoraTokens.Typography.footnote)
                         }
                         .padding(14)
-                        .background(Color.white.opacity(0.65))
-                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .background(AevoraTokens.Color.surface.cardPrimary.opacity(0.92))
+                        .overlay(tokenCardStroke(isSelected: false))
+                        .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
                     }
                 }
             }
@@ -211,21 +203,18 @@ struct OnboardingRootView: View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.headline)
+                    .font(AevoraTokens.Typography.headline)
                 if !body.isEmpty {
                     Text(body)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .font(AevoraTokens.Typography.subheadline)
+                        .foregroundStyle(AevoraTokens.Color.text.secondary)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
-            .background(isSelected ? Color.white : Color.white.opacity(0.55))
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(isSelected ? Color(red: 0.45, green: 0.24, blue: 0.13) : Color.clear, lineWidth: 2)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .background(isSelected ? AevoraTokens.Color.surface.cardElevated : AevoraTokens.Color.surface.cardPrimary.opacity(0.84))
+            .overlay(tokenCardStroke(isSelected: isSelected))
+            .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
         }
         .buttonStyle(.plain)
     }
@@ -233,7 +222,7 @@ struct OnboardingRootView: View {
     private func singleChoice(title: String, options: [String], selection: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
-                .font(.title3.bold())
+                .font(AevoraTokens.Typography.headline)
             ForEach(options, id: \.self) { option in
                 choiceCard(title: option, body: "", isSelected: selection.wrappedValue == option) {
                     selection.wrappedValue = option
@@ -245,10 +234,10 @@ struct OnboardingRootView: View {
     private func optionPicker(title: String, subtitle: String, options: [String], selection: Binding<Set<String>>, limit: Int) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(title)
-                .font(.title3.bold())
+                .font(AevoraTokens.Typography.headline)
             Text(subtitle)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.subheadline)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                 ForEach(options, id: \.self) { option in
                     let isSelected = selection.wrappedValue.contains(option)
@@ -262,19 +251,34 @@ struct OnboardingRootView: View {
                         selection.wrappedValue = updated
                     } label: {
                         Text(option.capitalized)
-                            .font(.subheadline.weight(.semibold))
+                            .font(AevoraTokens.Typography.subheadline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(isSelected ? Color.white : Color.white.opacity(0.55))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                    .stroke(isSelected ? Color(red: 0.45, green: 0.24, blue: 0.13) : Color.clear, lineWidth: 2)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                            .background(isSelected ? AevoraTokens.Color.surface.cardElevated : AevoraTokens.Color.surface.cardPrimary.opacity(0.84))
+                            .overlay(tokenCardStroke(isSelected: isSelected))
+                            .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
                     }
                     .buttonStyle(.plain)
                 }
             }
         }
+    }
+
+    private func tokenTextField(_ title: String, text: Binding<String>) -> some View {
+        TextField(title, text: text)
+            .font(AevoraTokens.Typography.body)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(AevoraTokens.Color.surface.cardPrimary)
+            .overlay(tokenCardStroke(isSelected: false))
+            .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
+    }
+
+    private func tokenCardStroke(isSelected: Bool) -> some View {
+        RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous)
+            .stroke(
+                isSelected ? AevoraTokens.Color.border.focus : AevoraTokens.Color.border.subtle,
+                lineWidth: isSelected ? 2 : 1.5
+            )
     }
 }

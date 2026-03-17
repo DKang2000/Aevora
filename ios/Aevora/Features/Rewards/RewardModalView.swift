@@ -8,12 +8,13 @@ struct RewardModalView: View {
     var body: some View {
         VStack(spacing: 20) {
             Capsule()
-                .fill(Color.secondary.opacity(0.25))
+                .fill(AevoraTokens.Color.border.subtle)
                 .frame(width: 44, height: 5)
                 .padding(.top, 8)
 
             Text(copy.text("rewards.summary_title", fallback: "Your world responds."))
-                .font(.title2.bold())
+                .font(AevoraTokens.Typography.displayMedium)
+                .foregroundStyle(AevoraTokens.Color.text.primary)
 
             HStack(spacing: 16) {
                 metric(title: copy.text("rewards.resonance_label", fallback: "Resonance"), value: "\(state.resonance)")
@@ -21,70 +22,84 @@ struct RewardModalView: View {
             }
 
             Text(state.worldChangeText)
-                .font(.body)
+                .font(AevoraTokens.Typography.body)
                 .multilineTextAlignment(.center)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
 
             if let magicalMomentTitle = state.magicalMomentTitle {
                 VStack(spacing: 8) {
                     Text(magicalMomentTitle)
-                        .font(.headline)
+                        .font(AevoraTokens.Typography.headline)
+                        .foregroundStyle(AevoraTokens.Color.text.primary)
                     if let magicalMomentBody = state.magicalMomentBody {
                         Text(magicalMomentBody)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .font(AevoraTokens.Typography.subheadline)
+                            .foregroundStyle(AevoraTokens.Color.text.secondary)
                             .multilineTextAlignment(.center)
                     }
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color(red: 0.97, green: 0.93, blue: 0.86))
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .background(AevoraTokens.Color.surface.cardElevated)
+                .overlay(tokenCardStroke)
+                .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
             }
 
             if state.leveledUp {
                 Text("Rank up. The city notices your return.")
-                    .font(.headline)
-                    .foregroundStyle(Color(red: 0.45, green: 0.24, blue: 0.13))
+                    .font(AevoraTokens.Typography.headline)
+                    .foregroundStyle(AevoraTokens.Color.action.primaryFill)
             }
 
             if !state.unlockedItemNames.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Unlocked")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                        .font(AevoraTokens.Typography.caption)
+                        .foregroundStyle(AevoraTokens.Color.text.secondary)
                     ForEach(state.unlockedItemNames, id: \.self) { itemName in
                         Text(itemName)
-                            .font(.subheadline.weight(.semibold))
+                            .font(AevoraTokens.Typography.subheadline)
+                            .foregroundStyle(AevoraTokens.Color.text.primary)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(Color(red: 0.96, green: 0.93, blue: 0.88))
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .background(AevoraTokens.Color.surface.cardPrimary)
+                .overlay(tokenCardStroke)
+                .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
             }
 
             Button(copy.text("actions.see_world", fallback: "See world response")) {
                 onDismiss()
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+            .tint(AevoraTokens.Color.action.primaryFill)
             .padding(.bottom, 12)
         }
         .padding(.horizontal, 24)
+        .padding(.top, 8)
+        .presentationBackground(AevoraTokens.Color.surface.app)
         .presentationDetents([.medium])
     }
 
     private func metric(title: String, value: String) -> some View {
         VStack(spacing: 6) {
             Text(value)
-                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .font(AevoraTokens.Typography.displayMedium)
+                .foregroundStyle(AevoraTokens.Color.text.primary)
             Text(title)
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.footnote)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
-        .background(Color(red: 0.96, green: 0.93, blue: 0.88))
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(AevoraTokens.Color.surface.cardSecondary)
+        .overlay(tokenCardStroke)
+        .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
+    }
+
+    private var tokenCardStroke: some View {
+        RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous)
+            .stroke(AevoraTokens.Color.border.subtle, lineWidth: 1.5)
     }
 }
