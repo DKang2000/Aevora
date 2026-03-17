@@ -575,12 +575,18 @@ describe("Durable starter arc core loop", () => {
       .then((response) => response.body);
 
     expect(exportResponse.exportRequest.status).toBe("prepared");
+    expect(exportResponse.exportRequest.redactionProfile).toBe("support_safe_v1");
     expect(exportResponse.summary.subscriptionTier).toBe("free");
+    expect(exportResponse.summary.lastCompletionLocalDate).toBe("2026-03-16");
 
-    await request(app.getHttpServer())
+    const deleteResponse = await request(app.getHttpServer())
       .delete("/v1/account")
       .set(authHeader)
-      .expect(200);
+      .expect(200)
+      .then((response) => response.body);
+
+    expect(deleteResponse.status).toBe("deleted");
+    expect(deleteResponse.deletedAt).toBeDefined();
 
     await request(app.getHttpServer())
       .get("/v1/account")

@@ -912,22 +912,60 @@ export class CoreLoopService {
     };
   }
 
-  async requestAccountExport(userId: string): Promise<Record<string, unknown>> {
+  async getAdminAccountSummary(userId: string): Promise<Record<string, unknown>> {
     await this.ensureStateLoaded();
 
     const user = this.requireUser(userId);
     return {
+      userId: user.user.id,
+      authMode: user.user.authMode,
+      selectedIdentityShellId: user.profile.selectedIdentityShellId,
+      originFamilyId: user.profile.originFamilyId,
+      activeVowCount: user.vows.filter((entry) => entry.status === "active").length,
+      archivedVowCount: user.vows.filter((entry) => entry.status === "archived").length,
+      completionDayCount: user.completionDates.length,
+      lastCompletionLocalDate: user.completionDates.at(-1) ?? null,
+      inventoryItemCount: user.inventoryItems.length,
+      rewardGrantCount: user.rewardLedger.length,
+      chapterId: user.chapterState.chapterId,
+      chapterDay: user.chapterState.currentDay,
+      districtStage: user.districtState.restorationStage,
+      subscriptionTier: user.subscriptionState.tier,
+      billingState: user.subscriptionState.billingState,
+      sourceConnections: user.sourceConnections.map((connection) => ({
+        sourceType: connection.sourceType,
+        authorizationState: connection.authorizationState,
+        supportedDomains: connection.supportedDomains
+      }))
+    };
+  }
+
+  async requestAccountExport(userId: string): Promise<Record<string, unknown>> {
+    await this.ensureStateLoaded();
+
+    const user = this.requireUser(userId);
+    const generatedAt = new Date().toISOString();
+    return {
       exportRequest: {
         id: `exp_${randomUUID()}`,
         status: "prepared",
-        generatedAt: new Date().toISOString()
+        generatedAt,
+        availableUntil: this.futureIsoDate(7),
+        format: "json",
+        redactionProfile: "support_safe_v1",
+        includes: ["account", "profile", "subscription_state", "vows", "progression", "inventory", "source_connections"]
       },
       summary: {
         userId: user.user.id,
         authMode: user.user.authMode,
         activeVows: user.vows.filter((entry) => entry.status === "active").length,
+        archivedVows: user.vows.filter((entry) => entry.status === "archived").length,
         completionDayCount: user.completionDates.length,
-        subscriptionTier: user.subscriptionState.tier
+        rewardGrantCount: user.rewardLedger.length,
+        inventoryItemCount: user.inventoryItems.length,
+        subscriptionTier: user.subscriptionState.tier,
+        billingState: user.subscriptionState.billingState,
+        lastCompletionLocalDate: user.completionDates.at(-1) ?? null
       }
     };
   }
@@ -940,12 +978,17 @@ export class CoreLoopService {
     }
 
     delete this.state.users[userId];
-    this.removeUserSessions(userId);
+    const revokedSessions = this.removeUserSessions(userId);
     await this.persistState();
 
     return {
       status: "deleted",
-      userId
+      userId,
+      deletedAt: new Date().toISOString(),
+      revokedAccessTokens: revokedSessions.accessTokens,
+      revokedRefreshTokens: revokedSessions.refreshTokens,
+      revokedDeviceSessions: revokedSessions.deviceSessions,
+      revokedAppleSessions: revokedSessions.appleSessions
     };
   }
 
@@ -1600,11 +1643,36 @@ export class CoreLoopService {
     };
   }
 
-  private removeUserSessions(userId: string): void {
-    this.state.accessTokens = Object.fromEntries(Object.entries(this.state.accessTokens).filter(([, mappedUserId]) => mappedUserId !== userId));
-    this.state.refreshTokens = Object.fromEntries(Object.entries(this.state.refreshTokens).filter(([, mappedUserId]) => mappedUserId !== userId));
-    this.state.deviceSessions = Object.fromEntries(Object.entries(this.state.deviceSessions).filter(([, mappedUserId]) => mappedUserId !== userId));
-    this.state.appleSessions = Object.fromEntries(Object.entries(this.state.appleSessions).filter(([, mappedUserId]) => mappedUserId !== userId));
+  private removeUserSessions(userId: string): {
+    accessTokens: number;
+    refreshTokens: number;
+    deviceSessions: number;
+    appleSessions: number;
+  } {
+    const accessTokens = Object.values(this.state.accessTokens).filter((mappedUserId) => mappedUserId === userId).length;
+    const refreshTokens = Object.values(this.state.refreshTokens).filter((mappedUserId) => mappedUserId === userId).length;
+    const deviceSessions = Object.values(this.state.deviceSessions).filter((mappedUserId) => mappedUserId === userId).length;
+    const appleSessions = Object.values(this.state.appleSessions).filter((mappedUserId) => mappedUserId === userId).length;
+
+    this.state.accessTokens = Object.fromEntries(
+      Object.entries(this.state.accessTokens).filter(([, mappedUserId]) => mappedUserId !== userId)
+    );
+    this.state.refreshTokens = Object.fromEntries(
+      Object.entries(this.state.refreshTokens).filter(([, mappedUserId]) => mappedUserId !== userId)
+    );
+    this.state.deviceSessions = Object.fromEntries(
+      Object.entries(this.state.deviceSessions).filter(([, mappedUserId]) => mappedUserId !== userId)
+    );
+    this.state.appleSessions = Object.fromEntries(
+      Object.entries(this.state.appleSessions).filter(([, mappedUserId]) => mappedUserId !== userId)
+    );
+
+    return {
+      accessTokens,
+      refreshTokens,
+      deviceSessions,
+      appleSessions
+    };
   }
 
   private dayDifference(fromDate: string, toDate: string): number {

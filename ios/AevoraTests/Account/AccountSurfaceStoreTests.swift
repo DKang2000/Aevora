@@ -95,12 +95,34 @@ final class AccountSurfaceStoreTests: XCTestCase {
         coreLoop.generateStarterRecommendations()
         coreLoop.finishOnboarding()
         store.startTrial(using: coreLoop)
+        store.prepareExport(using: coreLoop)
+        store.beginDeleteAccountFlow()
 
         store.deleteAccount(using: coreLoop)
 
         XCTAssertEqual(coreLoop.authMode, "guest")
         XCTAssertFalse(coreLoop.hasCompletedOnboarding)
         XCTAssertEqual(store.subscriptionState.tier, .free)
+        XCTAssertFalse(store.isDeleteConfirmationPresented)
+        XCTAssertNil(store.exportPreparedAt)
+    }
+
+    func testBeginDeleteFlowWarnsWhenNoExportPreviewExists() {
+        let environment = AppEnvironment(inMemory: true)
+        let store = AccountSurfaceStore(
+            repository: environment.repository,
+            analyticsClient: environment.analyticsClient,
+            remoteConfigClient: environment.remoteConfigClient,
+            notificationManager: StubNotificationManager(),
+            healthKitManager: StubHealthKitManager(),
+            glanceSurfaceStore: GlanceSurfaceStore(),
+            liveActivityCoordinator: LiveActivityCoordinator()
+        )
+
+        store.beginDeleteAccountFlow()
+
+        XCTAssertTrue(store.isDeleteConfirmationPresented)
+        XCTAssertEqual(store.accountNotice, "Prepare an export preview before deleting so your current local state is visible.")
     }
 
     func testHealthKitConnectionImportsVerifiedCompletionWithoutRemovingManualPath() async {

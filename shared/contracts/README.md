@@ -12,10 +12,15 @@ This folder is the canonical machine-readable source of truth for cross-team obj
 
 ## Expected subfolders
 - `api/`
+- `assets/`
+- `client-local-storage/`
 - `events/`
 - `content/`
 - `entitlements/`
-- `schemas/`
+- `localization/`
+- `permissions/`
+- `remote-config/`
+- `ui-states/`
 
 ## Guardrail
 Once a contract is accepted here, it outranks prose docs during implementation. Update the upstream doc and the contract together when semantics change.

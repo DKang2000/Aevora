@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "v1",
+  "releaseId": "launch_placeholder_assets_2026_03_16",
+  "generatedAt": "2026-03-16T00:00:00Z",
+  "cdnBaseURL": "placeholder://cdn.aevora.launch/v1",
+  "assets": [
+    {
+      "assetId": "asset_ios_app_icon_placeholder",
+      "channel": "ios_launch",
+      "logicalPath": "ios/app-icon/1024",
+      "artifactPath": "placeholder://assets/ios/app-icon-1024.png",
+      "contentHash": "placeholder_sha256_app_icon",
+      "versionToken": "2026_03_16_app_icon_placeholder",
+      "contentType": "image/png",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "sizeBytes": 0
+    },
+    {
+      "assetId": "asset_world_scene_dawnmarch_placeholder",
+      "channel": "world_scene",
+      "logicalPath": "world/dawnmarch/scene-root",
+      "artifactPath": "placeholder://assets/world/dawnmarch-scene-root.png",
+      "contentHash": "placeholder_sha256_world_scene",
+      "versionToken": "2026_03_16_world_scene_placeholder",
+      "contentType": "image/png",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "sizeBytes": 0
+    },
+    {
+      "assetId": "asset_widget_lockup_placeholder",
+      "channel": "widget",
+      "logicalPath": "widgets/lockup/basic",
+      "artifactPath": "placeholder://assets/widgets/basic-lockup.png",
+      "contentHash": "placeholder_sha256_widget_lockup",
+      "versionToken": "2026_03_16_widget_placeholder",
+      "contentType": "image/png",
+      "cacheControl": "public, max-age=31536000, immutable",
+      "sizeBytes": 0
+    }
+  ]
+}

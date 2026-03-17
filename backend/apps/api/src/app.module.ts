@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 
 import { AnalyticsModule } from "./analytics/analytics.module";
+import { AdminModule } from "./admin/admin.module";
 import { AccountModule } from "./account/account.module";
 import { AuthModule } from "./auth/auth.module";
 import { AppConfigModule } from "./common/config/config.module";
@@ -25,6 +26,7 @@ import { VowsModule } from "./vows/vows.module";
     HealthModule,
     ObservabilityModule,
     AnalyticsModule,
+    AdminModule,
     AccountModule,
     RuntimeConfigModule,
     ContentModule,

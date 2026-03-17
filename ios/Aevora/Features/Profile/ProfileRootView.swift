@@ -151,10 +151,34 @@ struct ProfileRootView: View {
                 accountStore.prepareExport(using: store)
             }
             .buttonStyle(.bordered)
-            Button("Delete local account state") {
-                accountStore.deleteAccount(using: store)
+            if let exportPreparedAt = accountStore.exportPreparedAt {
+                Text("Export preview prepared \(exportPreparedAt.formatted(date: .abbreviated, time: .shortened))")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
-            .buttonStyle(.bordered)
+            if accountStore.isDeleteConfirmationPresented {
+                Text("Deleting clears the local account snapshot, starter-arc continuity, subscription cache, and witness surfaces on this device.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                HStack {
+                    Button("Delete local account state", role: .destructive) {
+                        accountStore.deleteAccount(using: store)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Button("Cancel") {
+                        accountStore.cancelDeleteAccountFlow()
+                    }
+                    .buttonStyle(.bordered)
+                }
+            } else {
+                Button("Review delete account") {
+                    accountStore.beginDeleteAccountFlow()
+                }
+                .buttonStyle(.bordered)
+            }
+            Text("Launch support should use the account export path before requesting backend deletion for linked or subscribed users.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             if let exportPreview = accountStore.exportPreview {
                 Text(exportPreview)
                     .font(.footnote)

@@ -541,6 +541,116 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AccountExportResponse"
+  /v1/admin/runtime-config/releases/current:
+    get:
+      summary: Fetch the current remote-config release state for operators
+      responses:
+        "200":
+          description: Remote-config release state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RuntimeConfigReleaseStateResponse"
+  /v1/admin/runtime-config/releases/promote:
+    post:
+      summary: Promote a validated remote-config candidate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminPromoteRuntimeConfigRequest"
+      responses:
+        "201":
+          description: Promoted remote-config release
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RuntimeConfigPromotionResponse"
+  /v1/admin/content/releases/current:
+    get:
+      summary: Fetch the current launch-content release state for operators
+      responses:
+        "200":
+          description: Content release state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentReleaseStateResponse"
+  /v1/admin/content/releases/promote:
+    post:
+      summary: Promote a validated launch-content candidate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminPromoteContentRequest"
+      responses:
+        "201":
+          description: Promoted content release
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentPromotionResponse"
+  /v1/admin/assets/releases/current:
+    get:
+      summary: Fetch the current asset-manifest release state for operators
+      responses:
+        "200":
+          description: Asset-manifest release state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetReleaseStateResponse"
+  /v1/admin/assets/releases/promote:
+    post:
+      summary: Promote a validated asset manifest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminPromoteAssetManifestRequest"
+      responses:
+        "201":
+          description: Promoted asset release
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetPromotionResponse"
+  /v1/admin/accounts/{userId}:
+    get:
+      summary: Fetch support-safe account state for an operator
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Support-safe account summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminAccountSummaryResponse"
+  /v1/admin/accounts/{userId}/export:
+    post:
+      summary: Prepare a support-safe export for an operator
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Export request summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountExportResponse"
   /v1/glance/state:
     get:
       summary: Fetch the current widget and Live Activity witness snapshot
@@ -1100,7 +1210,7 @@ components:
       properties:
         exportRequest:
           type: object
-          required: [id, status, generatedAt]
+          required: [id, status, generatedAt, availableUntil, format, redactionProfile, includes]
           properties:
             id:
               type: string
@@ -1110,9 +1220,21 @@ components:
             generatedAt:
               type: string
               format: date-time
+            availableUntil:
+              type: string
+              format: date-time
+            format:
+              type: string
+              enum: [json]
+            redactionProfile:
+              type: string
+            includes:
+              type: array
+              items:
+                type: string
         summary:
           type: object
-          required: [userId, authMode, activeVows, completionDayCount, subscriptionTier]
+          required: [userId, authMode, activeVows, archivedVows, completionDayCount, rewardGrantCount, inventoryItemCount, subscriptionTier, billingState, lastCompletionLocalDate]
           properties:
             userId:
               type: string
@@ -1121,20 +1243,279 @@ components:
               enum: [guest, registered]
             activeVows:
               type: integer
+            archivedVows:
+              type: integer
             completionDayCount:
+              type: integer
+            rewardGrantCount:
+              type: integer
+            inventoryItemCount:
               type: integer
             subscriptionTier:
               type: string
               enum: [free, trial, premium_monthly, premium_annual]
+            billingState:
+              type: string
+              enum: [active, grace_period, billing_retry, expired]
+            lastCompletionLocalDate:
+              type: [string, "null"]
     AccountDeleteResponse:
       type: object
-      required: [status, userId]
+      required: [status, userId, deletedAt, revokedAccessTokens, revokedRefreshTokens, revokedDeviceSessions, revokedAppleSessions]
       properties:
         status:
           type: string
           enum: [deleted]
         userId:
           type: string
+        deletedAt:
+          type: string
+          format: date-time
+        revokedAccessTokens:
+          type: integer
+        revokedRefreshTokens:
+          type: integer
+        revokedDeviceSessions:
+          type: integer
+        revokedAppleSessions:
+          type: integer
+    RuntimeConfigReleaseRecord:
+      type: object
+      required: [id, label, sourcePath, schemaVersion, etag, promotedAt, promotedBy]
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        sourcePath:
+          type: string
+        schemaVersion:
+          type: string
+        etag:
+          type: string
+        promotedAt:
+          type: string
+          format: date-time
+        promotedBy:
+          type: string
+        notes:
+          type: [string, "null"]
+    RuntimeConfigReleaseStateResponse:
+      type: object
+      required: [defaultPath, envOverridePath, activeRelease, history]
+      properties:
+        defaultPath:
+          type: string
+        envOverridePath:
+          type: [string, "null"]
+        activeRelease:
+          anyOf:
+            - $ref: "#/components/schemas/RuntimeConfigReleaseRecord"
+            - type: "null"
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/RuntimeConfigReleaseRecord"
+    AdminPromoteRuntimeConfigRequest:
+      type: object
+      required: [candidatePath, label]
+      properties:
+        candidatePath:
+          type: string
+        label:
+          type: string
+        notes:
+          type: [string, "null"]
+    RuntimeConfigPromotionResponse:
+      type: object
+      required: [release, activeRelease]
+      properties:
+        release:
+          $ref: "#/components/schemas/RuntimeConfigReleaseRecord"
+        activeRelease:
+          $ref: "#/components/schemas/RuntimeConfigReleaseRecord"
+    ContentReleaseRecord:
+      type: object
+      required: [id, label, contentPath, copyPath, contentVersion, copyVersion, etag, promotedAt, promotedBy]
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        contentPath:
+          type: string
+        copyPath:
+          type: string
+        contentVersion:
+          type: string
+        copyVersion:
+          type: string
+        etag:
+          type: string
+        promotedAt:
+          type: string
+          format: date-time
+        promotedBy:
+          type: string
+        notes:
+          type: [string, "null"]
+    ContentReleaseStateResponse:
+      type: object
+      required: [defaultContentPath, defaultCopyPath, envOverridePath, envCopyOverridePath, activeRelease, history]
+      properties:
+        defaultContentPath:
+          type: string
+        defaultCopyPath:
+          type: string
+        envOverridePath:
+          type: [string, "null"]
+        envCopyOverridePath:
+          type: [string, "null"]
+        activeRelease:
+          anyOf:
+            - $ref: "#/components/schemas/ContentReleaseRecord"
+            - type: "null"
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContentReleaseRecord"
+    AdminPromoteContentRequest:
+      type: object
+      required: [contentPath, label]
+      properties:
+        contentPath:
+          type: string
+        copyPath:
+          type: [string, "null"]
+        label:
+          type: string
+        notes:
+          type: [string, "null"]
+    ContentPromotionResponse:
+      type: object
+      required: [release, activeRelease]
+      properties:
+        release:
+          $ref: "#/components/schemas/ContentReleaseRecord"
+        activeRelease:
+          $ref: "#/components/schemas/ContentReleaseRecord"
+    AssetReleaseRecord:
+      type: object
+      required: [id, label, manifestPath, schemaVersion, releaseId, assetCount, etag, promotedAt, promotedBy]
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        manifestPath:
+          type: string
+        schemaVersion:
+          type: string
+        releaseId:
+          type: string
+        assetCount:
+          type: integer
+        etag:
+          type: string
+        promotedAt:
+          type: string
+          format: date-time
+        promotedBy:
+          type: string
+        notes:
+          type: [string, "null"]
+    AssetReleaseStateResponse:
+      type: object
+      required: [defaultManifestPath, envOverridePath, activeRelease, history]
+      properties:
+        defaultManifestPath:
+          type: string
+        envOverridePath:
+          type: [string, "null"]
+        activeRelease:
+          anyOf:
+            - $ref: "#/components/schemas/AssetReleaseRecord"
+            - type: "null"
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetReleaseRecord"
+    AdminPromoteAssetManifestRequest:
+      type: object
+      required: [manifestPath, label]
+      properties:
+        manifestPath:
+          type: string
+        label:
+          type: string
+        notes:
+          type: [string, "null"]
+    AssetPromotionResponse:
+      type: object
+      required: [release, activeRelease]
+      properties:
+        release:
+          $ref: "#/components/schemas/AssetReleaseRecord"
+        activeRelease:
+          $ref: "#/components/schemas/AssetReleaseRecord"
+    AdminAccountSummaryResponse:
+      type: object
+      required: [account]
+      properties:
+        account:
+          type: object
+          required: [userId, authMode, selectedIdentityShellId, originFamilyId, activeVowCount, archivedVowCount, completionDayCount, lastCompletionLocalDate, inventoryItemCount, rewardGrantCount, chapterId, chapterDay, districtStage, subscriptionTier, billingState, sourceConnections]
+          properties:
+            userId:
+              type: string
+            authMode:
+              type: string
+              enum: [guest, registered]
+            selectedIdentityShellId:
+              type: string
+            originFamilyId:
+              type: string
+            activeVowCount:
+              type: integer
+            archivedVowCount:
+              type: integer
+            completionDayCount:
+              type: integer
+            lastCompletionLocalDate:
+              type: [string, "null"]
+            inventoryItemCount:
+              type: integer
+            rewardGrantCount:
+              type: integer
+            chapterId:
+              type: string
+            chapterDay:
+              type: integer
+            districtStage:
+              type: string
+            subscriptionTier:
+              type: string
+              enum: [free, trial, premium_monthly, premium_annual]
+            billingState:
+              type: string
+              enum: [active, grace_period, billing_retry, expired]
+            sourceConnections:
+              type: array
+              items:
+                type: object
+                required: [sourceType, authorizationState, supportedDomains]
+                properties:
+                  sourceType:
+                    type: string
+                    enum: [healthkit]
+                  authorizationState:
+                    type: string
+                    enum: [not_requested, requested, granted, denied]
+                  supportedDomains:
+                    type: array
+                    items:
+                      type: string
+                      enum: [workout, steps, sleep]
     GlanceStateResponse:
       type: object
       required: [todaySnapshot, liveActivitySnapshot]

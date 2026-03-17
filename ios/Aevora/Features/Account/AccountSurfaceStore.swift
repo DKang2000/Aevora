@@ -7,8 +7,10 @@ final class AccountSurfaceStore: ObservableObject {
     @Published var healthKitPermission: HealthKitPermissionSnapshot
     @Published var accountNotice: String?
     @Published var exportPreview: String?
+    @Published var exportPreparedAt: Date?
     @Published var lastNotificationPlan: NotificationPlan?
     @Published var lastHealthKitSyncAt: Date?
+    @Published var isDeleteConfirmationPresented = false
 
     private let repository: SwiftDataRepository
     private let analyticsClient: AnalyticsClient
@@ -194,7 +196,22 @@ final class AccountSurfaceStore: ObservableObject {
         Subscription: \(subscriptionState.tier.rawValue)
         HealthKit: \(healthKitPermission.rawValue)
         """
+        exportPreparedAt = .now
         accountNotice = "A local export preview is ready."
+    }
+
+    func beginDeleteAccountFlow() {
+        isDeleteConfirmationPresented = true
+        if exportPreview == nil {
+            accountNotice = "Prepare an export preview before deleting so your current local state is visible."
+        } else {
+            accountNotice = "Delete will clear the local profile, vows, continuity, and witness surfaces on this device."
+        }
+    }
+
+    func cancelDeleteAccountFlow() {
+        isDeleteConfirmationPresented = false
+        accountNotice = "Delete account was canceled."
     }
 
     func deleteAccount(using coreLoop: FirstPlayableStore) {
@@ -207,7 +224,9 @@ final class AccountSurfaceStore: ObservableObject {
         persistHealthKitPermission()
         lastHealthKitSyncAt = nil
         persistLastHealthKitSync()
+        exportPreparedAt = nil
         exportPreview = nil
+        isDeleteConfirmationPresented = false
         accountNotice = "The local account state was cleared. You can begin again."
         syncFromCoreLoop(coreLoop)
     }

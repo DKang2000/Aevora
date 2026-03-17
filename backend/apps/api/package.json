@@ -15,7 +15,10 @@
     "migrate:status": "prisma migrate status",
     "migrate:deploy": "prisma migrate deploy",
     "validate:analytics": "ts-node scripts/validate-analytics.ts",
-    "validate:datasets": "ts-node scripts/validate-datasets.ts"
+    "validate:datasets": "ts-node scripts/validate-datasets.ts",
+    "validate:remote-config-release": "ts-node scripts/validate-runtime-config-release.ts",
+    "validate:content-release": "ts-node scripts/validate-content-release.ts",
+    "validate:asset-manifest": "ts-node scripts/validate-asset-manifest.ts"
   },
   "dependencies": {
     "@aevora/analytics-schema": "workspace:*",

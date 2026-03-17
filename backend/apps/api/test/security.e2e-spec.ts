@@ -1,3 +1,7 @@
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
@@ -18,6 +22,10 @@ describe("Security and audit", () => {
     process.env.OBSERVABILITY_PROVIDER = "console";
     process.env.REMOTE_CONFIG_SOURCE = "file";
     process.env.CONTENT_SOURCE = "file";
+    process.env.AEVORA_CORE_LOOP_STORE_PATH = path.join(
+      mkdtempSync(path.join(tmpdir(), "aevora-security-core-loop-state-")),
+      "core-loop-store.json"
+    );
 
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
     app = moduleRef.createNestApplication();
@@ -26,6 +34,7 @@ describe("Security and audit", () => {
   });
 
   afterAll(async () => {
+    delete process.env.AEVORA_CORE_LOOP_STORE_PATH;
     await app.close();
   });
 

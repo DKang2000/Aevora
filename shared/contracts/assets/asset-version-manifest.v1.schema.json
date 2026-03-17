@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aevora.example.com/contracts/assets/asset-version-manifest.v1.schema.json",
+  "title": "Aevora Asset Version Manifest v1",
+  "type": "object",
+  "required": ["schemaVersion", "releaseId", "generatedAt", "cdnBaseURL", "assets"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "v1"
+    },
+    "releaseId": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cdnBaseURL": {
+      "type": "string"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "assetId",
+          "channel",
+          "logicalPath",
+          "artifactPath",
+          "contentHash",
+          "versionToken",
+          "contentType",
+          "cacheControl",
+          "sizeBytes"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string",
+            "enum": ["ios_launch", "app_store_metadata", "world_scene", "widget", "marketing_placeholder"]
+          },
+          "logicalPath": {
+            "type": "string"
+          },
+          "artifactPath": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "versionToken": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "cacheControl": {
+            "type": "string"
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

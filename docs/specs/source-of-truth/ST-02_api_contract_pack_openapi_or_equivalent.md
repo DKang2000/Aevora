@@ -44,6 +44,9 @@ This section defines:
 - `POST /v1/auth/apple`
 - `POST /v1/auth/link-account`
 - `POST /v1/auth/restore-session`
+- `GET /v1/account`
+- `POST /v1/account/export`
+- `DELETE /v1/account`
 
 ### Profile and avatar
 - `GET /v1/profile`
@@ -75,6 +78,16 @@ This section defines:
 
 ### Analytics
 - `POST /v1/analytics/events`
+
+### Internal launch ops
+- `GET /v1/admin/runtime-config/releases/current`
+- `POST /v1/admin/runtime-config/releases/promote`
+- `GET /v1/admin/content/releases/current`
+- `POST /v1/admin/content/releases/promote`
+- `GET /v1/admin/assets/releases/current`
+- `POST /v1/admin/assets/releases/promote`
+- `GET /v1/admin/accounts/{userId}`
+- `POST /v1/admin/accounts/{userId}/export`
 
 ## Canonical error envelope
 ```json
@@ -126,6 +139,7 @@ This section defines:
 - HealthKit-linked vows still accept manual completion when verification is unavailable
 - Notification-plan reads may be stale, but local reminder preferences remain valid until the next refresh
 - StoreKit server notifications can revise local entitlement assumptions after relaunch or restore
+- Internal launch-ops routes remain admin-guarded and support-safe; they must not expose raw HealthKit payloads or freeform note content
 
 ## Versioning notes
 - The public API is versioned under `/v1`

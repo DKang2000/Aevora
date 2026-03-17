@@ -22,6 +22,14 @@ describe("Content delivery", () => {
     process.env.OBSERVABILITY_PROVIDER = "console";
     process.env.REMOTE_CONFIG_SOURCE = "file";
     process.env.CONTENT_SOURCE = "file";
+    process.env.AEVORA_CONTENT_STATE_PATH = path.join(
+      mkdtempSync(path.join(tmpdir(), "aevora-content-state-")),
+      "content-state.json"
+    );
+    process.env.AEVORA_CORE_LOOP_STORE_PATH = path.join(
+      mkdtempSync(path.join(tmpdir(), "aevora-content-core-loop-state-")),
+      "core-loop-store.json"
+    );
 
     const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
     app = moduleRef.createNestApplication();
@@ -31,6 +39,9 @@ describe("Content delivery", () => {
 
   afterEach(async () => {
     delete process.env.AEVORA_CONTENT_OVERRIDE_PATH;
+    delete process.env.AEVORA_COPY_OVERRIDE_PATH;
+    delete process.env.AEVORA_CONTENT_STATE_PATH;
+    delete process.env.AEVORA_CORE_LOOP_STORE_PATH;
     await app.close();
   });
 
