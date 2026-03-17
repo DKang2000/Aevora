@@ -12,10 +12,10 @@ struct TodayRootView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(store.copy.text("today.headline", fallback: "Today's vows"))
-                            .font(.system(size: 34, weight: .bold, design: .rounded))
+                            .font(AevoraTokens.Typography.displayLarge)
                         Text("Day \(store.chapterState.currentDay) of \(store.chapterState.chapterLength) in \(store.chapterState.title)")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
+                            .font(AevoraTokens.Typography.headline)
+                            .foregroundStyle(AevoraTokens.Color.text.secondary)
                     }
 
                     chapterCard(store: store)
@@ -53,20 +53,21 @@ struct TodayRootView: View {
     private func chapterCard(store: FirstPlayableStore) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(store.copy.text("today.chapter_title", fallback: "Current chapter"))
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.caption)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
             Text(store.chapterState.title)
-                .font(.title3.bold())
+                .font(AevoraTokens.Typography.titleCard)
             Text(store.chapterState.objectiveTitle)
-                .font(.headline)
+                .font(AevoraTokens.Typography.headline)
             Text(store.chapterState.summary)
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.subheadline)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
             ProgressView(value: store.chapterState.progressPercent)
-                .tint(Color(red: 0.89, green: 0.55, blue: 0.25))
+                .tint(AevoraTokens.Color.action.progress)
             if store.chapterState.statusNote.isEmpty == false {
                 Text(store.chapterState.statusNote)
-                    .font(.footnote)
-                    .foregroundStyle(Color(red: 0.45, green: 0.24, blue: 0.13))
+                    .font(AevoraTokens.Typography.footnote)
+                    .foregroundStyle(AevoraTokens.Color.action.primaryFill)
             }
             Button {
                 store.isQuestJournalPresented = true
@@ -80,14 +81,8 @@ struct TodayRootView: View {
             .buttonStyle(.bordered)
         }
         .padding(18)
-        .background(
-            LinearGradient(
-                colors: [Color(red: 0.96, green: 0.90, blue: 0.81), Color(red: 0.93, green: 0.82, blue: 0.67)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+        .background(AevoraTokens.Gradient.chapter.primary)
+        .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.xl, style: .continuous))
     }
 
     private func reminderStrip(store: FirstPlayableStore) -> some View {
@@ -95,15 +90,15 @@ struct TodayRootView: View {
             ForEach(store.reminderPrompts) { prompt in
                 VStack(alignment: .leading, spacing: 4) {
                     Text(prompt.title)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                        .font(AevoraTokens.Typography.caption)
+                        .foregroundStyle(AevoraTokens.Color.text.secondary)
                     Text(prompt.body)
-                        .font(.subheadline)
+                        .font(AevoraTokens.Typography.subheadline)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(14)
-                .background(Color(red: 0.95, green: 0.93, blue: 0.89))
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .background(AevoraTokens.Color.surface.cardSecondary)
+                .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
             }
         }
     }
@@ -111,47 +106,50 @@ struct TodayRootView: View {
     private func returnSurfacesCard(store: FirstPlayableStore, accountStore: AccountSurfaceStore) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Return surfaces")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.caption)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
 
             if accountStore.shouldShowNotificationEducation && store.completionDayCount > 0 {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(store.copy.text("notifications.education_title", fallback: "Let Aevora keep the district in view"))
-                        .font(.headline)
+                        .font(AevoraTokens.Typography.headline)
                     Text(store.copy.text("notifications.education_body", fallback: "Turn on notifications after setup so vow reminders and witness beats can pull you back without friction."))
-                        .foregroundStyle(.secondary)
+                        .font(AevoraTokens.Typography.subheadline)
+                        .foregroundStyle(AevoraTokens.Color.text.secondary)
                     Button("Turn on notifications") {
                         accountStore.requestNotifications(using: store)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                    .tint(AevoraTokens.Color.action.primaryFill)
                 }
             }
 
             if accountStore.shouldShowHealthKitEducation && store.hasCompletedOnboarding {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(store.copy.text("healthkit.education_title", fallback: "Verified inputs can stay narrow and optional"))
-                        .font(.headline)
+                        .font(AevoraTokens.Typography.headline)
                     Text(store.copy.text("healthkit.education_body", fallback: "If one of your vows matches a supported HealthKit path, you can connect it here and still keep manual logging available."))
-                        .foregroundStyle(.secondary)
+                        .font(AevoraTokens.Typography.subheadline)
+                        .foregroundStyle(AevoraTokens.Color.text.secondary)
                     Button(store.copy.text("healthkit.connect_cta", fallback: "Connect HealthKit")) {
                         accountStore.connectHealthKit(using: store)
                     }
                     .buttonStyle(.bordered)
+                    .tint(AevoraTokens.Color.action.primaryFill)
                 }
             }
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(accountStore.supportsAdvancedWidgets ? "Premium witness surfaces are active." : "The free Today widget is ready. Premium adds deeper witness surfaces.")
-                    .font(.subheadline)
+                    .font(AevoraTokens.Typography.subheadline)
                 Text(accountStore.supportsLiveActivities ? "Live Activities can stay active while your current chapter is in motion." : "Live Activities unlock with premium breadth.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .font(AevoraTokens.Typography.footnote)
+                    .foregroundStyle(AevoraTokens.Color.text.secondary)
             }
         }
         .padding(18)
-        .background(Color(red: 0.95, green: 0.93, blue: 0.89))
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(AevoraTokens.Color.surface.cardSecondary)
+        .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.md, style: .continuous))
     }
 
     private func vowList(store: FirstPlayableStore) -> some View {
@@ -161,39 +159,39 @@ struct TodayRootView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(vow.title)
-                                .font(.headline)
+                                .font(AevoraTokens.Typography.headline)
                             Text("\(vow.category) • \(vow.targetValue) \(vow.targetUnit)")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .font(AevoraTokens.Typography.subheadline)
+                                .foregroundStyle(AevoraTokens.Color.text.secondary)
                             if let badge = store.completionBadge(for: vow.id) {
                                 Text(badge)
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(Color(red: 0.24, green: 0.48, blue: 0.31))
+                                    .font(AevoraTokens.Typography.caption)
+                                    .foregroundStyle(AevoraTokens.Color.text.success)
                             }
                         }
                         Spacer()
                         Text(vow.statusLabel)
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(vow.isCompleteToday ? .green : .secondary)
+                            .font(AevoraTokens.Typography.footnote)
+                            .foregroundStyle(vow.isCompleteToday ? AevoraTokens.Color.text.success : AevoraTokens.Color.text.secondary)
                     }
                     ProgressView(value: min(Double(vow.progressToday) / Double(max(vow.targetValue, 1)), 1))
-                        .tint(vow.isCompleteToday ? .green : Color(red: 0.89, green: 0.55, blue: 0.25))
+                        .tint(vow.isCompleteToday ? AevoraTokens.Color.state.successFill : AevoraTokens.Color.action.progress)
                     if let history = vow.history.first {
                         Text("Last kept: \(history.localDate) • \(history.progressState.capitalized)")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
+                            .font(AevoraTokens.Typography.footnote)
+                            .foregroundStyle(AevoraTokens.Color.text.secondary)
                     }
                     Button(vow.type == "binary" ? store.copy.text("vow.binary_done", fallback: "Completed") : store.copy.text("today.complete_vow_cta", fallback: "Log progress")) {
                         store.quickLog(vow)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                    .tint(AevoraTokens.Color.action.primaryFill)
                     .disabled(vow.isCompleteToday)
                     .accessibilityLabel("Log progress for \(vow.title)")
                 }
                 .padding(18)
-                .background(Color(red: 0.98, green: 0.96, blue: 0.92))
-                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .background(AevoraTokens.Color.surface.cardPrimary)
+                .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.lg, style: .continuous))
             }
         }
     }
@@ -210,28 +208,29 @@ struct TodayRootView: View {
                 environment.selectedTab = .world
             }
             .buttonStyle(.bordered)
+            .tint(AevoraTokens.Color.action.primaryFill)
             if !store.inventoryItems.isEmpty {
                 Text("Latest keepsake: \(store.inventoryItems.last?.name ?? "")")
-                    .font(.footnote.weight(.semibold))
+                    .font(AevoraTokens.Typography.footnote)
             }
             Text(store.chapterState.tomorrowPrompt)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.footnote)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
         }
     }
 
     private func statChip(title: String, value: Int) -> some View {
         VStack(spacing: 4) {
             Text("\(value)")
-                .font(.headline)
+                .font(AevoraTokens.Typography.headline)
             Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.caption)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
-        .background(Color(red: 0.95, green: 0.93, blue: 0.89))
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(AevoraTokens.Color.surface.cardSecondary)
+        .clipShape(RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous))
     }
 
     private func progressSheet(store: FirstPlayableStore) -> some View {
@@ -247,7 +246,7 @@ struct TodayRootView: View {
                     store.confirmProgressSheet()
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                .tint(AevoraTokens.Color.action.primaryFill)
             }
             .padding()
             .navigationTitle(store.copy.text("vow.progress_title", fallback: "Log today's progress"))
@@ -258,10 +257,11 @@ struct TodayRootView: View {
     private func paywallPreview(store: FirstPlayableStore, accountStore: AccountSurfaceStore) -> some View {
         VStack(spacing: 20) {
             Text(store.copy.text("paywall.headline", fallback: "Unlock your full journey in Aevora"))
-                .font(.title2.bold())
+                .font(AevoraTokens.Typography.displayMedium)
                 .multilineTextAlignment(.center)
             Text(store.copy.text("paywall.body", fallback: "Premium expands your world, your witness surfaces, and your active vow breadth."))
-                .foregroundStyle(.secondary)
+                .font(AevoraTokens.Typography.subheadline)
+                .foregroundStyle(AevoraTokens.Color.text.secondary)
                 .multilineTextAlignment(.center)
             VStack(spacing: 12) {
                 if accountStore.subscriptionState.trialEligible && accountStore.subscriptionState.tier == .free {
@@ -269,30 +269,32 @@ struct TodayRootView: View {
                         accountStore.startTrial(using: store)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                    .tint(AevoraTokens.Color.action.primaryFill)
                 } else {
                     Button("Unlock monthly premium") {
                         accountStore.purchase(tier: .premiumMonthly, using: store)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(Color(red: 0.45, green: 0.24, blue: 0.13))
+                    .tint(AevoraTokens.Color.action.primaryFill)
                 }
 
                 Button("Unlock annual premium") {
                     accountStore.purchase(tier: .premiumAnnual, using: store)
                 }
                 .buttonStyle(.bordered)
+                .tint(AevoraTokens.Color.action.primaryFill)
 
                 Button(store.copy.text("settings.restore_purchase_cta", fallback: "Restore purchase")) {
                     accountStore.restorePurchases(using: store)
                 }
                 .buttonStyle(.bordered)
+                .tint(AevoraTokens.Color.action.primaryFill)
             }
             Button(store.copy.text("paywall.continue_free_cta", fallback: "Keep the free path")) {
                 store.dismissSoftPaywall()
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color(red: 0.71, green: 0.63, blue: 0.56))
+            .tint(AevoraTokens.Color.parchmentStone.shade300)
         }
         .padding(24)
         .presentationDetents([.medium])

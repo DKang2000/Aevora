@@ -25,6 +25,7 @@
 		2F135CBB2944BA368534C385 /* RedactionPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B041943AB6C78A4E2A54035E /* RedactionPolicy.swift */; };
 		310A32384FC0D719271FE095 /* AutomationSurfaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE4EBF3C5DE381C008E981F /* AutomationSurfaceStore.swift */; };
 		341E496A2C390E409DBCFC7D /* RewardModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2BE78869ACBF60C3855BC7 /* RewardModalView.swift */; };
+		349B039B9324A0B9899F81FB /* AevoraTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022AE6A0DE7CC3D5FBE56D92 /* AevoraTokens.swift */; };
 		359331067289762811AD63CB /* AnalyticsEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4649A28505A2C84CA5F01397 /* AnalyticsEnvelope.swift */; };
 		37E266AD290C483808DB6B7B /* NotificationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744E0D056B08A33A9C443C9B /* NotificationPlan.swift */; };
 		3F58D44BF7BEB588CB1EB6C4 /* FeatureFlagOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEF370240A0AF53072AC295 /* FeatureFlagOverrideStore.swift */; };
@@ -57,6 +58,7 @@
 		9A040EB9493C1E43EB41C7AA /* SyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28931C3E7AB28AB38FB3C42F /* SyncOperation.swift */; };
 		9B9BA7B56C5550372DE4BAE2 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033728F637B098F516E2E638 /* StatusTests.swift */; };
 		9C2D7C649CF44D1A8A043D4E /* LogContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295A3462DB36D81DA899FCDB /* LogContext.swift */; };
+		9F5588024006BB5FCCA4627D /* aevora-v1-design-tokens.json in Resources */ = {isa = PBXBuildFile; fileRef = 1BF448AE91926B478F5E9096 /* aevora-v1-design-tokens.json */; };
 		A169B6FD4D536107BE7CC51D /* FirstPlayableStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8D1BEB7CCFA37ABBC93DB9 /* FirstPlayableStore.swift */; };
 		A5372BAC95703EA1D3E53F3C /* AnalyticsValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA38F8F6F2A78541AD19FEF /* AnalyticsValidator.swift */; };
 		A7132F98F3BD8E3CFC14A893 /* SyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8496287AB9754366245BA15E /* SyncCoordinator.swift */; };
@@ -121,11 +123,13 @@
 		00E8D327578A57BB3A6EFE96 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		01996036331957444BB6A1A3 /* LocalSeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalSeedLoader.swift; sourceTree = "<group>"; };
 		01DFCCE96778B9D952CA0BC8 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		022AE6A0DE7CC3D5FBE56D92 /* AevoraTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraTokens.swift; sourceTree = "<group>"; };
 		0233F5EBE73734322718F8FB /* RemoteConfigClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigClientTests.swift; sourceTree = "<group>"; };
 		033728F637B098F516E2E638 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
 		0E30F1D482AFA118D9BB625E /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		0F44E4A4CD0C0AEF24A6305A /* launch-content.min.v1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "launch-content.min.v1.json"; sourceTree = "<group>"; };
 		1037E6462B55C88ABAAD4386 /* LocalModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalModels.swift; sourceTree = "<group>"; };
+		1BF448AE91926B478F5E9096 /* aevora-v1-design-tokens.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "aevora-v1-design-tokens.json"; sourceTree = "<group>"; };
 		1D2A20A8AE7E5F62A523418F /* Aevora.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aevora.entitlements; sourceTree = "<group>"; };
 		1DB2A8CF9CD6588CF132E530 /* core.v1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = core.v1.json; sourceTree = "<group>"; };
 		1FEEE15F5CC7BCE5FDC5C413 /* SeedScenarioLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedScenarioLoader.swift; sourceTree = "<group>"; };
@@ -205,6 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				399203630851E5F6EBCB2660 /* content */,
+				B15384519CBB4CD9A02F1497 /* shared */,
 			);
 			name = Aevora;
 			path = ..;
@@ -342,12 +347,28 @@
 			path = Persistence;
 			sourceTree = "<group>";
 		};
+		4ACD1D2929339B54490DB8D5 /* tokens */ = {
+			isa = PBXGroup;
+			children = (
+				1BF448AE91926B478F5E9096 /* aevora-v1-design-tokens.json */,
+			);
+			path = tokens;
+			sourceTree = "<group>";
+		};
 		56FB8339EB5DA71086EFC96C /* Debug */ = {
 			isa = PBXGroup;
 			children = (
 				AE1BBCB130166A666375F90E /* DebugTests.swift */,
 			);
 			path = Debug;
+			sourceTree = "<group>";
+		};
+		593CE655A96D1D2E127CFD10 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				022AE6A0DE7CC3D5FBE56D92 /* AevoraTokens.swift */,
+			);
+			path = DesignSystem;
 			sourceTree = "<group>";
 		};
 		59C63903D4ABB11562FF5E7E /* Shared */ = {
@@ -519,6 +540,14 @@
 			path = Health;
 			sourceTree = "<group>";
 		};
+		B15384519CBB4CD9A02F1497 /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				4ACD1D2929339B54490DB8D5 /* tokens */,
+			);
+			path = shared;
+			sourceTree = "<group>";
+		};
 		B5536F3825031CB0AA2BBA57 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -560,6 +589,7 @@
 				8AD4CD3C90C6C46A440C7D58 /* App */,
 				6E1CA0A72DF0289320EC9E33 /* Core */,
 				6655F4A6076B0BC8704D0247 /* Debug */,
+				593CE655A96D1D2E127CFD10 /* DesignSystem */,
 				B5536F3825031CB0AA2BBA57 /* Features */,
 				59C63903D4ABB11562FF5E7E /* Shared */,
 				09F11F300DE72A8E92E0F570 /* Support */,
@@ -807,6 +837,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F5588024006BB5FCCA4627D /* aevora-v1-design-tokens.json in Resources */,
 				4C1DE99450237E07F913496B /* core.v1.json in Resources */,
 				F968CE19C4E567E204E86291 /* launch-content.min.v1.json in Resources */,
 				0F991EF0F832BCCD4DC8EF09 /* remote-config-defaults.json in Resources */,
@@ -826,6 +857,7 @@
 				7842A0C81EEF603FF97D6B47 /* AccountSurfaceStore.swift in Sources */,
 				7ECC637C4A13AF098112FE98 /* AevoraApp.swift in Sources */,
 				ABC9587FE6F69A386D1B4B5E /* AevoraShortcuts.swift in Sources */,
+				349B039B9324A0B9899F81FB /* AevoraTokens.swift in Sources */,
 				D13484C20351838AAFC9C98F /* AnalyticsClient.swift in Sources */,
 				359331067289762811AD63CB /* AnalyticsEnvelope.swift in Sources */,
 				6B0692FBA9F904A70A09A4AB /* AnalyticsEvent.swift in Sources */,
