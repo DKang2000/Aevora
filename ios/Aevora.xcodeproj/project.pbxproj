@@ -83,6 +83,7 @@
 		EC7DDFA25AF38C49AA4808C4 /* AccountSurfaceStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBBBB4ED72FB8B5909E4551 /* AccountSurfaceStoreTests.swift */; };
 		EF561EC24F974E4E903CC61F /* AppNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B463D3B37B39384ED29C6FDF /* AppNotificationDelegate.swift */; };
 		F0D1B308191EEA4FCEB25551 /* HearthRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D459E49C35D37C9EDED109 /* HearthRootView.swift */; };
+		F3996C8D56B08998FE6D6256 /* OnboardingRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14C40448C980529B2C65397 /* OnboardingRootViewTests.swift */; };
 		F4CBA2683824CE2B1D47CE93 /* FirstPlayableStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D13B2F3733F1BD569E1C4 /* FirstPlayableStoreTests.swift */; };
 		F968CE19C4E567E204E86291 /* launch-content.min.v1.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F44E4A4CD0C0AEF24A6305A /* launch-content.min.v1.json */; };
 		FB3F1C99AEE9F50481A34300 /* GlanceSurfaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */; };
@@ -188,6 +189,7 @@
 		CB34C6AE7E8F1251B4B3E4D7 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		CC6F801B267A74460754ABF4 /* AppDeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDeepLink.swift; sourceTree = "<group>"; };
 		CC7B76DAF93C0234227562D0 /* AnalyticsMetadataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsMetadataProvider.swift; sourceTree = "<group>"; };
+		D14C40448C980529B2C65397 /* OnboardingRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootViewTests.swift; sourceTree = "<group>"; };
 		D25F5725B8D24A9F5C4E0A51 /* APIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTests.swift; sourceTree = "<group>"; };
 		DD9B0310F7E03E5D84D3277D /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		DF36EF5DD0177976BD13AD93 /* AevoraTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AevoraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -245,6 +247,14 @@
 				9B2B9505E95645DFF7864208 /* ObservabilityTests.swift */,
 			);
 			path = Observability;
+			sourceTree = "<group>";
+		};
+		0F8AB829E055B88FE8303EAF /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				D14C40448C980529B2C65397 /* OnboardingRootViewTests.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		1FCE24BB658AF680F44F2A7E /* Today */ = {
@@ -681,6 +691,7 @@
 				56FB8339EB5DA71086EFC96C /* Debug */,
 				B98A9920DBEE0FADB563EACF /* Networking */,
 				0E12F5C1A5AB73F971BF2896 /* Observability */,
+				0F8AB829E055B88FE8303EAF /* Onboarding */,
 				05DE0ACEEA3A311E3EF54ED5 /* Persistence */,
 				A3C5E165110CC285E54BD459 /* Status */,
 				3CB9B21930D7CCFD33233920 /* Sync */,
@@ -934,6 +945,7 @@
 				F4CBA2683824CE2B1D47CE93 /* FirstPlayableStoreTests.swift in Sources */,
 				FB3F1C99AEE9F50481A34300 /* GlanceSurfaceModels.swift in Sources */,
 				1F78488C846C288AC2C58DF4 /* ObservabilityTests.swift in Sources */,
+				F3996C8D56B08998FE6D6256 /* OnboardingRootViewTests.swift in Sources */,
 				81F73782B691B15E6D511085 /* PersistenceTests.swift in Sources */,
 				B757E5C2BCE944290314D3F9 /* RemoteConfigClientTests.swift in Sources */,
 				9B9BA7B56C5550372DE4BAE2 /* StatusTests.swift in Sources */,
@@ -984,7 +996,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aevora;
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleTypeRole\": \"Editor\", \"CFBundleURLSchemes\": [\"aevora\"]]]";
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"aevora\"], \"CFBundleTypeRole\": \"Editor\"]]";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
 					UIInterfaceOrientationPortrait,
@@ -1009,7 +1021,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aevora;
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleTypeRole\": \"Editor\", \"CFBundleURLSchemes\": [\"aevora\"]]]";
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"aevora\"], \"CFBundleTypeRole\": \"Editor\"]]";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
 					UIInterfaceOrientationPortrait,

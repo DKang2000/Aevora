@@ -1,6 +1,17 @@
 import AuthenticationServices
 import SwiftUI
 
+enum OnboardingFooterMode: Equatable {
+    case backOnly
+    case advance
+    case inlineCompletion
+}
+
+struct OnboardingFooterConfiguration: Equatable {
+    let mode: OnboardingFooterMode
+    let primaryTitle: String?
+}
+
 struct OnboardingRootView: View {
     @ObservedObject var store: FirstPlayableStore
     @EnvironmentObject private var environment: AppEnvironment
@@ -16,6 +27,26 @@ struct OnboardingRootView: View {
 
     private var accountStore: AccountSurfaceStore {
         environment.accountSurfaceStore
+    }
+
+    static func footerConfiguration(for step: OnboardingFlowStep, copy: CopyCatalog) -> OnboardingFooterConfiguration {
+        switch step {
+        case .signIn:
+            return OnboardingFooterConfiguration(mode: .backOnly, primaryTitle: nil)
+        case .softPaywall:
+            return OnboardingFooterConfiguration(mode: .inlineCompletion, primaryTitle: nil)
+        case .starterVows:
+            return OnboardingFooterConfiguration(mode: .advance, primaryTitle: "Preview quest")
+        case .questPreview:
+            return OnboardingFooterConfiguration(mode: .advance, primaryTitle: "See first witness")
+        case .magicalMoment:
+            return OnboardingFooterConfiguration(mode: .advance, primaryTitle: "See options")
+        default:
+            return OnboardingFooterConfiguration(
+                mode: .advance,
+                primaryTitle: copy.text("onboarding.next", fallback: "Next")
+            )
+        }
     }
 
     var body: some View {
@@ -50,8 +81,10 @@ struct OnboardingRootView: View {
 
     @ViewBuilder
     private var footer: some View {
-        switch currentStep {
-        case .signIn:
+        let configuration = Self.footerConfiguration(for: currentStep, copy: store.copy)
+
+        switch configuration.mode {
+        case .backOnly:
             HStack {
                 if currentStep.rawValue > 0 {
                     Button(store.copy.text("onboarding.back", fallback: "Back")) {
@@ -61,9 +94,9 @@ struct OnboardingRootView: View {
                 }
                 Spacer()
             }
-        case .softPaywall:
+        case .inlineCompletion:
             EmptyView()
-        default:
+        case .advance:
             HStack {
                 if currentStep.rawValue > 0 {
                     Button(store.copy.text("onboarding.back", fallback: "Back")) {
@@ -74,7 +107,7 @@ struct OnboardingRootView: View {
 
                 Spacer()
 
-                Button(nextButtonTitle) {
+                Button(configuration.primaryTitle ?? store.copy.text("onboarding.next", fallback: "Next")) {
                     store.advanceOnboarding()
                 }
                 .buttonStyle(.borderedProminent)
@@ -503,19 +536,6 @@ struct OnboardingRootView: View {
                     }
                     .padding(18)
                 }
-        }
-    }
-
-    private var nextButtonTitle: String {
-        switch currentStep {
-        case .starterVows:
-            return "Preview quest"
-        case .questPreview:
-            return "See first witness"
-        case .magicalMoment:
-            return "See options"
-        default:
-            return store.copy.text("onboarding.next", fallback: "Next")
         }
     }
 
