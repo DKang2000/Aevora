@@ -288,30 +288,140 @@ def draw_card(
     )
 
 
-def draw_choice_card(
+def draw_selection_visual(
+    image: Image.Image,
+    art_box: tuple[int, int, int, int],
+    accent: str,
+    key: str,
+) -> None:
+    panel(
+        image,
+        art_box,
+        TOKENS.color("color.surface.cardSecondary"),
+        TOKENS.color("color.border.subtle"),
+        radius=26,
+        alpha=255,
+    )
+    draw = ImageDraw.Draw(image)
+    add_glow(
+        image,
+        ((art_box[0] + art_box[2]) // 2, (art_box[1] + art_box[3]) // 2),
+        46,
+        accent,
+        50,
+    )
+
+    if key == "family_dawnbound":
+        draw.polygon(
+            [
+                (art_box[0] + 38, art_box[1] + 42),
+                (art_box[0] + 96, art_box[1] + 42),
+                (art_box[0] + 112, art_box[1] + 72),
+                (art_box[0] + 76, art_box[1] + 126),
+                (art_box[0] + 24, art_box[1] + 78),
+            ],
+            fill=rgba(accent, 225),
+        )
+        draw.rectangle((art_box[0] + 124, art_box[1] + 26, art_box[0] + 132, art_box[1] + 132), fill=rgba(TOKENS.color("color.emberCopper.700")))
+        draw.polygon(
+            [
+                (art_box[0] + 132, art_box[1] + 28),
+                (art_box[0] + 168, art_box[1] + 42),
+                (art_box[0] + 132, art_box[1] + 64),
+            ],
+            fill=rgba(TOKENS.color("color.dawnGold.300")),
+        )
+        draw.rounded_rectangle((art_box[0] + 58, art_box[1] + 126, art_box[0] + 94, art_box[1] + 174), radius=16, fill=rgba(TOKENS.color("color.emberCopper.700")))
+    elif key == "family_archivist":
+        draw.rounded_rectangle((art_box[0] + 24, art_box[1] + 54, art_box[0] + 92, art_box[1] + 140), radius=18, fill=rgba(TOKENS.color("color.moonIndigo.500")))
+        draw.rounded_rectangle((art_box[0] + 94, art_box[1] + 70, art_box[0] + 142, art_box[1] + 114), radius=12, fill=rgba(accent, 230))
+        draw.ellipse((art_box[0] + 126, art_box[1] + 40, art_box[0] + 164, art_box[1] + 78), outline=rgba(TOKENS.color("color.text.primary")), width=5)
+        draw.line((art_box[0] + 152, art_box[1] + 68, art_box[0] + 174, art_box[1] + 94), fill=rgba(TOKENS.color("color.text.primary")), width=5)
+        draw.line((art_box[0] + 34, art_box[1] + 152, art_box[0] + 140, art_box[1] + 152), fill=rgba(TOKENS.color("color.border.focus")), width=5)
+    elif key == "family_hearthkeeper":
+        draw.rounded_rectangle((art_box[0] + 42, art_box[1] + 36, art_box[0] + 118, art_box[1] + 150), radius=24, fill=rgba(TOKENS.color("color.emberCopper.700")))
+        draw.rectangle((art_box[0] + 70, art_box[1] + 20, art_box[0] + 90, art_box[1] + 40), fill=rgba(TOKENS.color("color.parchmentStone.050")))
+        draw.rectangle((art_box[0] + 132, art_box[1] + 36, art_box[0] + 142, art_box[1] + 150), fill=rgba(TOKENS.color("color.emberCopper.700")))
+        draw.rounded_rectangle((art_box[0] + 132, art_box[1] + 26, art_box[0] + 176, art_box[1] + 52), radius=10, fill=rgba(accent, 230))
+        draw.arc((art_box[0] + 26, art_box[1] + 12, art_box[0] + 60, art_box[1] + 56), start=240, end=340, fill=rgba(TOKENS.color("color.parchmentStone.050")), width=5)
+        draw.arc((art_box[0] + 52, art_box[1] + 2, art_box[0] + 86, art_box[1] + 46), start=240, end=340, fill=rgba(TOKENS.color("color.parchmentStone.050")), width=5)
+    elif key == "family_chartermaker":
+        draw.rounded_rectangle((art_box[0] + 28, art_box[1] + 44, art_box[0] + 108, art_box[1] + 148), radius=18, fill=rgba(TOKENS.color("color.mossGreen.500")))
+        draw.line((art_box[0] + 48, art_box[1] + 68, art_box[0] + 88, art_box[1] + 68), fill=rgba(TOKENS.color("color.parchmentStone.050")), width=4)
+        draw.line((art_box[0] + 48, art_box[1] + 88, art_box[0] + 88, art_box[1] + 88), fill=rgba(TOKENS.color("color.parchmentStone.050")), width=4)
+        draw.line((art_box[0] + 48, art_box[1] + 108, art_box[0] + 78, art_box[1] + 108), fill=rgba(TOKENS.color("color.parchmentStone.050")), width=4)
+        draw.ellipse((art_box[0] + 122, art_box[1] + 58, art_box[0] + 170, art_box[1] + 106), fill=rgba(accent, 225))
+        draw.rectangle((art_box[0] + 142, art_box[1] + 102, art_box[0] + 150, art_box[1] + 144), fill=rgba(TOKENS.color("color.emberCopper.700")))
+    elif key == "identity_knight":
+        draw.polygon(
+            [
+                (art_box[0] + 38, art_box[1] + 44),
+                (art_box[0] + 86, art_box[1] + 44),
+                (art_box[0] + 100, art_box[1] + 74),
+                (art_box[0] + 70, art_box[1] + 126),
+                (art_box[0] + 28, art_box[1] + 80),
+            ],
+            fill=rgba(accent, 225),
+        )
+        draw.rounded_rectangle((art_box[0] + 112, art_box[1] + 26, art_box[0] + 142, art_box[1] + 146), radius=14, fill=rgba(TOKENS.color("color.emberCopper.700")))
+        draw.rectangle((art_box[0] + 146, art_box[1] + 28, art_box[0] + 154, art_box[1] + 140), fill=rgba(TOKENS.color("color.text.primary")))
+    elif key == "identity_scholar":
+        draw.rounded_rectangle((art_box[0] + 26, art_box[1] + 58, art_box[0] + 104, art_box[1] + 134), radius=18, fill=rgba(TOKENS.color("color.moonIndigo.500")))
+        draw.rectangle((art_box[0] + 44, art_box[1] + 40, art_box[0] + 72, art_box[1] + 58), fill=rgba(accent, 225))
+        draw.ellipse((art_box[0] + 122, art_box[1] + 38, art_box[0] + 154, art_box[1] + 70), outline=rgba(TOKENS.color("color.text.primary")), width=5)
+        draw.line((art_box[0] + 146, art_box[1] + 66, art_box[0] + 170, art_box[1] + 92), fill=rgba(TOKENS.color("color.text.primary")), width=4)
+        draw.rounded_rectangle((art_box[0] + 118, art_box[1] + 96, art_box[0] + 164, art_box[1] + 134), radius=10, fill=rgba(accent, 220))
+    elif key == "identity_baker":
+        draw.rounded_rectangle((art_box[0] + 42, art_box[1] + 28, art_box[0] + 118, art_box[1] + 146), radius=22, fill=rgba(TOKENS.color("color.emberCopper.700")))
+        draw.rectangle((art_box[0] + 68, art_box[1] + 16, art_box[0] + 92, art_box[1] + 34), fill=rgba(TOKENS.color("color.parchmentStone.050")))
+        draw.rectangle((art_box[0] + 128, art_box[1] + 38, art_box[0] + 138, art_box[1] + 144), fill=rgba(TOKENS.color("color.emberCopper.700")))
+        draw.rounded_rectangle((art_box[0] + 138, art_box[1] + 30, art_box[0] + 176, art_box[1] + 52), radius=10, fill=rgba(accent, 220))
+        draw.ellipse((art_box[0] + 134, art_box[1] + 88, art_box[0] + 172, art_box[1] + 118), fill=rgba(TOKENS.color("color.dawnGold.300")))
+    elif key == "identity_merchant":
+        draw.rounded_rectangle((art_box[0] + 36, art_box[1] + 36, art_box[0] + 114, art_box[1] + 150), radius=20, fill=rgba(TOKENS.color("color.mossGreen.500")))
+        draw.line((art_box[0] + 62, art_box[1] + 54, art_box[0] + 62, art_box[1] + 138), fill=rgba(TOKENS.color("color.parchmentStone.050")), width=4)
+        draw.line((art_box[0] + 86, art_box[1] + 54, art_box[0] + 86, art_box[1] + 138), fill=rgba(TOKENS.color("color.parchmentStone.050")), width=4)
+        draw.rounded_rectangle((art_box[0] + 126, art_box[1] + 54, art_box[0] + 172, art_box[1] + 116), radius=10, fill=rgba(accent, 225))
+        draw.ellipse((art_box[0] + 136, art_box[1] + 120, art_box[0] + 166, art_box[1] + 150), fill=rgba(TOKENS.color("color.emberCopper.700")))
+
+
+def draw_selection_card(
     image: Image.Image,
     box: tuple[int, int, int, int],
     title: str,
     body: str,
     accent: str,
+    visual_key: str,
+    material_label: str,
     selected: bool = False,
 ) -> None:
     fill = TOKENS.color("color.surface.cardElevated") if selected else TOKENS.color("color.surface.cardPrimary")
     outline = TOKENS.color("color.border.focus") if selected else TOKENS.color("color.border.subtle")
     panel(image, box, fill, outline, radius=int(TOKENS.get("radius.lg")))
     draw = ImageDraw.Draw(image)
-    add_glow(image, (box[2] - 68, box[1] + 56), 48, accent, 44)
-    draw.rounded_rectangle((box[0] + 22, box[1] + 22, box[0] + 88, box[1] + 88), radius=24, fill=rgba(accent, 220))
-    draw.text((box[0] + 112, box[1] + 24), title, font=font("accent", 28), fill=rgba(TOKENS.color("color.text.primary")))
+
+    art_box = (box[0] + 20, box[1] + 20, box[0] + 204, box[1] + 204)
+    draw_selection_visual(image, art_box, accent, visual_key)
+    draw.rounded_rectangle(
+        (art_box[0], art_box[3] + 12, art_box[2], art_box[3] + 42),
+        radius=14,
+        fill=rgba(accent, 205),
+    )
+    draw.text((art_box[0] + 14, art_box[3] + 18), material_label, font=font("body", 18), fill=rgba(TOKENS.color("color.text.primary")))
+
+    text_x = box[0] + 230
+    text_y = box[1] + 28
+    draw.text((text_x, text_y), title, font=font("accent", 28), fill=rgba(TOKENS.color("color.text.primary")))
     draw_text_block(
         draw,
         body,
-        (box[0] + 112, box[1] + 60),
+        (text_x, text_y + 40),
         font("body", 20),
         TOKENS.color("color.text.secondary"),
-        box[2] - box[0] - 136,
+        box[2] - text_x - 24,
         line_gap=4,
     )
+
     if selected:
         chip(
             draw,
@@ -593,7 +703,22 @@ def draw_family_selection_board() -> None:
         col = index % 2
         x1 = canvas[0] + 40 + col * 660
         y1 = start_y + row * 430
-        draw_choice_card(image, (x1, y1, x1 + 620, y1 + 360), *card)
+        title, body, accent, selected = card
+        draw_selection_card(
+            image,
+            (x1, y1, x1 + 620, y1 + 360),
+            title,
+            body,
+            accent,
+            f"family_{title.lower()}",
+            {
+                "Dawnbound": "tabard + standard",
+                "Archivist": "sigil + archive brass",
+                "Hearthkeeper": "steam + warm timber",
+                "Chartermaker": "seal + measured cloth",
+            }[title],
+            selected,
+        )
 
     panel(image, (canvas[0] + 40, canvas[3] - 260, canvas[2] - 40, canvas[3] - 40), TOKENS.color("color.surface.cardSecondary"), TOKENS.color("color.border.default"), radius=int(TOKENS.get("radius.xl")))
     draw.text((canvas[0] + 68, canvas[3] - 222), "Selection rule", font=font("accent", 30), fill=rgba(TOKENS.color("color.text.primary")))
@@ -633,7 +758,22 @@ def draw_identity_selection_board() -> None:
     for index, card in enumerate(identities):
         x1 = canvas[0] + 40 + index % 2 * 660
         y1 = y + index // 2 * 360
-        draw_choice_card(image, (x1, y1, x1 + 620, y1 + 290), *card)
+        title, body, accent, selected = card
+        draw_selection_card(
+            image,
+            (x1, y1, x1 + 620, y1 + 290),
+            title,
+            body,
+            accent,
+            f"identity_{title.lower()}",
+            {
+                "Knight": "shield + civic cloth",
+                "Scholar": "lamp + archive paper",
+                "Baker": "apron + bread warmth",
+                "Merchant": "ledger + market seal",
+            }[title],
+            selected,
+        )
 
     panel(image, (canvas[0] + 40, canvas[1] + 940, canvas[2] - 40, canvas[1] + 1260), TOKENS.color("color.surface.cardPrimary"), TOKENS.color("color.border.default"), radius=int(TOKENS.get("radius.xl")))
     draw.text((canvas[0] + 68, canvas[1] + 978), "Premium-ready, not gated", font=font("accent", 30), fill=rgba(TOKENS.color("color.text.primary")))

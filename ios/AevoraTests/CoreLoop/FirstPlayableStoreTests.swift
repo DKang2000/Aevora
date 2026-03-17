@@ -3,6 +3,57 @@ import XCTest
 
 @MainActor
 final class FirstPlayableStoreTests: XCTestCase {
+    func testLockedOnboardingSequenceReachesSoftPaywallAfterGuestChoice() {
+        let environment = AppEnvironment(inMemory: true)
+        let store = environment.firstPlayableStore
+
+        XCTAssertEqual(store.currentOnboardingFlowStep, .welcomePromise)
+        XCTAssertEqual(store.onboardingProgressTotal, 15)
+
+        store.advanceOnboarding()
+        XCTAssertEqual(store.currentOnboardingFlowStep, .problemSolution)
+
+        store.advanceOnboarding()
+        XCTAssertEqual(store.currentOnboardingFlowStep, .signIn)
+
+        store.advanceOnboarding()
+        XCTAssertEqual(store.currentOnboardingFlowStep, .signIn, "Auth choice should remain required before advancing past sign-in.")
+
+        store.beginGuestMode()
+        store.advanceOnboarding()
+        XCTAssertEqual(store.currentOnboardingFlowStep, .goals)
+
+        while store.currentOnboardingFlowStep != .softPaywall {
+            store.advanceOnboarding()
+        }
+
+        XCTAssertEqual(store.currentOnboardingFlowStep, .softPaywall)
+        XCTAssertFalse(store.recommendedVows.isEmpty)
+    }
+
+    func testFinishingOnboardingSuppressesRepeatSoftPaywallAfterFirstReward() {
+        let environment = AppEnvironment(inMemory: true)
+        let store = environment.firstPlayableStore
+
+        store.beginGuestMode()
+        store.generateStarterRecommendations()
+        store.finishOnboarding()
+
+        guard let firstVow = store.activeVows.first else {
+            XCTFail("Expected starter vows")
+            return
+        }
+
+        store.quickLog(firstVow)
+        if store.isProgressSheetPresented {
+            store.confirmProgressSheet()
+        }
+
+        XCTAssertNotNil(store.rewardPresentation)
+        store.rewardDismissed()
+        XCTAssertFalse(store.isSoftPaywallPresented, "Onboarding paywall preview should prevent an immediate second paywall after the first reward.")
+    }
+
     func testStarterRecommendationsRespectFreePathLimit() {
         let environment = AppEnvironment(inMemory: true)
         let store = environment.firstPlayableStore

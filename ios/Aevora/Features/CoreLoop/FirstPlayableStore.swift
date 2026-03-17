@@ -185,6 +185,24 @@ struct ReminderPromptState: Identifiable, Equatable {
     let body: String
 }
 
+enum OnboardingFlowStep: Int, CaseIterable {
+    case welcomePromise
+    case problemSolution
+    case signIn
+    case goals
+    case lifeAreas
+    case blocker
+    case dailyLoad
+    case tone
+    case family
+    case identity
+    case avatar
+    case starterVows
+    case questPreview
+    case magicalMoment
+    case softPaywall
+}
+
 enum LocalCompletionSource: String, Codable {
     case manual
     case healthkit
@@ -406,6 +424,47 @@ final class FirstPlayableStore: ObservableObject {
         todayGold
     }
 
+    var currentOnboardingFlowStep: OnboardingFlowStep {
+        OnboardingFlowStep(rawValue: onboardingStep) ?? .welcomePromise
+    }
+
+    var onboardingProgressValue: Double {
+        Double(min(currentOnboardingFlowStep.rawValue + 1, OnboardingFlowStep.allCases.count))
+    }
+
+    var onboardingProgressTotal: Double {
+        Double(OnboardingFlowStep.allCases.count)
+    }
+
+    var onboardingQuestPreviewTitle: String {
+        let starterDay = content.starterArcDays.first
+        let quest = content.questTemplates.first(where: { $0.id == starterDay?.questId })
+        return copy.text(quest?.titleKey ?? "", fallback: "The Ember That Returned")
+    }
+
+    var onboardingQuestPreviewSummary: String {
+        let starterDay = content.starterArcDays.first
+        let quest = content.questTemplates.first(where: { $0.id == starterDay?.questId })
+        return copy.text(quest?.summaryKey ?? "", fallback: "Keep one small vow and the district answers.")
+    }
+
+    var onboardingQuestTomorrowPrompt: String {
+        let starterDay = content.starterArcDays.first
+        return copy.text(starterDay?.tomorrowPromptKey ?? "", fallback: "Return tomorrow to keep the quarter moving.")
+    }
+
+    var onboardingMagicalMomentPreviewTitle: String {
+        let momentID = content.starterArcDays.first?.worldMomentId
+        let moment = content.magicalMoments.first(where: { $0.id == momentID }) ?? content.magicalMoments.first
+        return copy.text(moment?.titleKey ?? "", fallback: "The city remembers those who keep cadence.")
+    }
+
+    var onboardingMagicalMomentPreviewBody: String {
+        let momentID = content.starterArcDays.first?.worldMomentId
+        let moment = content.magicalMoments.first(where: { $0.id == momentID }) ?? content.magicalMoments.first
+        return copy.text(moment?.summaryKey ?? "", fallback: districtState.worldChangeText)
+    }
+
     var worldAnchors: [WorldAnchorState] {
         [
             WorldAnchorState(id: "quay_gate", title: "Quay Gate", npcIDs: visibleNPCIDs(for: "quay_gate")),
@@ -501,22 +560,33 @@ final class FirstPlayableStore: ObservableObject {
     }
 
     func advanceOnboarding() {
-        if onboardingStep == 3 {
+        let currentStep = currentOnboardingFlowStep
+
+        if currentStep == .signIn && !hasStartedOnboarding {
+            return
+        }
+
+        if currentStep == .family {
             updateAvatarDefaults()
             track(.originFamilySelected, surface: "onboarding", properties: ["family_id": selectedFamilyID])
         }
 
-        if onboardingStep == 4 {
+        if currentStep == .identity {
             updateAvatarDefaults()
             track(.identitySelected, surface: "onboarding", properties: ["identity_id": selectedIdentityID])
         }
 
-        if onboardingStep == 5 {
+        if currentStep == .avatar {
             generateStarterRecommendations()
             track(.avatarCreated, surface: "onboarding", properties: ["silhouette_id": avatarDraft.silhouetteId])
         }
 
-        onboardingStep = min(onboardingStep + 1, 6)
+        if currentStep == .magicalMoment && !hasShownSoftPaywall {
+            hasShownSoftPaywall = true
+            track(.paywallViewed, surface: "paywall", properties: ["trigger": "after_first_magical_moment"])
+        }
+
+        onboardingStep = min(onboardingStep + 1, OnboardingFlowStep.softPaywall.rawValue)
         persistSnapshot()
         track(.onboardingStepCompleted, surface: "onboarding", properties: ["step_index": "\(onboardingStep)"])
     }
@@ -570,6 +640,8 @@ final class FirstPlayableStore: ObservableObject {
     func finishOnboarding() {
         activeVows = recommendedVows
         hasCompletedOnboarding = true
+        hasShownSoftPaywall = true
+        isSoftPaywallPresented = false
         onboardingStep = 0
         refreshDerivedState()
 
