@@ -23,6 +23,10 @@ targets:
         buildPhase: resources
       - path: ../shared/tokens/aevora-v1-design-tokens.json
         buildPhase: resources
+      - path: ../shared/contracts/assets/aevora-v1-asset-slot-families.seed.json
+        buildPhase: resources
+      - path: ../ops/assets/manifests/aevora-v1-local-placeholder-manifest.seed.json
+        buildPhase: resources
     dependencies:
       - target: AevoraWidgets
         embed: true

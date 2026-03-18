@@ -1,6 +1,7 @@
 import XCTest
 @testable import Aevora
 
+@MainActor
 final class OnboardingRootViewTests: XCTestCase {
     func testFooterConfigurationOnlyAllowsInlineCompletionAtSoftPaywall() {
         let copy = CopyCatalog()

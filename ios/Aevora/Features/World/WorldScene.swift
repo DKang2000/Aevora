@@ -4,13 +4,25 @@ import SwiftUI
 final class EmberQuayScene: SKScene {
     private let state: DistrictWitnessState
     private let anchorID: String
+    private let tilesetResolution: AevoraAssetResolution
+    private let repairResolution: AevoraAssetResolution
 
-    init(size: CGSize, state: DistrictWitnessState, anchorID: String) {
+    init(
+        size: CGSize,
+        state: DistrictWitnessState,
+        anchorID: String,
+        tilesetResolution: AevoraAssetResolution,
+        repairResolution: AevoraAssetResolution
+    ) {
         self.state = state
         self.anchorID = anchorID
+        self.tilesetResolution = tilesetResolution
+        self.repairResolution = repairResolution
         super.init(size: size)
         scaleMode = .resizeFill
-        backgroundColor = SKColor(red: 0.15, green: 0.15, blue: 0.18, alpha: 1)
+        backgroundColor = tilesetResolution.isMapped
+            ? SKColor(red: 0.13, green: 0.17, blue: 0.21, alpha: 1)
+            : SKColor(red: 0.15, green: 0.15, blue: 0.18, alpha: 1)
     }
 
     @available(*, unavailable)
@@ -22,7 +34,9 @@ final class EmberQuayScene: SKScene {
         removeAllChildren()
 
         let quay = SKShapeNode(rectOf: CGSize(width: size.width * 0.92, height: size.height * 0.75), cornerRadius: 28)
-        quay.fillColor = .init(red: 0.22, green: 0.23, blue: 0.27, alpha: 1)
+        quay.fillColor = tilesetResolution.isMapped
+            ? .init(red: 0.20, green: 0.25, blue: 0.28, alpha: 1)
+            : .init(red: 0.22, green: 0.23, blue: 0.27, alpha: 1)
         quay.strokeColor = .clear
         quay.position = CGPoint(x: size.width / 2, y: size.height / 2)
         addChild(quay)
@@ -49,7 +63,11 @@ final class EmberQuayScene: SKScene {
 
         let stageAccent = SKShapeNode(rectOf: CGSize(width: 120, height: 24), cornerRadius: 12)
         stageAccent.position = CGPoint(x: size.width / 2 + 70, y: size.height / 2 - 48)
-        stageAccent.fillColor = state.problemProgressPercent > 0.75 ? .init(red: 0.80, green: 0.63, blue: 0.31, alpha: 1) : .init(red: 0.46, green: 0.44, blue: 0.33, alpha: 1)
+        stageAccent.fillColor = state.problemProgressPercent > 0.75
+            ? .init(red: 0.80, green: 0.63, blue: 0.31, alpha: 1)
+            : (repairResolution.isMapped
+                ? .init(red: 0.32, green: 0.53, blue: 0.42, alpha: 1)
+                : .init(red: 0.46, green: 0.44, blue: 0.33, alpha: 1))
         stageAccent.strokeColor = .clear
         addChild(stageAccent)
 
@@ -83,11 +101,29 @@ final class EmberQuayScene: SKScene {
 struct WorldSceneContainer: View {
     let state: DistrictWitnessState
     let anchorID: String
+    let tilesetResolution: AevoraAssetResolution
+    let repairResolution: AevoraAssetResolution
 
     var body: some View {
-        SpriteView(scene: EmberQuayScene(size: CGSize(width: 360, height: 260), state: state, anchorID: anchorID))
+        ZStack(alignment: .topLeading) {
+            SpriteView(
+                scene: EmberQuayScene(
+                    size: CGSize(width: 360, height: 260),
+                    state: state,
+                    anchorID: anchorID,
+                    tilesetResolution: tilesetResolution,
+                    repairResolution: repairResolution
+                )
+            )
             .frame(height: 260)
             .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-            .accessibilityLabel("Ember Quay district scene in \(state.stageTitle) state")
+
+            VStack(alignment: .leading, spacing: 8) {
+                AevoraAssetStatusPill(resolution: tilesetResolution)
+                AevoraAssetStatusPill(resolution: repairResolution)
+            }
+            .padding(16)
+        }
+        .accessibilityLabel("Ember Quay district scene in \(state.stageTitle) state")
     }
 }

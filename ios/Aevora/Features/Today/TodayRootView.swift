@@ -3,6 +3,9 @@ import SwiftUI
 struct TodayRootView: View {
     @EnvironmentObject private var environment: AppEnvironment
 
+    static let chapterAssetSlots: [AevoraAssetSlot] = [.chapterCard, .promoCard]
+    static let rewardAssetSlots: [AevoraAssetSlot] = [.rewardCard, .rewardFX]
+
     var body: some View {
         NavigationStack {
             let store = environment.firstPlayableStore
@@ -28,7 +31,7 @@ struct TodayRootView: View {
             }
             .navigationTitle("Today")
             .sheet(item: $environment.firstPlayableStore.rewardPresentation) { reward in
-                RewardModalView(state: reward, copy: store.copy) {
+                RewardModalView(state: reward, copy: store.copy, assetResolver: environment.assetResolver) {
                     environment.firstPlayableStore.rewardDismissed()
                     environment.selectedTab = .world
                 }
@@ -51,7 +54,16 @@ struct TodayRootView: View {
     }
 
     private func chapterCard(store: FirstPlayableStore) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let resolutions = environment.assetResolver.resolve(slots: Self.chapterAssetSlots)
+
+        return VStack(alignment: .leading, spacing: 12) {
+            if let chapterResolution = resolutions.first {
+                AevoraAssetAccentView(
+                    resolution: chapterResolution,
+                    title: "Chapter card slot",
+                    subtitle: "Today’s chapter surface stays bound to one asset family."
+                )
+            }
             Text(store.copy.text("today.chapter_title", fallback: "Current chapter"))
                 .font(AevoraTokens.Typography.caption)
                 .foregroundStyle(AevoraTokens.Color.text.secondary)
@@ -79,6 +91,15 @@ struct TodayRootView: View {
                 }
             }
             .buttonStyle(.bordered)
+            if let promoResolution = resolutions.dropFirst().first {
+                HStack {
+                    Text("Promo family")
+                        .font(AevoraTokens.Typography.caption)
+                        .foregroundStyle(AevoraTokens.Color.text.secondary)
+                    Spacer()
+                    AevoraAssetStatusPill(resolution: promoResolution)
+                }
+            }
         }
         .padding(18)
         .background(AevoraTokens.Gradient.chapter.primary)

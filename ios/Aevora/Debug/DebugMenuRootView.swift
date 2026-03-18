@@ -4,6 +4,7 @@ struct DebugMenuRootView: View {
     let seedScenarioLoader: SeedScenarioLoader
     @ObservedObject var featureFlagOverrideStore: FeatureFlagOverrideStore
     let syncQueue: SyncQueue
+    @ObservedObject var assetResolver: AevoraAssetResolver
 
     @State private var operations: [SyncOperation] = []
 
@@ -32,6 +33,10 @@ struct DebugMenuRootView: View {
 
                 Section("Sync Queue") {
                     SyncQueueInspector(operations: operations)
+                }
+
+                Section("Assets") {
+                    AssetDebugMenuView(assetResolver: assetResolver)
                 }
             }
             .navigationTitle("Debug")

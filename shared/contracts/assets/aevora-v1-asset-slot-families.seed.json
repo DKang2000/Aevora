@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "draft-prebeta-v1",
+  "notes": "Starter slot-family registry for remaining manual art packs. Convert to the repo's final contract shape during the pre-beta asset pipeline pass.",
+  "packs": [
+    {
+      "sectionId": "ART-02",
+      "betaCritical": true,
+      "slotFamilies": [
+        "brand.mark.primary",
+        "brand.mark.mono",
+        "icon.app.1024",
+        "icon.app.iosMasked"
+      ]
+    },
+    {
+      "sectionId": "ART-05",
+      "betaCritical": true,
+      "slotFamilies": [
+        "onboarding.promise.card.family",
+        "onboarding.problemSolution.card.family",
+        "onboarding.familySelection.card.family",
+        "onboarding.identitySelection.card.family",
+        "onboarding.magicMoment.hero",
+        "onboarding.paywall.supporting.family"
+      ]
+    },
+    {
+      "sectionId": "ART-06",
+      "betaCritical": true,
+      "slotFamilies": [
+        "avatar.base.bodyFrame.family",
+        "avatar.base.skinTone.family",
+        "avatar.base.bustAnchor.family"
+      ]
+    },
+    {
+      "sectionId": "ART-07",
+      "betaCritical": true,
+      "slotFamilies": [
+        "avatar.hair.shape.family",
+        "avatar.hair.color.family",
+        "avatar.accessory.family",
+        "avatar.paletteAccent.family"
+      ]
+    },
+    {
+      "sectionId": "ART-08",
+      "betaCritical": true,
+      "slotFamilies": [
+        "identity.outfit.variant.family"
+      ]
+    },
+    {
+      "sectionId": "ART-09",
+      "betaCritical": true,
+      "slotFamilies": [
+        "npc.bust.family",
+        "npc.bust.expression.family",
+        "npc.vendor.bust.family"
+      ]
+    },
+    {
+      "sectionId": "ART-10",
+      "betaCritical": false,
+      "slotFamilies": [
+        "npc.sprite.idle.family",
+        "npc.sprite.interact.family"
+      ]
+    },
+    {
+      "sectionId": "ART-11",
+      "betaCritical": true,
+      "slotFamilies": [
+        "world.tileset.cyrane.family",
+        "world.district.accent.family",
+        "world.signage.family"
+      ]
+    },
+    {
+      "sectionId": "ART-12",
+      "betaCritical": true,
+      "slotFamilies": [
+        "hearth.environment.base.family",
+        "hearth.decor.family",
+        "hearth.state.family"
+      ]
+    },
+    {
+      "sectionId": "ART-13",
+      "betaCritical": true,
+      "slotFamilies": [
+        "prop.oven.family",
+        "prop.lantern.family",
+        "prop.canal.family",
+        "prop.archive.family",
+        "prop.stall.family",
+        "prop.charterSeal.family"
+      ]
+    },
+    {
+      "sectionId": "ART-14",
+      "betaCritical": true,
+      "slotFamilies": [
+        "district.repairState.family"
+      ]
+    },
+    {
+      "sectionId": "ART-15",
+      "betaCritical": true,
+      "slotFamilies": [
+        "item.icon.family",
+        "cosmetic.icon.family",
+        "shop.cardArt.family"
+      ]
+    },
+    {
+      "sectionId": "ART-16",
+      "betaCritical": false,
+      "slotFamilies": [
+        "fx.reward.family",
+        "fx.sparkle.family",
+        "fx.worldRepair.family"
+      ]
+    },
+    {
+      "sectionId": "ART-17",
+      "betaCritical": false,
+      "slotFamilies": [
+        "animation.character.family"
+      ]
+    },
+    {
+      "sectionId": "ART-18",
+      "betaCritical": false,
+      "slotFamilies": [
+        "animation.environment.family"
+      ]
+    },
+    {
+      "sectionId": "ART-19",
+      "betaCritical": false,
+      "slotFamilies": [
+        "card.chapter.family",
+        "card.reward.family",
+        "card.promo.family"
+      ]
+    },
+    {
+      "sectionId": "ART-20",
+      "betaCritical": false,
+      "slotFamilies": [
+        "marketing.screenshot.family",
+        "marketing.preview.family"
+      ]
+    }
+  ]
+}

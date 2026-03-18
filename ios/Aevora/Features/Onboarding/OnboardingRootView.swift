@@ -29,6 +29,10 @@ struct OnboardingRootView: View {
         environment.accountSurfaceStore
     }
 
+    private var assetResolver: AevoraAssetResolver {
+        environment.assetResolver
+    }
+
     static func footerConfiguration(for step: OnboardingFlowStep, copy: CopyCatalog) -> OnboardingFooterConfiguration {
         switch step {
         case .signIn:
@@ -51,6 +55,27 @@ struct OnboardingRootView: View {
 
     static func avatarStepState(for store: FirstPlayableStore) -> OnboardingAvatarStepState {
         store.onboardingAvatarStepState
+    }
+
+    static func assetSlot(for step: OnboardingFlowStep) -> AevoraAssetSlot? {
+        switch step {
+        case .welcomePromise:
+            return .onboardingPromiseCards
+        case .problemSolution:
+            return .onboardingProblemSolutionCards
+        case .family:
+            return .onboardingFamilySelectionCards
+        case .identity:
+            return .onboardingIdentitySelectionCards
+        case .avatar:
+            return .avatarBaseBodyFrame
+        case .magicalMoment:
+            return .onboardingMagicalMomentHero
+        case .softPaywall:
+            return .onboardingPaywallSupporting
+        default:
+            return nil
+        }
     }
 
     var body: some View {
@@ -184,7 +209,14 @@ struct OnboardingRootView: View {
     }
 
     private var welcomePromiseView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        let onboardingAsset = assetResolver.resolve(.onboardingPromiseCards)
+
+        return VStack(alignment: .leading, spacing: 16) {
+            AevoraAssetAccentView(
+                resolution: onboardingAsset,
+                title: "Onboarding card family",
+                subtitle: "Promise cards stay mapped through one logical slot."
+            )
             Text(store.copy.text("onboarding.welcome_title", fallback: "Level up in Aevora as you level up in real life."))
                 .font(AevoraTokens.Typography.displayLarge)
             Text(store.copy.text("onboarding.welcome_body", fallback: "Keep a few meaningful vows, and the city will answer."))
@@ -206,7 +238,14 @@ struct OnboardingRootView: View {
     }
 
     private var problemSolutionView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        let onboardingAsset = assetResolver.resolve(.onboardingProblemSolutionCards)
+
+        return VStack(alignment: .leading, spacing: 16) {
+            AevoraAssetAccentView(
+                resolution: onboardingAsset,
+                title: "Problem/solution carousel",
+                subtitle: "Runtime stays placeholder-safe while the final card family is still manual."
+            )
             Text("Why Aevora works")
                 .font(AevoraTokens.Typography.displayMedium)
             Text("Three quick beats establish the product logic before setup questions begin.")
@@ -296,7 +335,14 @@ struct OnboardingRootView: View {
     }
 
     private var familySelectionView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        let onboardingAsset = assetResolver.resolve(.onboardingFamilySelectionCards)
+
+        return VStack(alignment: .leading, spacing: 16) {
+            AevoraAssetAccentView(
+                resolution: onboardingAsset,
+                title: "Family selection accents",
+                subtitle: "Each origin family keeps one logical art family instead of ad hoc card assets."
+            )
             Text(store.copy.text("onboarding.family_title", fallback: "Choose your origin family"))
                 .font(AevoraTokens.Typography.displayMedium)
             Text("Plain-language framing first, with a mythic civic accent carried by shape, props, and materials.")
@@ -321,7 +367,14 @@ struct OnboardingRootView: View {
     }
 
     private var identitySelectionView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        let onboardingAsset = assetResolver.resolve(.onboardingIdentitySelectionCards)
+
+        return VStack(alignment: .leading, spacing: 16) {
+            AevoraAssetAccentView(
+                resolution: onboardingAsset,
+                title: "Identity selection accents",
+                subtitle: "Selection boards can be swapped in later without changing this screen’s logic."
+            )
             Text(store.copy.text("onboarding.identity_title", fallback: "Choose your path"))
                 .font(AevoraTokens.Typography.displayMedium)
             Text("The free path can choose any one launch identity now. Premium breadth comes later through switching and chapter depth.")
@@ -344,6 +397,8 @@ struct OnboardingRootView: View {
 
     private var avatarBasicsView: some View {
         let avatarState = Self.avatarStepState(for: store)
+        let baseFrameResolution = assetResolver.resolve(.avatarBaseBodyFrame)
+        let bustAnchorResolution = assetResolver.resolve(.avatarBaseBustAnchor)
 
         return VStack(alignment: .leading, spacing: 16) {
             Text(store.copy.text("onboarding.avatar_title", fallback: "Shape your arrival"))
@@ -357,7 +412,11 @@ struct OnboardingRootView: View {
 
             cardPanel(title: "Arrival preview", eyebrow: "Avatar basics") {
                 VStack(alignment: .leading, spacing: 14) {
-                    AvatarPreviewCard(configuration: avatarState.configuration, style: .onboarding)
+                    AvatarPreviewCard(
+                        configuration: avatarState.configuration,
+                        style: .onboarding,
+                        assetResolutions: [baseFrameResolution, bustAnchorResolution]
+                    )
 
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Silhouette")
@@ -480,7 +539,15 @@ struct OnboardingRootView: View {
     }
 
     private var magicalMomentView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        let magicalMomentAsset = assetResolver.resolve(.onboardingMagicalMomentHero)
+        let worldRepairAsset = assetResolver.resolve(.worldRepairFX)
+
+        return VStack(alignment: .leading, spacing: 16) {
+            AevoraAssetAccentView(
+                resolution: magicalMomentAsset,
+                title: "First witness frame",
+                subtitle: "The magical moment stays art-slot driven and still lands before the soft paywall."
+            )
             Text("Your first witness beat")
                 .font(AevoraTokens.Typography.displayMedium)
             Text("Visible world consequence lands before any premium invitation.")
@@ -491,6 +558,11 @@ struct OnboardingRootView: View {
 
             cardPanel(title: store.onboardingMagicalMomentPreviewTitle, eyebrow: "World response") {
                 VStack(alignment: .leading, spacing: 8) {
+                    AevoraAssetAccentView(
+                        resolution: worldRepairAsset,
+                        title: "World-repair FX hook",
+                        subtitle: "Current builds use static proof instead of motion-heavy reward effects."
+                    )
                     Text(store.onboardingMagicalMomentPreviewBody)
                         .font(AevoraTokens.Typography.body)
                         .foregroundStyle(AevoraTokens.Color.text.secondary)
@@ -503,7 +575,14 @@ struct OnboardingRootView: View {
     }
 
     private var softPaywallView: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        let paywallAsset = assetResolver.resolve(.onboardingPaywallSupporting)
+
+        return VStack(alignment: .leading, spacing: 20) {
+            AevoraAssetAccentView(
+                resolution: paywallAsset,
+                title: "Supporting paywall art",
+                subtitle: "The soft paywall keeps a dismissible free-path-safe slot even before final polish lands."
+            )
             Text(store.copy.text("paywall.headline", fallback: "Unlock your full journey in Aevora"))
                 .font(AevoraTokens.Typography.displayMedium)
             Text(store.copy.text("paywall.body", fallback: "Premium expands your world, your witness surfaces, and your active vow breadth."))

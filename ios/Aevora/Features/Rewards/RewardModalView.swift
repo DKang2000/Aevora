@@ -3,14 +3,27 @@ import SwiftUI
 struct RewardModalView: View {
     let state: RewardPresentationState
     let copy: CopyCatalog
+    let assetResolver: AevoraAssetResolver
     let onDismiss: () -> Void
 
+    static let assetSlots: [AevoraAssetSlot] = [.rewardCard, .rewardFX]
+
     var body: some View {
+        let assetResolutions = assetResolver.resolve(slots: Self.assetSlots)
+
         VStack(spacing: 20) {
             Capsule()
                 .fill(AevoraTokens.Color.border.subtle)
                 .frame(width: 44, height: 5)
                 .padding(.top, 8)
+
+            if let rewardCardResolution = assetResolutions.first {
+                AevoraAssetAccentView(
+                    resolution: rewardCardResolution,
+                    title: "Reward card family",
+                    subtitle: "Reward presentation resolves through a slot first, then placeholder-safe chrome."
+                )
+            }
 
             Text(copy.text("rewards.summary_title", fallback: "Your world responds."))
                 .font(AevoraTokens.Typography.displayMedium)
@@ -19,6 +32,10 @@ struct RewardModalView: View {
             HStack(spacing: 16) {
                 metric(title: copy.text("rewards.resonance_label", fallback: "Resonance"), value: "\(state.resonance)")
                 metric(title: copy.text("rewards.gold_label", fallback: "Gold"), value: "\(state.gold)")
+            }
+
+            if let rewardFXResolution = assetResolutions.dropFirst().first {
+                AevoraAssetStatusPill(resolution: rewardFXResolution)
             }
 
             Text(state.worldChangeText)

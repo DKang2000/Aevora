@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		038DE489A33A87A9388D8BED /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD387CDAA06895848DB8C9 /* AppTab.swift */; };
 		06DCA3072269B41427CB04C6 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B0310F7E03E5D84D3277D /* AppEnvironment.swift */; };
+		0701F106747F48961D821707 /* aevora-v1-asset-slot-families.seed.json in Resources */ = {isa = PBXBuildFile; fileRef = DEF98F137278FBBDAC1B08C0 /* aevora-v1-asset-slot-families.seed.json */; };
 		07F8EB1A34E138D7A185087C /* OnboardingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */; };
 		0A22D8C5739AEF63A13FE81A /* DebugTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1BBCB130166A666375F90E /* DebugTests.swift */; };
 		0AB8DFC6E92761C80C297EEF /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E30F1D482AFA118D9BB625E /* APIRequest.swift */; };
@@ -30,12 +31,14 @@
 		37E266AD290C483808DB6B7B /* NotificationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744E0D056B08A33A9C443C9B /* NotificationPlan.swift */; };
 		3F58D44BF7BEB588CB1EB6C4 /* FeatureFlagOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEF370240A0AF53072AC295 /* FeatureFlagOverrideStore.swift */; };
 		431EE0BF0614836803D90F30 /* DebugMenuRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53567186EE6D40733FCB6406 /* DebugMenuRootView.swift */; };
+		46F95E6C41F43164E1E4B7E9 /* AevoraAssetResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2831F4516DF46D79E115AF83 /* AevoraAssetResolver.swift */; };
 		47235F6135D0C220D122A6FB /* SeedScenarioLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FEEE15F5CC7BCE5FDC5C413 /* SeedScenarioLoader.swift */; };
 		47E1924DF5AE287EF6A3B1EA /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8D327578A57BB3A6EFE96 /* APIClient.swift */; };
 		4B4BE1CB2D9DCBBC02B67B02 /* SyncStatusStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FF4156CED7ED88C0E66EFB /* SyncStatusStore.swift */; };
 		4BF3AB8458899E4581C55868 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB34C6AE7E8F1251B4B3E4D7 /* NotificationManager.swift */; };
 		4C1DE99450237E07F913496B /* core.v1.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DB2A8CF9CD6588CF132E530 /* core.v1.json */; };
 		4F9B2A5809158A32AD5E7A53 /* GlanceSurfaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD3BC2ACC2537DBAEC37054 /* GlanceSurfaceStore.swift */; };
+		4FD5EEE78F87993A6A0053C3 /* AssetSurfaceContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC95333D4C206D0BE793DA2 /* AssetSurfaceContractTests.swift */; };
 		52746D9559A9B4DDB5AA79FF /* CopyCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE9042C4904EEDFDD44422F /* CopyCatalog.swift */; };
 		54A34AE1B69B52AF56A4F49F /* QuestJournalSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731B7AB4C829B4396745176E /* QuestJournalSheet.swift */; };
 		559040FBFB03CDD3C99B7B7C /* SyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFAD86645BBEBB1C3B34E90 /* SyncTests.swift */; };
@@ -46,7 +49,9 @@
 		64D3A8B06D764E3218F87465 /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A536B9B29F4057677FC7BE74 /* SyncQueue.swift */; };
 		68658477D33348D3F7E0FCC0 /* ProfileRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9139DBC7998D7C2B2ADA6674 /* ProfileRootView.swift */; };
 		6B0692FBA9F904A70A09A4AB /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA28F8FCC82888F92ECE85A1 /* AnalyticsEvent.swift */; };
+		6ED4C13A86E2F4CA0ADC8BEB /* AevoraAssetRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B32D13574A1FB08F24C091 /* AevoraAssetRegistry.swift */; };
 		6FCDA30BFB45BC5A1D47D594 /* AnalyticsMetadataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC7B76DAF93C0234227562D0 /* AnalyticsMetadataProvider.swift */; };
+		77B476914B33776A5DCC143A /* AssetRuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DFDDD385C3A2E9A2444004 /* AssetRuntimeTests.swift */; };
 		7842A0C81EEF603FF97D6B47 /* AccountSurfaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3811DE6E0B48BBD1C64E10 /* AccountSurfaceStore.swift */; };
 		7890B3E035112B82D94DAF36 /* XCTestCase+AevoraAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255AD94C388087BFE3CF8A9 /* XCTestCase+AevoraAsync.swift */; };
 		792F86E3737683868F1FB59A /* ConnectivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482E265A84935A597EA40A46 /* ConnectivityMonitor.swift */; };
@@ -80,13 +85,16 @@
 		D9E65EB570B430270E70B113 /* APIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25F5725B8D24A9F5C4E0A51 /* APIClientTests.swift */; };
 		DB785B2138F826B5026A3527 /* GlanceSurfaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */; };
 		DE1804FA9C825594F8D97812 /* GlanceSurfaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */; };
+		E75245ED5D57347EDF51AE04 /* AssetDebugMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B75541B3E1EEB93764E2E6 /* AssetDebugMenuView.swift */; };
 		EBB0FE686E6505DCA29C9FDB /* SyncQueueInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D39D0B9303EB308C3773C1 /* SyncQueueInspector.swift */; };
 		EBE41ECFF8B52F59DE35EB72 /* LiveActivityCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B17D579B5C44109024680D /* LiveActivityCoordinator.swift */; };
 		EC7DDFA25AF38C49AA4808C4 /* AccountSurfaceStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBBBB4ED72FB8B5909E4551 /* AccountSurfaceStoreTests.swift */; };
+		ED15694337653573483B4BD7 /* AevoraAssetManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9442BDE8A04E5B6AB94CAE2F /* AevoraAssetManifest.swift */; };
 		EF561EC24F974E4E903CC61F /* AppNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B463D3B37B39384ED29C6FDF /* AppNotificationDelegate.swift */; };
 		F0D1B308191EEA4FCEB25551 /* HearthRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D459E49C35D37C9EDED109 /* HearthRootView.swift */; };
 		F3996C8D56B08998FE6D6256 /* OnboardingRootViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14C40448C980529B2C65397 /* OnboardingRootViewTests.swift */; };
 		F4CBA2683824CE2B1D47CE93 /* FirstPlayableStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D13B2F3733F1BD569E1C4 /* FirstPlayableStoreTests.swift */; };
+		F57FE14C3EB0B5F79EDD27E1 /* aevora-v1-local-placeholder-manifest.seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C1EBEDEA1F60B8C3927D664B /* aevora-v1-local-placeholder-manifest.seed.json */; };
 		F968CE19C4E567E204E86291 /* launch-content.min.v1.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F44E4A4CD0C0AEF24A6305A /* launch-content.min.v1.json */; };
 		FB3F1C99AEE9F50481A34300 /* GlanceSurfaceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */; };
 /* End PBXBuildFile section */
@@ -129,6 +137,7 @@
 		022AE6A0DE7CC3D5FBE56D92 /* AevoraTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraTokens.swift; sourceTree = "<group>"; };
 		0233F5EBE73734322718F8FB /* RemoteConfigClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigClientTests.swift; sourceTree = "<group>"; };
 		033728F637B098F516E2E638 /* StatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusTests.swift; sourceTree = "<group>"; };
+		0CC95333D4C206D0BE793DA2 /* AssetSurfaceContractTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSurfaceContractTests.swift; sourceTree = "<group>"; };
 		0E30F1D482AFA118D9BB625E /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		0F44E4A4CD0C0AEF24A6305A /* launch-content.min.v1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "launch-content.min.v1.json"; sourceTree = "<group>"; };
 		1037E6462B55C88ABAAD4386 /* LocalModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalModels.swift; sourceTree = "<group>"; };
@@ -137,6 +146,7 @@
 		1DB2A8CF9CD6588CF132E530 /* core.v1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = core.v1.json; sourceTree = "<group>"; };
 		1FEEE15F5CC7BCE5FDC5C413 /* SeedScenarioLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedScenarioLoader.swift; sourceTree = "<group>"; };
 		26D926286D24773C4EF8E27C /* AnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTests.swift; sourceTree = "<group>"; };
+		2831F4516DF46D79E115AF83 /* AevoraAssetResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraAssetResolver.swift; sourceTree = "<group>"; };
 		28563D8BEA3C1B0ADE99BA83 /* remote-config-defaults.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "remote-config-defaults.json"; sourceTree = "<group>"; };
 		28931C3E7AB28AB38FB3C42F /* SyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncOperation.swift; sourceTree = "<group>"; };
 		295A3462DB36D81DA899FCDB /* LogContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogContext.swift; sourceTree = "<group>"; };
@@ -161,6 +171,7 @@
 		722D6B919EE975BA883CA970 /* OfflineBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBannerView.swift; sourceTree = "<group>"; };
 		731B7AB4C829B4396745176E /* QuestJournalSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestJournalSheet.swift; sourceTree = "<group>"; };
 		744E0D056B08A33A9C443C9B /* NotificationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPlan.swift; sourceTree = "<group>"; };
+		74B32D13574A1FB08F24C091 /* AevoraAssetRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraAssetRegistry.swift; sourceTree = "<group>"; };
 		75FB9264A6932686A7E4A19D /* TodayRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRootView.swift; sourceTree = "<group>"; };
 		79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceSurfaceModels.swift; sourceTree = "<group>"; };
 		7AA38F8F6F2A78541AD19FEF /* AnalyticsValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsValidator.swift; sourceTree = "<group>"; };
@@ -174,19 +185,23 @@
 		9139DBC7998D7C2B2ADA6674 /* ProfileRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRootView.swift; sourceTree = "<group>"; };
 		92D39D0B9303EB308C3773C1 /* SyncQueueInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncQueueInspector.swift; sourceTree = "<group>"; };
 		93C6097F315F71AEA1CCE63D /* AevoraShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraShortcuts.swift; sourceTree = "<group>"; };
+		9442BDE8A04E5B6AB94CAE2F /* AevoraAssetManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraAssetManifest.swift; sourceTree = "<group>"; };
 		9B2B9505E95645DFF7864208 /* ObservabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservabilityTests.swift; sourceTree = "<group>"; };
 		9BC16E15DCD734BC97D617BD /* LaunchContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchContent.swift; sourceTree = "<group>"; };
 		9D3811DE6E0B48BBD1C64E10 /* AccountSurfaceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSurfaceStore.swift; sourceTree = "<group>"; };
 		A03D13B2F3733F1BD569E1C4 /* FirstPlayableStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPlayableStoreTests.swift; sourceTree = "<group>"; };
 		A536B9B29F4057677FC7BE74 /* SyncQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncQueue.swift; sourceTree = "<group>"; };
 		A5BC70ABB8EB853BD144116F /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
+		A8DFDDD385C3A2E9A2444004 /* AssetRuntimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRuntimeTests.swift; sourceTree = "<group>"; };
 		AE1BBCB130166A666375F90E /* DebugTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTests.swift; sourceTree = "<group>"; };
 		B041943AB6C78A4E2A54035E /* RedactionPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedactionPolicy.swift; sourceTree = "<group>"; };
+		B0B75541B3E1EEB93764E2E6 /* AssetDebugMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDebugMenuView.swift; sourceTree = "<group>"; };
 		B171BFF37476565D05E8B160 /* AevoraWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraWidgetsBundle.swift; sourceTree = "<group>"; };
 		B463D3B37B39384ED29C6FDF /* AppNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotificationDelegate.swift; sourceTree = "<group>"; };
 		B9DA1B47F0B6538B63F65A0F /* SyncConflictView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConflictView.swift; sourceTree = "<group>"; };
 		BDFAD86645BBEBB1C3B34E90 /* SyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTests.swift; sourceTree = "<group>"; };
 		BFE4EBF3C5DE381C008E981F /* AutomationSurfaceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomationSurfaceStore.swift; sourceTree = "<group>"; };
+		C1EBEDEA1F60B8C3927D664B /* aevora-v1-local-placeholder-manifest.seed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "aevora-v1-local-placeholder-manifest.seed.json"; sourceTree = "<group>"; };
 		C3562FBAF9AE0EE508735965 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		C552722BF9ED16767039338D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C6D459E49C35D37C9EDED109 /* HearthRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HearthRootView.swift; sourceTree = "<group>"; };
@@ -196,6 +211,7 @@
 		D14C40448C980529B2C65397 /* OnboardingRootViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootViewTests.swift; sourceTree = "<group>"; };
 		D25F5725B8D24A9F5C4E0A51 /* APIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTests.swift; sourceTree = "<group>"; };
 		DD9B0310F7E03E5D84D3277D /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		DEF98F137278FBBDAC1B08C0 /* aevora-v1-asset-slot-families.seed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "aevora-v1-asset-slot-families.seed.json"; sourceTree = "<group>"; };
 		DF36EF5DD0177976BD13AD93 /* AevoraTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = AevoraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF8D1BEB7CCFA37ABBC93DB9 /* FirstPlayableStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPlayableStore.swift; sourceTree = "<group>"; };
 		EA28F8FCC82888F92ECE85A1 /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
@@ -211,10 +227,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		004DCEDB97897240C3C5173D /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				DEF98F137278FBBDAC1B08C0 /* aevora-v1-asset-slot-families.seed.json */,
+			);
+			path = assets;
+			sourceTree = "<group>";
+		};
 		01DA8B31BCADE12235DC94EF /* Aevora */ = {
 			isa = PBXGroup;
 			children = (
 				399203630851E5F6EBCB2660 /* content */,
+				B58404344058ABA3EBA714D9 /* ops */,
 				B15384519CBB4CD9A02F1497 /* shared */,
 			);
 			name = Aevora;
@@ -278,6 +303,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		28B6DBDDAB358DA85ADF02A4 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				A8DFDDD385C3A2E9A2444004 /* AssetRuntimeTests.swift */,
+				0CC95333D4C206D0BE793DA2 /* AssetSurfaceContractTests.swift */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		29C29BA06FDD1FAFA89553A0 /* Observability */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,6 +321,14 @@
 				611C61E3547306E4AEC9F2C8 /* StructuredLogger.swift */,
 			);
 			path = Observability;
+			sourceTree = "<group>";
+		};
+		34AC4017FD96E65DE2A74736 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				8A356C65513CB6ADB706224F /* manifests */,
+			);
+			path = assets;
 			sourceTree = "<group>";
 		};
 		358A1CCE52DA23612410A9C8 /* Products */ = {
@@ -381,6 +423,9 @@
 		593CE655A96D1D2E127CFD10 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				9442BDE8A04E5B6AB94CAE2F /* AevoraAssetManifest.swift */,
+				74B32D13574A1FB08F24C091 /* AevoraAssetRegistry.swift */,
+				2831F4516DF46D79E115AF83 /* AevoraAssetResolver.swift */,
 				022AE6A0DE7CC3D5FBE56D92 /* AevoraTokens.swift */,
 			);
 			path = DesignSystem;
@@ -413,6 +458,14 @@
 				35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		652FE69C7241858D3888A782 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				B0B75541B3E1EEB93764E2E6 /* AssetDebugMenuView.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		6655F4A6076B0BC8704D0247 /* Debug */ = {
@@ -479,6 +532,14 @@
 			path = Analytics;
 			sourceTree = "<group>";
 		};
+		8A356C65513CB6ADB706224F /* manifests */ = {
+			isa = PBXGroup;
+			children = (
+				C1EBEDEA1F60B8C3927D664B /* aevora-v1-local-placeholder-manifest.seed.json */,
+			);
+			path = manifests;
+			sourceTree = "<group>";
+		};
 		8AD4CD3C90C6C46A440C7D58 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +557,14 @@
 				9D3811DE6E0B48BBD1C64E10 /* AccountSurfaceStore.swift */,
 			);
 			path = Account;
+			sourceTree = "<group>";
+		};
+		971E7060D812B1E8EB9240D3 /* contracts */ = {
+			isa = PBXGroup;
+			children = (
+				004DCEDB97897240C3C5173D /* assets */,
+			);
+			path = contracts;
 			sourceTree = "<group>";
 		};
 		9DE718698B7CF46EE6D3AEEF /* copy */ = {
@@ -559,6 +628,7 @@
 		B15384519CBB4CD9A02F1497 /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				971E7060D812B1E8EB9240D3 /* contracts */,
 				4ACD1D2929339B54490DB8D5 /* tokens */,
 			);
 			path = shared;
@@ -569,6 +639,7 @@
 			children = (
 				8EB818D5DCF3562D08094383 /* Account */,
 				68645CCA59A3B053101C5BEB /* CoreLoop */,
+				652FE69C7241858D3888A782 /* Debug */,
 				81AD8CC50068C9694420380B /* Hearth */,
 				5CF457F960890B3F7FEC0A94 /* Onboarding */,
 				ECD0E39F8087F419F875E456 /* Profile */,
@@ -578,6 +649,14 @@
 				3D03FD7C3BD8D0EBA0605F3C /* World */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		B58404344058ABA3EBA714D9 /* ops */ = {
+			isa = PBXGroup;
+			children = (
+				34AC4017FD96E65DE2A74736 /* assets */,
+			);
+			path = ops;
 			sourceTree = "<group>";
 		};
 		B98A9920DBEE0FADB563EACF /* Networking */ = {
@@ -692,6 +771,7 @@
 				5BBBE7F262EE25FFEA693997 /* AppNavigationTests.swift */,
 				CF605AB60248C6525F6AF758 /* Account */,
 				89FF4B6C93B89CC3AC5F3462 /* Analytics */,
+				28B6DBDDAB358DA85ADF02A4 /* Assets */,
 				CDA75108A58A89989C8FEF29 /* Config */,
 				0DA0CC69F68E4153248D5F3F /* CoreLoop */,
 				56FB8339EB5DA71086EFC96C /* Debug */,
@@ -854,7 +934,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0701F106747F48961D821707 /* aevora-v1-asset-slot-families.seed.json in Resources */,
 				9F5588024006BB5FCCA4627D /* aevora-v1-design-tokens.json in Resources */,
+				F57FE14C3EB0B5F79EDD27E1 /* aevora-v1-local-placeholder-manifest.seed.json in Resources */,
 				4C1DE99450237E07F913496B /* core.v1.json in Resources */,
 				F968CE19C4E567E204E86291 /* launch-content.min.v1.json in Resources */,
 				0F991EF0F832BCCD4DC8EF09 /* remote-config-defaults.json in Resources */,
@@ -873,6 +955,9 @@
 				0AB8DFC6E92761C80C297EEF /* APIRequest.swift in Sources */,
 				7842A0C81EEF603FF97D6B47 /* AccountSurfaceStore.swift in Sources */,
 				7ECC637C4A13AF098112FE98 /* AevoraApp.swift in Sources */,
+				ED15694337653573483B4BD7 /* AevoraAssetManifest.swift in Sources */,
+				6ED4C13A86E2F4CA0ADC8BEB /* AevoraAssetRegistry.swift in Sources */,
+				46F95E6C41F43164E1E4B7E9 /* AevoraAssetResolver.swift in Sources */,
 				ABC9587FE6F69A386D1B4B5E /* AevoraShortcuts.swift in Sources */,
 				349B039B9324A0B9899F81FB /* AevoraTokens.swift in Sources */,
 				D13484C20351838AAFC9C98F /* AnalyticsClient.swift in Sources */,
@@ -885,6 +970,7 @@
 				108C7F7F819D7CE9A05893F8 /* AppIntentRouter.swift in Sources */,
 				EF561EC24F974E4E903CC61F /* AppNotificationDelegate.swift in Sources */,
 				038DE489A33A87A9388D8BED /* AppTab.swift in Sources */,
+				E75245ED5D57347EDF51AE04 /* AssetDebugMenuView.swift in Sources */,
 				310A32384FC0D719271FE095 /* AutomationSurfaceStore.swift in Sources */,
 				8EDBC67E98F1445145F96CEA /* AvatarPreviewCard.swift in Sources */,
 				792F86E3737683868F1FB59A /* ConnectivityMonitor.swift in Sources */,
@@ -947,6 +1033,8 @@
 				EC7DDFA25AF38C49AA4808C4 /* AccountSurfaceStoreTests.swift in Sources */,
 				D23F54F8D5BB3A4AE2E773E3 /* AnalyticsTests.swift in Sources */,
 				1BF426C29DEFD8EDDEA6E346 /* AppNavigationTests.swift in Sources */,
+				77B476914B33776A5DCC143A /* AssetRuntimeTests.swift in Sources */,
+				4FD5EEE78F87993A6A0053C3 /* AssetSurfaceContractTests.swift in Sources */,
 				8E3AA39160A6414F342B650B /* AvatarSurfaceContractTests.swift in Sources */,
 				A7DBCAE005998950F532E70D /* DateFormatter+AevoraTest.swift in Sources */,
 				0A22D8C5739AEF63A13FE81A /* DebugTests.swift in Sources */,
@@ -1004,7 +1092,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aevora;
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"aevora\"], \"CFBundleTypeRole\": \"Editor\"]]";
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleTypeRole\": \"Editor\", \"CFBundleURLSchemes\": [\"aevora\"]]]";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
 					UIInterfaceOrientationPortrait,
@@ -1029,7 +1117,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Aevora;
-				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleURLSchemes\": [\"aevora\"], \"CFBundleTypeRole\": \"Editor\"]]";
+				INFOPLIST_KEY_CFBundleURLTypes = "[[\"CFBundleTypeRole\": \"Editor\", \"CFBundleURLSchemes\": [\"aevora\"]]]";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = (
 					UIInterfaceOrientationPortrait,

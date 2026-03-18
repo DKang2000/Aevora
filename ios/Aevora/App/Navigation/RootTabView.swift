@@ -31,7 +31,8 @@ struct RootTabView: View {
             DebugMenuRootView(
                 seedScenarioLoader: environment.seedScenarioLoader,
                 featureFlagOverrideStore: environment.featureFlagOverrideStore,
-                syncQueue: environment.syncQueue
+                syncQueue: environment.syncQueue,
+                assetResolver: environment.assetResolver
             )
         }
         .toolbar {

@@ -115,6 +115,17 @@ enum AvatarPresentationCatalog {
 struct AvatarPreviewCard: View {
     let configuration: AvatarPreviewConfiguration
     let style: AvatarPreviewStyle
+    let assetResolutions: [AevoraAssetResolution]
+
+    init(
+        configuration: AvatarPreviewConfiguration,
+        style: AvatarPreviewStyle,
+        assetResolutions: [AevoraAssetResolution] = []
+    ) {
+        self.configuration = configuration
+        self.style = style
+        self.assetResolutions = assetResolutions
+    }
 
     private var displayName: String {
         let trimmed = configuration.displayName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -136,6 +147,14 @@ struct AvatarPreviewCard: View {
         let avatarHeight: CGFloat = style == .onboarding ? 198 : 162
 
         VStack(alignment: .leading, spacing: style == .onboarding ? 16 : 14) {
+            if let assetResolution = assetResolutions.first {
+                AevoraAssetAccentView(
+                    resolution: assetResolution,
+                    title: style == .onboarding ? "Avatar base slot" : "Hearth avatar slot",
+                    subtitle: assetResolution.fallbackReason
+                )
+            }
+
             HStack(alignment: .center, spacing: style == .onboarding ? 18 : 16) {
                 ZStack {
                     RoundedRectangle(cornerRadius: style == .onboarding ? 24 : 22, style: .continuous)
@@ -173,6 +192,9 @@ struct AvatarPreviewCard: View {
                 AvatarLabelChip(label: palette.label, fill: AevoraTokens.Color.parchmentStone.shade200, foreground: AevoraTokens.Color.text.primary)
                 if !configuration.accessoryLabel.isEmpty {
                     AvatarLabelChip(label: configuration.accessoryLabel, fill: AevoraTokens.Color.mossGreen.shade300, foreground: AevoraTokens.Color.text.primary)
+                }
+                if let secondaryResolution = assetResolutions.dropFirst().first {
+                    AevoraAssetStatusPill(resolution: secondaryResolution)
                 }
             }
         }

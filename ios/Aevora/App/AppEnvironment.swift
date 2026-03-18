@@ -19,6 +19,9 @@ final class AppEnvironment: ObservableObject {
     let logger: StructuredLogger
     let crashReporter: CrashReporter
     let seedScenarioLoader: SeedScenarioLoader
+    let assetManifest: AevoraAssetManifest
+    let assetRegistry: AevoraAssetRegistry
+    let assetResolver: AevoraAssetResolver
     var firstPlayableStore: FirstPlayableStore
     let glanceSurfaceStore: GlanceSurfaceStore
     let liveActivityCoordinator: LiveActivityCoordinator
@@ -56,6 +59,9 @@ final class AppEnvironment: ObservableObject {
             metadataProvider: AnalyticsMetadataProvider(),
             validator: AnalyticsValidator()
         )
+        assetManifest = AevoraAssetManifest.loadPlaceholderSeed()
+        assetRegistry = AevoraAssetRegistry.load()
+        assetResolver = AevoraAssetResolver(registry: assetRegistry, manifest: assetManifest)
         let monitor = connectivityMonitor
         syncCoordinator = SyncCoordinator(
             apiClient: APIClient(baseURL: URL(string: "https://example.invalid")!),

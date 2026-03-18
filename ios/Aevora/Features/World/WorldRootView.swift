@@ -5,16 +5,27 @@ struct WorldRootView: View {
     @State private var selectedNPC: SelectedNPC?
     @State private var isShopPresented = false
 
+    static let sceneAssetSlots: [AevoraAssetSlot] = [.worldTilesetCyrane, .districtRepairState]
+    static let districtAssetSlots: [AevoraAssetSlot] = [.worldDistrictAccent, .worldSignage, .worldRepairFX]
+    static let npcAssetSlots: [AevoraAssetSlot] = [.npcBust, .npcVendorBust]
+    static let shopAssetSlots: [AevoraAssetSlot] = [.shopCardArt, .itemIcon]
+
     var body: some View {
         NavigationStack {
             let store = environment.firstPlayableStore
+            let sceneResolutions = environment.assetResolver.resolve(slots: Self.sceneAssetSlots)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     Text(store.copy.text("world.headline", fallback: "World"))
                         .font(AevoraTokens.Typography.displayLarge)
 
-                    WorldSceneContainer(state: store.districtState, anchorID: store.currentWorldAnchorID)
+                    WorldSceneContainer(
+                        state: store.districtState,
+                        anchorID: store.currentWorldAnchorID,
+                        tilesetResolution: sceneResolutions[0],
+                        repairResolution: sceneResolutions[1]
+                    )
 
                     districtCard(store: store)
                     promenadeCard(store: store)
@@ -34,7 +45,16 @@ struct WorldRootView: View {
     }
 
     private func districtCard(store: FirstPlayableStore) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
+        let assetResolutions = environment.assetResolver.resolve(slots: Self.districtAssetSlots)
+
+        return VStack(alignment: .leading, spacing: 10) {
+            if let districtResolution = assetResolutions.first {
+                AevoraAssetAccentView(
+                    resolution: districtResolution,
+                    title: "District environment slots",
+                    subtitle: "World scene art stays attached to logical slots while the imported kit is incomplete."
+                )
+            }
             Text(store.districtState.stageTitle)
                 .font(AevoraTokens.Typography.titleCard)
             Text("Day \(store.chapterState.currentDay) of \(store.chapterState.chapterLength) in \(store.chapterState.title)")
@@ -56,6 +76,11 @@ struct WorldRootView: View {
                 Text(store.chapterState.statusNote)
                     .font(AevoraTokens.Typography.footnote)
                     .foregroundStyle(AevoraTokens.Color.action.primaryFill)
+            }
+            HStack {
+                ForEach(assetResolutions.dropFirst(), id: \.id) { resolution in
+                    AevoraAssetStatusPill(resolution: resolution)
+                }
             }
         }
         .padding(18)
@@ -98,9 +123,18 @@ struct WorldRootView: View {
     }
 
     private func npcSection(store: FirstPlayableStore) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let assetResolutions = environment.assetResolver.resolve(slots: Self.npcAssetSlots)
+
+        return VStack(alignment: .leading, spacing: 12) {
             Text("Witnesses nearby")
                 .font(AevoraTokens.Typography.headline)
+            if let npcResolution = assetResolutions.first {
+                AevoraAssetAccentView(
+                    resolution: npcResolution,
+                    title: "NPC bust family",
+                    subtitle: "Dialogue and vendor faces now resolve through one shared bust slot."
+                )
+            }
 
             let anchorNPCs = store.worldAnchors.first(where: { $0.id == store.currentWorldAnchorID })?.npcIDs ?? []
             if anchorNPCs.isEmpty {
@@ -132,7 +166,16 @@ struct WorldRootView: View {
     }
 
     private func shopCard(store: FirstPlayableStore) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
+        let assetResolutions = environment.assetResolver.resolve(slots: Self.shopAssetSlots)
+
+        return VStack(alignment: .leading, spacing: 10) {
+            if let shopResolution = assetResolutions.first {
+                AevoraAssetAccentView(
+                    resolution: shopResolution,
+                    title: "Shop card art slot",
+                    subtitle: "Quarter Market can swap imported art in later without changing the purchase surface."
+                )
+            }
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(store.copy.text("shop.headline", fallback: "Quarter Market"))
@@ -154,6 +197,9 @@ struct WorldRootView: View {
             Text(store.completionDayCount < 7 ? "The market opens after the oven rekindles." : "Spend Gold on a small curated set of props and keepsakes that make your progress visible.")
                 .font(AevoraTokens.Typography.subheadline)
                 .foregroundStyle(AevoraTokens.Color.text.secondary)
+            if let itemResolution = assetResolutions.dropFirst().first {
+                AevoraAssetStatusPill(resolution: itemResolution)
+            }
         }
         .padding(18)
         .background(AevoraTokens.Color.surface.cardPrimary)
@@ -168,11 +214,19 @@ private struct SelectedNPC: Identifiable {
 private struct NPCDialogueSheet: View {
     let store: FirstPlayableStore
     let npcID: String
+    @EnvironmentObject private var environment: AppEnvironment
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
+        let npcResolution = environment.assetResolver.resolve(.npcBust)
+
         NavigationStack {
             VStack(alignment: .leading, spacing: 18) {
+                AevoraAssetAccentView(
+                    resolution: npcResolution,
+                    title: "Dialogue bust slot",
+                    subtitle: "Witness dialogue keeps its placeholder-safe portrait hook active."
+                )
                 Text(store.npcName(for: npcID))
                     .font(AevoraTokens.Typography.displayMedium)
                 Text(store.dialogueLine(for: npcID))
@@ -204,14 +258,22 @@ private struct NPCDialogueSheet: View {
 
 private struct ShopSheet: View {
     let store: FirstPlayableStore
+    @EnvironmentObject private var environment: AppEnvironment
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
+        let shopResolution = environment.assetResolver.resolve(.shopCardArt)
+
         NavigationStack {
             List {
                 Section {
                     Text("Gold available: \(store.goldBalance)")
                         .font(AevoraTokens.Typography.headline)
+                    AevoraAssetAccentView(
+                        resolution: shopResolution,
+                        title: "Shop import slot",
+                        subtitle: "Imported card art can replace this placeholder-safe treatment later."
+                    )
                 }
 
                 ForEach(store.availableShopOffers) { offer in
