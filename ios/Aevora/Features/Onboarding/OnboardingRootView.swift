@@ -212,8 +212,9 @@ struct OnboardingRootView: View {
         let onboardingAsset = assetResolver.resolve(.onboardingPromiseCards)
 
         return VStack(alignment: .leading, spacing: 16) {
-            AevoraAssetAccentView(
+            onboardingRenderableArt(
                 resolution: onboardingAsset,
+                style: .heroCard,
                 title: "Onboarding card family",
                 subtitle: "Promise cards stay mapped through one logical slot."
             )
@@ -241,8 +242,9 @@ struct OnboardingRootView: View {
         let onboardingAsset = assetResolver.resolve(.onboardingProblemSolutionCards)
 
         return VStack(alignment: .leading, spacing: 16) {
-            AevoraAssetAccentView(
+            onboardingRenderableArt(
                 resolution: onboardingAsset,
+                style: .heroCard,
                 title: "Problem/solution carousel",
                 subtitle: "Runtime stays placeholder-safe while the final card family is still manual."
             )
@@ -338,8 +340,9 @@ struct OnboardingRootView: View {
         let onboardingAsset = assetResolver.resolve(.onboardingFamilySelectionCards)
 
         return VStack(alignment: .leading, spacing: 16) {
-            AevoraAssetAccentView(
+            onboardingRenderableArt(
                 resolution: onboardingAsset,
+                style: .heroCard,
                 title: "Family selection accents",
                 subtitle: "Each origin family keeps one logical art family instead of ad hoc card assets."
             )
@@ -370,8 +373,9 @@ struct OnboardingRootView: View {
         let onboardingAsset = assetResolver.resolve(.onboardingIdentitySelectionCards)
 
         return VStack(alignment: .leading, spacing: 16) {
-            AevoraAssetAccentView(
+            onboardingRenderableArt(
                 resolution: onboardingAsset,
+                style: .heroCard,
                 title: "Identity selection accents",
                 subtitle: "Selection boards can be swapped in later without changing this screen’s logic."
             )
@@ -543,8 +547,9 @@ struct OnboardingRootView: View {
         let worldRepairAsset = assetResolver.resolve(.worldRepairFX)
 
         return VStack(alignment: .leading, spacing: 16) {
-            AevoraAssetAccentView(
+            onboardingRenderableArt(
                 resolution: magicalMomentAsset,
+                style: .wideBanner,
                 title: "First witness frame",
                 subtitle: "The magical moment stays art-slot driven and still lands before the soft paywall."
             )
@@ -554,12 +559,16 @@ struct OnboardingRootView: View {
                 .font(AevoraTokens.Typography.subheadline)
                 .foregroundStyle(AevoraTokens.Color.text.secondary)
 
-            sceneWitnessCard
+            sceneWitnessCard(
+                magicalMomentAsset: magicalMomentAsset,
+                worldRepairAsset: worldRepairAsset
+            )
 
             cardPanel(title: store.onboardingMagicalMomentPreviewTitle, eyebrow: "World response") {
                 VStack(alignment: .leading, spacing: 8) {
-                    AevoraAssetAccentView(
+                    onboardingRenderableArt(
                         resolution: worldRepairAsset,
+                        style: .compactTile,
                         title: "World-repair FX hook",
                         subtitle: "Current builds use static proof instead of motion-heavy reward effects."
                     )
@@ -578,8 +587,9 @@ struct OnboardingRootView: View {
         let paywallAsset = assetResolver.resolve(.onboardingPaywallSupporting)
 
         return VStack(alignment: .leading, spacing: 20) {
-            AevoraAssetAccentView(
+            onboardingRenderableArt(
                 resolution: paywallAsset,
+                style: .wideBanner,
                 title: "Supporting paywall art",
                 subtitle: "The soft paywall keeps a dismissible free-path-safe slot even before final polish lands."
             )
@@ -640,10 +650,15 @@ struct OnboardingRootView: View {
         }
     }
 
-    private var sceneWitnessCard: some View {
+    private func sceneWitnessCard(
+        magicalMomentAsset: AevoraAssetResolution,
+        worldRepairAsset: AevoraAssetResolution
+    ) -> some View {
         ZStack(alignment: .bottomLeading) {
-            RoundedRectangle(cornerRadius: AevoraTokens.Radius.xl, style: .continuous)
-                .fill(AevoraTokens.Gradient.world.deep)
+            AevoraAssetRenderableView(
+                resolution: magicalMomentAsset,
+                style: .wideBanner
+            )
                 .frame(height: 250)
                 .overlay(alignment: .topLeading) {
                     VStack(alignment: .leading, spacing: 10) {
@@ -657,19 +672,50 @@ struct OnboardingRootView: View {
                     .padding(18)
                 }
                 .overlay(alignment: .bottomLeading) {
-                    HStack(spacing: 18) {
-                        RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous)
-                            .fill(AevoraTokens.Color.emberCopper.shade700)
-                            .frame(width: 72, height: 72)
-                        Capsule()
-                            .fill(AevoraTokens.Color.dawnGold.shade500)
-                            .frame(width: 28, height: 86)
-                        RoundedRectangle(cornerRadius: AevoraTokens.Radius.sm, style: .continuous)
-                            .fill(AevoraTokens.Color.moonIndigo.shade300)
-                            .frame(width: 116, height: 48)
+                    HStack(spacing: 10) {
+                        AevoraAssetStatusPill(resolution: magicalMomentAsset)
+                        AevoraAssetStatusPill(resolution: worldRepairAsset)
                     }
                     .padding(18)
                 }
+        }
+    }
+
+    private func onboardingRenderableArt(
+        resolution: AevoraAssetResolution,
+        style: AevoraAssetPresentationStyle,
+        title: String,
+        subtitle: String
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            AevoraAssetRenderableView(
+                resolution: resolution,
+                style: style
+            )
+            .frame(height: artHeight(for: style))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(AevoraTokens.Typography.caption)
+                    .foregroundStyle(AevoraTokens.Color.text.secondary)
+                Text(subtitle)
+                    .font(AevoraTokens.Typography.subheadline)
+                    .foregroundStyle(AevoraTokens.Color.text.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private func artHeight(for style: AevoraAssetPresentationStyle) -> CGFloat {
+        switch style {
+        case .heroCard:
+            return 196
+        case .portraitBust:
+            return 160
+        case .wideBanner:
+            return 184
+        case .compactTile:
+            return 116
         }
     }
 

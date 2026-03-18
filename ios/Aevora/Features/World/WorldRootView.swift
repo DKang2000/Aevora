@@ -49,11 +49,11 @@ struct WorldRootView: View {
 
         return VStack(alignment: .leading, spacing: 10) {
             if let districtResolution = assetResolutions.first {
-                AevoraAssetAccentView(
+                AevoraAssetRenderableView(
                     resolution: districtResolution,
-                    title: "District environment slots",
-                    subtitle: "World scene art stays attached to logical slots while the imported kit is incomplete."
+                    style: .wideBanner
                 )
+                .frame(height: 168)
             }
             Text(store.districtState.stageTitle)
                 .font(AevoraTokens.Typography.titleCard)
@@ -129,11 +129,11 @@ struct WorldRootView: View {
             Text("Witnesses nearby")
                 .font(AevoraTokens.Typography.headline)
             if let npcResolution = assetResolutions.first {
-                AevoraAssetAccentView(
+                AevoraAssetRenderableView(
                     resolution: npcResolution,
-                    title: "NPC bust family",
-                    subtitle: "Dialogue and vendor faces now resolve through one shared bust slot."
+                    style: .wideBanner
                 )
+                .frame(height: 148)
             }
 
             let anchorNPCs = store.worldAnchors.first(where: { $0.id == store.currentWorldAnchorID })?.npcIDs ?? []
@@ -170,11 +170,11 @@ struct WorldRootView: View {
 
         return VStack(alignment: .leading, spacing: 10) {
             if let shopResolution = assetResolutions.first {
-                AevoraAssetAccentView(
+                AevoraAssetRenderableView(
                     resolution: shopResolution,
-                    title: "Shop card art slot",
-                    subtitle: "Quarter Market can swap imported art in later without changing the purchase surface."
+                    style: .wideBanner
                 )
+                .frame(height: 154)
             }
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -222,11 +222,11 @@ private struct NPCDialogueSheet: View {
 
         NavigationStack {
             VStack(alignment: .leading, spacing: 18) {
-                AevoraAssetAccentView(
+                AevoraAssetRenderableView(
                     resolution: npcResolution,
-                    title: "Dialogue bust slot",
-                    subtitle: "Witness dialogue keeps its placeholder-safe portrait hook active."
+                    style: .portraitBust
                 )
+                .frame(height: 184)
                 Text(store.npcName(for: npcID))
                     .font(AevoraTokens.Typography.displayMedium)
                 Text(store.dialogueLine(for: npcID))
@@ -263,50 +263,59 @@ private struct ShopSheet: View {
 
     var body: some View {
         let shopResolution = environment.assetResolver.resolve(.shopCardArt)
+        let itemResolution = environment.assetResolver.resolve(.itemIcon)
 
         NavigationStack {
             List {
                 Section {
                     Text("Gold available: \(store.goldBalance)")
                         .font(AevoraTokens.Typography.headline)
-                    AevoraAssetAccentView(
+                    AevoraAssetRenderableView(
                         resolution: shopResolution,
-                        title: "Shop import slot",
-                        subtitle: "Imported card art can replace this placeholder-safe treatment later."
+                        style: .wideBanner
                     )
+                    .frame(height: 148)
                 }
 
                 ForEach(store.availableShopOffers) { offer in
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(offer.itemName)
-                                    .font(AevoraTokens.Typography.headline)
-                                Text(offer.itemSummary)
-                                    .font(AevoraTokens.Typography.subheadline)
-                                    .foregroundStyle(AevoraTokens.Color.text.secondary)
+                    HStack(alignment: .top, spacing: 12) {
+                        AevoraAssetRenderableView(
+                            resolution: itemResolution,
+                            style: .compactTile
+                        )
+                        .frame(width: 88, height: 88)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(offer.itemName)
+                                        .font(AevoraTokens.Typography.headline)
+                                    Text(offer.itemSummary)
+                                        .font(AevoraTokens.Typography.subheadline)
+                                        .foregroundStyle(AevoraTokens.Color.text.secondary)
+                                }
+                                Spacer()
+                                Text("\(offer.priceGold) Gold")
+                                    .font(AevoraTokens.Typography.footnote)
                             }
-                            Spacer()
-                            Text("\(offer.priceGold) Gold")
-                                .font(AevoraTokens.Typography.footnote)
-                        }
 
-                        Text("Sold by \(store.npcName(for: offer.vendorNpcID))")
-                            .font(AevoraTokens.Typography.footnote)
-                            .foregroundStyle(AevoraTokens.Color.text.secondary)
-
-                        if offer.isLocked {
-                            Text(offer.isOwned ? store.copy.text("shop.owned_label", fallback: "Owned") : store.copy.text("shop.locked_label", fallback: "Unlocks deeper in Chapter One"))
+                            Text("Sold by \(store.npcName(for: offer.vendorNpcID))")
                                 .font(AevoraTokens.Typography.footnote)
                                 .foregroundStyle(AevoraTokens.Color.text.secondary)
-                        }
 
-                        Button(store.copy.text("shop.buy_cta", fallback: "Buy with Gold")) {
-                            store.purchaseOffer(offer.id)
+                            if offer.isLocked {
+                                Text(offer.isOwned ? store.copy.text("shop.owned_label", fallback: "Owned") : store.copy.text("shop.locked_label", fallback: "Unlocks deeper in Chapter One"))
+                                    .font(AevoraTokens.Typography.footnote)
+                                    .foregroundStyle(AevoraTokens.Color.text.secondary)
+                            }
+
+                            Button(store.copy.text("shop.buy_cta", fallback: "Buy with Gold")) {
+                                store.purchaseOffer(offer.id)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(offer.isLocked || !offer.canAfford)
+                            .tint(AevoraTokens.Color.action.primaryFill)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(offer.isLocked || !offer.canAfford)
-                        .tint(AevoraTokens.Color.action.primaryFill)
                     }
                     .padding(.vertical, 6)
                 }

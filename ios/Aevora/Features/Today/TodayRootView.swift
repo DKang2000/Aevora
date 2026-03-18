@@ -58,11 +58,11 @@ struct TodayRootView: View {
 
         return VStack(alignment: .leading, spacing: 12) {
             if let chapterResolution = resolutions.first {
-                AevoraAssetAccentView(
+                AevoraAssetRenderableView(
                     resolution: chapterResolution,
-                    title: "Chapter card slot",
-                    subtitle: "Today’s chapter surface stays bound to one asset family."
+                    style: .wideBanner
                 )
+                .frame(height: 172)
             }
             Text(store.copy.text("today.chapter_title", fallback: "Current chapter"))
                 .font(AevoraTokens.Typography.caption)
@@ -93,7 +93,7 @@ struct TodayRootView: View {
             .buttonStyle(.bordered)
             if let promoResolution = resolutions.dropFirst().first {
                 HStack {
-                    Text("Promo family")
+                    Text("Promo family stays ready for imported art without changing the chapter card structure.")
                         .font(AevoraTokens.Typography.caption)
                         .foregroundStyle(AevoraTokens.Color.text.secondary)
                     Spacer()

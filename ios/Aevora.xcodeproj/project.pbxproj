@@ -10,6 +10,7 @@
 		038DE489A33A87A9388D8BED /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AD387CDAA06895848DB8C9 /* AppTab.swift */; };
 		06DCA3072269B41427CB04C6 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B0310F7E03E5D84D3277D /* AppEnvironment.swift */; };
 		0701F106747F48961D821707 /* aevora-v1-asset-slot-families.seed.json in Resources */ = {isa = PBXBuildFile; fileRef = DEF98F137278FBBDAC1B08C0 /* aevora-v1-asset-slot-families.seed.json */; };
+		07BD3077D7F3E7B37F935E66 /* AssetRenderableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB67D34C6F7736A51F1B2EA /* AssetRenderableViewTests.swift */; };
 		07F8EB1A34E138D7A185087C /* OnboardingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */; };
 		0A22D8C5739AEF63A13FE81A /* DebugTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1BBCB130166A666375F90E /* DebugTests.swift */; };
 		0AB8DFC6E92761C80C297EEF /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E30F1D482AFA118D9BB625E /* APIRequest.swift */; };
@@ -79,6 +80,7 @@
 		B89DAD08D33BBB251522EC1F /* FeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A6A2372367D3EF195C3E52 /* FeatureFlag.swift */; };
 		BBF2CC842BFE132D5453161D /* TypedRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F201E9A338E1D51755FDC4 /* TypedRemoteConfig.swift */; };
 		C22511C1930FC28071FEA728 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1616307E3E2F66DD37A6A3 /* APIError.swift */; };
+		C4D67B06BE2E44C451BF5BB2 /* AevoraAssetRenderableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF05237824BC32550455198 /* AevoraAssetRenderableView.swift */; };
 		D13484C20351838AAFC9C98F /* AnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA35F180DCFE491F56B0B7B /* AnalyticsClient.swift */; };
 		D23F54F8D5BB3A4AE2E773E3 /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D926286D24773C4EF8E27C /* AnalyticsTests.swift */; };
 		D604EEA30703215246B04A4F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3562FBAF9AE0EE508735965 /* HealthKitManager.swift */; };
@@ -152,6 +154,7 @@
 		295A3462DB36D81DA899FCDB /* LogContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogContext.swift; sourceTree = "<group>"; };
 		2AE9042C4904EEDFDD44422F /* CopyCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyCatalog.swift; sourceTree = "<group>"; };
 		2C70B32E4A8F83AD1AF0C61D /* Aevora.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Aevora.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CB67D34C6F7736A51F1B2EA /* AssetRenderableViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRenderableViewTests.swift; sourceTree = "<group>"; };
 		2DBBBB4ED72FB8B5909E4551 /* AccountSurfaceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSurfaceStoreTests.swift; sourceTree = "<group>"; };
 		35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootView.swift; sourceTree = "<group>"; };
 		40F201E9A338E1D51755FDC4 /* TypedRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedRemoteConfig.swift; sourceTree = "<group>"; };
@@ -175,6 +178,7 @@
 		75FB9264A6932686A7E4A19D /* TodayRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRootView.swift; sourceTree = "<group>"; };
 		79E6EA35165C34C8005E2DF0 /* GlanceSurfaceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlanceSurfaceModels.swift; sourceTree = "<group>"; };
 		7AA38F8F6F2A78541AD19FEF /* AnalyticsValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsValidator.swift; sourceTree = "<group>"; };
+		7FF05237824BC32550455198 /* AevoraAssetRenderableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AevoraAssetRenderableView.swift; sourceTree = "<group>"; };
 		8496287AB9754366245BA15E /* SyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncCoordinator.swift; sourceTree = "<group>"; };
 		8681F676DCE7FC56BCA292D5 /* LocalRepositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRepositories.swift; sourceTree = "<group>"; };
 		8958F1971ECAB39AA5B9F865 /* AppIntentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentRouter.swift; sourceTree = "<group>"; };
@@ -306,6 +310,7 @@
 		28B6DBDDAB358DA85ADF02A4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				2CB67D34C6F7736A51F1B2EA /* AssetRenderableViewTests.swift */,
 				A8DFDDD385C3A2E9A2444004 /* AssetRuntimeTests.swift */,
 				0CC95333D4C206D0BE793DA2 /* AssetSurfaceContractTests.swift */,
 			);
@@ -425,6 +430,7 @@
 			children = (
 				9442BDE8A04E5B6AB94CAE2F /* AevoraAssetManifest.swift */,
 				74B32D13574A1FB08F24C091 /* AevoraAssetRegistry.swift */,
+				7FF05237824BC32550455198 /* AevoraAssetRenderableView.swift */,
 				2831F4516DF46D79E115AF83 /* AevoraAssetResolver.swift */,
 				022AE6A0DE7CC3D5FBE56D92 /* AevoraTokens.swift */,
 			);
@@ -957,6 +963,7 @@
 				7ECC637C4A13AF098112FE98 /* AevoraApp.swift in Sources */,
 				ED15694337653573483B4BD7 /* AevoraAssetManifest.swift in Sources */,
 				6ED4C13A86E2F4CA0ADC8BEB /* AevoraAssetRegistry.swift in Sources */,
+				C4D67B06BE2E44C451BF5BB2 /* AevoraAssetRenderableView.swift in Sources */,
 				46F95E6C41F43164E1E4B7E9 /* AevoraAssetResolver.swift in Sources */,
 				ABC9587FE6F69A386D1B4B5E /* AevoraShortcuts.swift in Sources */,
 				349B039B9324A0B9899F81FB /* AevoraTokens.swift in Sources */,
@@ -1033,6 +1040,7 @@
 				EC7DDFA25AF38C49AA4808C4 /* AccountSurfaceStoreTests.swift in Sources */,
 				D23F54F8D5BB3A4AE2E773E3 /* AnalyticsTests.swift in Sources */,
 				1BF426C29DEFD8EDDEA6E346 /* AppNavigationTests.swift in Sources */,
+				07BD3077D7F3E7B37F935E66 /* AssetRenderableViewTests.swift in Sources */,
 				77B476914B33776A5DCC143A /* AssetRuntimeTests.swift in Sources */,
 				4FD5EEE78F87993A6A0053C3 /* AssetSurfaceContractTests.swift in Sources */,
 				8E3AA39160A6414F342B650B /* AvatarSurfaceContractTests.swift in Sources */,

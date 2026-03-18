@@ -43,6 +43,30 @@ final class AssetSurfaceContractTests: XCTestCase {
         XCTAssertTrue(resolutions.contains(where: { $0.slot == .hearthEnvironmentBase }))
     }
 
+    func testMajorBridgeSurfacesResolveLogicalSlotsEndToEnd() {
+        let environment = AppEnvironment(inMemory: true)
+        let resolver = environment.assetResolver
+
+        let slots =
+            OnboardingFlowStep.allCases.compactMap(OnboardingRootView.assetSlot(for:)) +
+            TodayRootView.chapterAssetSlots +
+            RewardModalView.assetSlots +
+            WorldRootView.sceneAssetSlots +
+            WorldRootView.districtAssetSlots +
+            WorldRootView.npcAssetSlots +
+            WorldRootView.shopAssetSlots +
+            HearthRootView.heroAssetSlots
+
+        let resolutions = resolver.resolve(slots: slots)
+
+        XCTAssertEqual(resolutions.count, slots.count)
+        XCTAssertTrue(resolutions.contains(where: { $0.slot == .onboardingPaywallSupporting }))
+        XCTAssertTrue(resolutions.contains(where: { $0.slot == .rewardCard }))
+        XCTAssertTrue(resolutions.contains(where: { $0.slot == .npcBust }))
+        XCTAssertTrue(resolutions.contains(where: { $0.slot == .shopCardArt }))
+        XCTAssertTrue(resolutions.allSatisfy { !$0.logicalPath.isEmpty })
+    }
+
     func testInventoryBucketsRouteToExpectedAssetFamilies() {
         let propItem = InventoryItemState(
             id: "prop-1",

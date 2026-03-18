@@ -18,11 +18,11 @@ struct RewardModalView: View {
                 .padding(.top, 8)
 
             if let rewardCardResolution = assetResolutions.first {
-                AevoraAssetAccentView(
+                AevoraAssetRenderableView(
                     resolution: rewardCardResolution,
-                    title: "Reward card family",
-                    subtitle: "Reward presentation resolves through a slot first, then placeholder-safe chrome."
+                    style: .heroCard
                 )
+                .frame(height: 184)
             }
 
             Text(copy.text("rewards.summary_title", fallback: "Your world responds."))

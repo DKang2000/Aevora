@@ -27,6 +27,14 @@ struct HearthRootView: View {
                     Text(store.hearthState.title)
                         .font(AevoraTokens.Typography.displayLarge)
 
+                    if let environmentResolution = heroAssetResolutions.first {
+                        AevoraAssetRenderableView(
+                            resolution: environmentResolution,
+                            style: .wideBanner
+                        )
+                        .frame(height: 166)
+                    }
+
                     AvatarPreviewCard(
                         configuration: heroConfiguration,
                         style: .hearth,
@@ -108,11 +116,11 @@ struct HearthRootView: View {
         action: @escaping () -> Void
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            AevoraAssetAccentView(
+            AevoraAssetRenderableView(
                 resolution: resolution,
-                title: "Item art slot",
-                subtitle: resolution.logicalPath
+                style: .compactTile
             )
+            .frame(height: 104)
             Text(item.name)
                 .font(AevoraTokens.Typography.headline)
             Text(item.summary)

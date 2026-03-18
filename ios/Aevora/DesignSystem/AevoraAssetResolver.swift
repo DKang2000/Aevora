@@ -1,20 +1,25 @@
 import SwiftUI
 
 struct AevoraAssetResolution: Equatable, Identifiable {
-    enum Status: String, Equatable {
-        case mapped
-        case placeholderFallback
+    enum PresentationState: String, CaseIterable, Equatable {
+        case imported
+        case mappedPlaceholder
+        case fallbackMissing
     }
 
     let slot: AevoraAssetSlot
     let family: AevoraAssetSlotFamily
     let entry: AevoraAssetManifest.AssetEntry?
-    let status: Status
+    let presentationState: PresentationState
     let fallbackReason: String
 
     var id: String { slot.id }
-    var isMapped: Bool { status == .mapped }
-    var isBetaCriticalMissing: Bool { family.betaCritical && !isMapped }
+    var hasManifestEntry: Bool { entry != nil }
+    var isMapped: Bool { hasManifestEntry }
+    var isImported: Bool { presentationState == .imported }
+    var isPlaceholderMapped: Bool { presentationState == .mappedPlaceholder }
+    var isFallbackMissing: Bool { presentationState == .fallbackMissing }
+    var isBetaCriticalMissing: Bool { family.betaCritical && isFallbackMissing }
 
     var displayTitle: String {
         slot.rawValue
@@ -24,12 +29,41 @@ struct AevoraAssetResolution: Equatable, Identifiable {
     }
 
     var statusLabel: String {
-        isMapped ? "Manifest mapped" : "Fallback active"
+        switch presentationState {
+        case .imported:
+            return "Imported"
+        case .mappedPlaceholder:
+            return "Mapped placeholder"
+        case .fallbackMissing:
+            return "Fallback missing"
+        }
+    }
+
+    var statusDetail: String {
+        switch presentationState {
+        case .imported:
+            return "Manifest points at imported art."
+        case .mappedPlaceholder:
+            return "Manifest entry exists, but it still points at placeholder art."
+        case .fallbackMissing:
+            return "No manifest entry yet. Runtime uses deterministic placeholder chrome."
+        }
     }
 
     var sectionLabel: String { family.sectionId }
     var logicalPath: String { entry?.logicalPath ?? slot.rawValue.replacingOccurrences(of: ".", with: "/") }
     var artifactPath: String { entry?.artifactPath ?? "placeholder://\(logicalPath)" }
+
+    var tintColor: Color {
+        switch presentationState {
+        case .imported:
+            return AevoraTokens.Color.text.success
+        case .mappedPlaceholder:
+            return AevoraTokens.Color.action.primaryFill
+        case .fallbackMissing:
+            return AevoraTokens.Color.text.secondary
+        }
+    }
 
     var accentColors: [Color] {
         switch family.sectionId {
@@ -46,6 +80,30 @@ struct AevoraAssetResolution: Equatable, Identifiable {
         default:
             return [AevoraTokens.Color.surface.cardSecondary, AevoraTokens.Color.surface.cardPrimary]
         }
+    }
+
+    static func classify(entry: AevoraAssetManifest.AssetEntry?) -> PresentationState {
+        guard let entry else {
+            return .fallbackMissing
+        }
+
+        if isPlaceholder(entry) {
+            return .mappedPlaceholder
+        }
+
+        return .imported
+    }
+
+    static func isPlaceholder(_ entry: AevoraAssetManifest.AssetEntry) -> Bool {
+        let artifactPath = entry.artifactPath.lowercased()
+        let versionToken = entry.versionToken.lowercased()
+        let contentHash = entry.contentHash.lowercased()
+
+        return artifactPath.contains("/placeholders/")
+            || artifactPath.contains("placeholder")
+            || versionToken.hasPrefix("seed-")
+            || versionToken.contains("placeholder")
+            || contentHash.contains("placeholder")
     }
 }
 
@@ -78,12 +136,17 @@ final class AevoraAssetResolver: ObservableObject {
         let family = registry.family(for: slot)
             ?? AevoraAssetSlotFamily(id: slot.rawValue, sectionId: "ART-unknown", betaCritical: false, surfaces: [])
         let entry = manifest.entry(for: slot.rawValue)
+        let presentationState = AevoraAssetResolution.classify(entry: entry)
         return AevoraAssetResolution(
             slot: slot,
             family: family,
             entry: entry,
-            status: entry == nil ? .placeholderFallback : .mapped,
-            fallbackReason: entry == nil ? "No manifest entry yet. Runtime uses deterministic placeholder chrome." : "Manifest entry loaded."
+            presentationState: presentationState,
+            fallbackReason: AevoraAssetResolution.classify(entry: entry) == .fallbackMissing
+                ? "No manifest entry yet. Runtime uses deterministic placeholder chrome."
+                : (presentationState == .mappedPlaceholder
+                    ? "Manifest entry exists, but the slot still resolves to placeholder art."
+                    : "Manifest entry loaded for imported art.")
         )
     }
 
@@ -151,7 +214,7 @@ struct AevoraAssetAccentView: View {
                     .foregroundStyle(AevoraTokens.Color.text.secondary)
                 Text(resolution.statusLabel)
                     .font(AevoraTokens.Typography.footnote)
-                    .foregroundStyle(resolution.isMapped ? AevoraTokens.Color.text.success : AevoraTokens.Color.text.secondary)
+                    .foregroundStyle(resolution.tintColor)
             }
         }
         .padding(12)
@@ -176,9 +239,9 @@ struct AevoraAssetStatusPill: View {
     let resolution: AevoraAssetResolution
 
     var body: some View {
-        Text(resolution.isMapped ? "Mapped" : "Placeholder")
+        Text(resolution.statusLabel)
             .font(AevoraTokens.Typography.caption)
-            .foregroundStyle(resolution.isMapped ? AevoraTokens.Color.text.success : AevoraTokens.Color.text.secondary)
+            .foregroundStyle(resolution.tintColor)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .background(AevoraTokens.Color.surface.cardSecondary)

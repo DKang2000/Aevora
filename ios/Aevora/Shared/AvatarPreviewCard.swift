@@ -142,29 +142,40 @@ struct AvatarPreviewCard: View {
             ?? AvatarPresentationCatalog.palettes.first!
     }
 
+    private var preferredRenderableResolution: AevoraAssetResolution? {
+        assetResolutions.first(where: \.isImported)
+    }
+
     var body: some View {
         let avatarWidth: CGFloat = style == .onboarding ? 146 : 122
         let avatarHeight: CGFloat = style == .onboarding ? 198 : 162
 
         VStack(alignment: .leading, spacing: style == .onboarding ? 16 : 14) {
-            if let assetResolution = assetResolutions.first {
-                AevoraAssetAccentView(
-                    resolution: assetResolution,
-                    title: style == .onboarding ? "Avatar base slot" : "Hearth avatar slot",
-                    subtitle: assetResolution.fallbackReason
-                )
-            }
-
             HStack(alignment: .center, spacing: style == .onboarding ? 18 : 16) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: style == .onboarding ? 24 : 22, style: .continuous)
-                        .fill(AevoraTokens.Color.surface.cardPrimary)
-                    RoundedRectangle(cornerRadius: style == .onboarding ? 24 : 22, style: .continuous)
-                        .stroke(AevoraTokens.Color.border.default, lineWidth: 1.5)
-                    AvatarFigureView(silhouette: silhouette, palette: palette, compact: style == .hearth)
-                        .padding(style == .onboarding ? 12 : 10)
+                    if let renderableResolution = preferredRenderableResolution {
+                        AevoraAssetRenderableView(
+                            resolution: renderableResolution,
+                            style: .portraitBust,
+                            showsStatusPill: false
+                        )
+                    } else {
+                        RoundedRectangle(cornerRadius: style == .onboarding ? 24 : 22, style: .continuous)
+                            .fill(AevoraTokens.Color.surface.cardPrimary)
+                        RoundedRectangle(cornerRadius: style == .onboarding ? 24 : 22, style: .continuous)
+                            .stroke(AevoraTokens.Color.border.default, lineWidth: 1.5)
+                        AvatarFigureView(silhouette: silhouette, palette: palette, compact: style == .hearth)
+                            .padding(style == .onboarding ? 12 : 10)
+                    }
                 }
                 .frame(width: avatarWidth, height: avatarHeight)
+                .clipShape(RoundedRectangle(cornerRadius: style == .onboarding ? 24 : 22, style: .continuous))
+                .overlay(alignment: .topTrailing) {
+                    if let resolution = assetResolutions.first {
+                        AevoraAssetStatusPill(resolution: resolution)
+                            .padding(8)
+                    }
+                }
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(displayName)

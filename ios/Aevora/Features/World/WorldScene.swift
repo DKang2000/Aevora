@@ -20,9 +20,7 @@ final class EmberQuayScene: SKScene {
         self.repairResolution = repairResolution
         super.init(size: size)
         scaleMode = .resizeFill
-        backgroundColor = tilesetResolution.isMapped
-            ? SKColor(red: 0.13, green: 0.17, blue: 0.21, alpha: 1)
-            : SKColor(red: 0.15, green: 0.15, blue: 0.18, alpha: 1)
+        backgroundColor = .clear
     }
 
     @available(*, unavailable)
@@ -34,10 +32,13 @@ final class EmberQuayScene: SKScene {
         removeAllChildren()
 
         let quay = SKShapeNode(rectOf: CGSize(width: size.width * 0.92, height: size.height * 0.75), cornerRadius: 28)
-        quay.fillColor = tilesetResolution.isMapped
-            ? .init(red: 0.20, green: 0.25, blue: 0.28, alpha: 1)
-            : .init(red: 0.22, green: 0.23, blue: 0.27, alpha: 1)
-        quay.strokeColor = .clear
+        quay.fillColor = tilesetResolution.isImported
+            ? .init(red: 0.11, green: 0.14, blue: 0.18, alpha: 0.34)
+            : .init(red: 0.22, green: 0.23, blue: 0.27, alpha: 0.96)
+        quay.strokeColor = tilesetResolution.isImported
+            ? .init(red: 0.93, green: 0.83, blue: 0.60, alpha: 0.28)
+            : .clear
+        quay.lineWidth = tilesetResolution.isImported ? 2 : 0
         quay.position = CGPoint(x: size.width / 2, y: size.height / 2)
         addChild(quay)
 
@@ -65,7 +66,7 @@ final class EmberQuayScene: SKScene {
         stageAccent.position = CGPoint(x: size.width / 2 + 70, y: size.height / 2 - 48)
         stageAccent.fillColor = state.problemProgressPercent > 0.75
             ? .init(red: 0.80, green: 0.63, blue: 0.31, alpha: 1)
-            : (repairResolution.isMapped
+            : (repairResolution.isImported
                 ? .init(red: 0.32, green: 0.53, blue: 0.42, alpha: 1)
                 : .init(red: 0.46, green: 0.44, blue: 0.33, alpha: 1))
         stageAccent.strokeColor = .clear
@@ -106,6 +107,12 @@ struct WorldSceneContainer: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
+            AevoraAssetRenderableView(
+                resolution: tilesetResolution,
+                style: .wideBanner
+            )
+            .frame(height: 260)
+
             SpriteView(
                 scene: EmberQuayScene(
                     size: CGSize(width: 360, height: 260),
@@ -116,6 +123,7 @@ struct WorldSceneContainer: View {
                 )
             )
             .frame(height: 260)
+            .background(Color.clear)
             .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
 
             VStack(alignment: .leading, spacing: 8) {
