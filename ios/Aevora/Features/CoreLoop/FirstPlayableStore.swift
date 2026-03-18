@@ -436,6 +436,50 @@ final class FirstPlayableStore: ObservableObject {
         Double(OnboardingFlowStep.allCases.count)
     }
 
+    var selectedIdentityDisplayName: String {
+        guard let identity = content.identityShells.first(where: { $0.id == selectedIdentityID }) else {
+            return Self.readableAvatarLabel(selectedIdentityID, prefix: "idn_")
+        }
+        return copy.text(identity.displayNameKey, fallback: Self.readableAvatarLabel(identity.id, prefix: "idn_"))
+    }
+
+    var onboardingAvatarStepState: OnboardingAvatarStepState {
+        let silhouettes = Self.uniqueAvatarOptionIDs(
+            content.identityShells
+                .filter { $0.originFamilyId == selectedFamilyID }
+                .compactMap { $0.defaultAvatar?.silhouetteId },
+            fallback: avatarDraft.silhouetteId
+        )
+        let palettes = Self.uniqueAvatarOptionIDs(
+            content.identityShells
+                .filter { $0.originFamilyId == selectedFamilyID }
+                .compactMap { $0.defaultAvatar?.paletteId },
+            fallback: avatarDraft.paletteId
+        )
+
+        return OnboardingAvatarStepState(
+            configuration: avatarPreviewConfiguration(
+                statusLine: "One preview, fast silhouette and palette choices, then back to your starter vows."
+            ),
+            silhouetteOptions: silhouettes.map { id in
+                AvatarSelectionOption(
+                    id: id,
+                    label: AvatarPresentationCatalog.silhouette(for: id)?.label ?? Self.readableAvatarLabel(id, prefix: "silhouette_")
+                )
+            },
+            paletteOptions: palettes.map { id in
+                AvatarSelectionOption(
+                    id: id,
+                    label: AvatarPresentationCatalog.palette(for: id)?.label ?? Self.readableAvatarLabel(id, prefix: "palette_")
+                )
+            }
+        )
+    }
+
+    var hearthAvatarPreviewConfiguration: AvatarPreviewConfiguration {
+        avatarPreviewConfiguration(statusLine: hearthState.summary)
+    }
+
     var onboardingQuestPreviewTitle: String {
         let starterDay = content.starterArcDays.first
         let quest = content.questTemplates.first(where: { $0.id == starterDay?.questId })
@@ -497,6 +541,26 @@ final class FirstPlayableStore: ObservableObject {
                 remainingStock: remainingStock
             )
         }
+    }
+
+    private func avatarPreviewConfiguration(statusLine: String) -> AvatarPreviewConfiguration {
+        AvatarPreviewConfiguration(
+            displayName: avatarDraft.displayName,
+            pronouns: avatarDraft.pronouns,
+            identityName: selectedIdentityDisplayName,
+            silhouetteId: avatarDraft.silhouetteId,
+            paletteId: avatarDraft.paletteId,
+            accessoryLabel: currentAccessoryLabel,
+            statusLine: statusLine
+        )
+    }
+
+    private var currentAccessoryLabel: String {
+        guard let accessoryID = avatarDraft.accessoryIds.first else {
+            return ""
+        }
+        return AvatarPresentationCatalog.accessory(for: accessoryID)?.label
+            ?? Self.readableAvatarLabel(accessoryID, prefix: "accessory_")
     }
 
     init(
@@ -1427,6 +1491,22 @@ final class FirstPlayableStore: ObservableObject {
             unlockedPropNames: props,
             chapterClosureReady: completionDayCount >= 7
         )
+    }
+
+    private static func uniqueAvatarOptionIDs(_ ids: [String], fallback: String) -> [String] {
+        var seen: Set<String> = []
+        let options = ids.filter { seen.insert($0).inserted }
+        if options.isEmpty {
+            return [fallback]
+        }
+        return options
+    }
+
+    private static func readableAvatarLabel(_ identifier: String, prefix: String) -> String {
+        identifier
+            .replacingOccurrences(of: prefix, with: "")
+            .replacingOccurrences(of: "_", with: " ")
+            .capitalized
     }
 
     private static func localDateString(now: Date = .now) -> String {

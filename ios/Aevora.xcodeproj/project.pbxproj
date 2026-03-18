@@ -55,6 +55,8 @@
 		7ECC637C4A13AF098112FE98 /* AevoraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7301BF89211C32F083F51A /* AevoraApp.swift */; };
 		81E39308007F684D11D7830D /* LaunchContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC16E15DCD734BC97D617BD /* LaunchContent.swift */; };
 		81F73782B691B15E6D511085 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC60416C2D35FDBB95F30FDB /* PersistenceTests.swift */; };
+		8E3AA39160A6414F342B650B /* AvatarSurfaceContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AF3F19CEB8A8FC93A93239 /* AvatarSurfaceContractTests.swift */; };
+		8EDBC67E98F1445145F96CEA /* AvatarPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B0ABFD2B2CC3690A587794 /* AvatarPreviewCard.swift */; };
 		9A040EB9493C1E43EB41C7AA /* SyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28931C3E7AB28AB38FB3C42F /* SyncOperation.swift */; };
 		9B9BA7B56C5550372DE4BAE2 /* StatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033728F637B098F516E2E638 /* StatusTests.swift */; };
 		9C2D7C649CF44D1A8A043D4E /* LogContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 295A3462DB36D81DA899FCDB /* LogContext.swift */; };
@@ -143,6 +145,7 @@
 		2DBBBB4ED72FB8B5909E4551 /* AccountSurfaceStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSurfaceStoreTests.swift; sourceTree = "<group>"; };
 		35FF2BE9CB3B7EACD0EF6680 /* OnboardingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootView.swift; sourceTree = "<group>"; };
 		40F201E9A338E1D51755FDC4 /* TypedRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedRemoteConfig.swift; sourceTree = "<group>"; };
+		45AF3F19CEB8A8FC93A93239 /* AvatarSurfaceContractTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarSurfaceContractTests.swift; sourceTree = "<group>"; };
 		4649A28505A2C84CA5F01397 /* AnalyticsEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEnvelope.swift; sourceTree = "<group>"; };
 		482E265A84935A597EA40A46 /* ConnectivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityMonitor.swift; sourceTree = "<group>"; };
 		4EA35F180DCFE491F56B0B7B /* AnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsClient.swift; sourceTree = "<group>"; };
@@ -150,6 +153,7 @@
 		53567186EE6D40733FCB6406 /* DebugMenuRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugMenuRootView.swift; sourceTree = "<group>"; };
 		567F61F75E72B4CCED0D8187 /* WorldScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldScene.swift; sourceTree = "<group>"; };
 		57AA5CA810F8BC01D4AD26D6 /* DateFormatter+AevoraTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+AevoraTest.swift"; sourceTree = "<group>"; };
+		58B0ABFD2B2CC3690A587794 /* AvatarPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPreviewCard.swift; sourceTree = "<group>"; };
 		59B17D579B5C44109024680D /* LiveActivityCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityCoordinator.swift; sourceTree = "<group>"; };
 		5BBBE7F262EE25FFEA693997 /* AppNavigationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigationTests.swift; sourceTree = "<group>"; };
 		611C61E3547306E4AEC9F2C8 /* StructuredLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructuredLogger.swift; sourceTree = "<group>"; };
@@ -252,6 +256,7 @@
 		0F8AB829E055B88FE8303EAF /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				45AF3F19CEB8A8FC93A93239 /* AvatarSurfaceContractTests.swift */,
 				D14C40448C980529B2C65397 /* OnboardingRootViewTests.swift */,
 			);
 			path = Onboarding;
@@ -384,6 +389,7 @@
 		59C63903D4ABB11562FF5E7E /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				58B0ABFD2B2CC3690A587794 /* AvatarPreviewCard.swift */,
 				EBF52EB9C3C5F6DA64F54490 /* Status */,
 			);
 			path = Shared;
@@ -880,6 +886,7 @@
 				EF561EC24F974E4E903CC61F /* AppNotificationDelegate.swift in Sources */,
 				038DE489A33A87A9388D8BED /* AppTab.swift in Sources */,
 				310A32384FC0D719271FE095 /* AutomationSurfaceStore.swift in Sources */,
+				8EDBC67E98F1445145F96CEA /* AvatarPreviewCard.swift in Sources */,
 				792F86E3737683868F1FB59A /* ConnectivityMonitor.swift in Sources */,
 				52746D9559A9B4DDB5AA79FF /* CopyCatalog.swift in Sources */,
 				14D0C0761986804E67F1E25F /* CrashReporter.swift in Sources */,
@@ -940,6 +947,7 @@
 				EC7DDFA25AF38C49AA4808C4 /* AccountSurfaceStoreTests.swift in Sources */,
 				D23F54F8D5BB3A4AE2E773E3 /* AnalyticsTests.swift in Sources */,
 				1BF426C29DEFD8EDDEA6E346 /* AppNavigationTests.swift in Sources */,
+				8E3AA39160A6414F342B650B /* AvatarSurfaceContractTests.swift in Sources */,
 				A7DBCAE005998950F532E70D /* DateFormatter+AevoraTest.swift in Sources */,
 				0A22D8C5739AEF63A13FE81A /* DebugTests.swift in Sources */,
 				F4CBA2683824CE2B1D47CE93 /* FirstPlayableStoreTests.swift in Sources */,

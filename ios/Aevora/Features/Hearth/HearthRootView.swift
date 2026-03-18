@@ -3,21 +3,25 @@ import SwiftUI
 struct HearthRootView: View {
     @EnvironmentObject private var environment: AppEnvironment
 
+    static func heroConfiguration(for store: FirstPlayableStore) -> AvatarPreviewConfiguration {
+        store.hearthAvatarPreviewConfiguration
+    }
+
     var body: some View {
         NavigationStack {
             let store = environment.firstPlayableStore
             let storedItems = store.inventoryItems.filter { $0.status != "applied" }
             let appliedItems = store.inventoryItems.filter { $0.status == "applied" }
+            let heroConfiguration = Self.heroConfiguration(for: store)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     Text(store.hearthState.title)
                         .font(AevoraTokens.Typography.displayLarge)
 
+                    AvatarPreviewCard(configuration: heroConfiguration, style: .hearth)
+
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(store.hearthState.summary)
-                            .font(AevoraTokens.Typography.subheadline)
-                            .foregroundStyle(AevoraTokens.Color.text.secondary)
                         Text("Gold on hand: \(store.goldBalance)")
                             .font(AevoraTokens.Typography.headline)
                         if store.hearthState.chapterClosureReady {

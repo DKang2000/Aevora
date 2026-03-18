@@ -49,6 +49,10 @@ struct OnboardingRootView: View {
         }
     }
 
+    static func avatarStepState(for store: FirstPlayableStore) -> OnboardingAvatarStepState {
+        store.onboardingAvatarStepState
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
@@ -339,7 +343,9 @@ struct OnboardingRootView: View {
     }
 
     private var avatarBasicsView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        let avatarState = Self.avatarStepState(for: store)
+
+        return VStack(alignment: .leading, spacing: 16) {
             Text(store.copy.text("onboarding.avatar_title", fallback: "Shape your arrival"))
                 .font(AevoraTokens.Typography.displayMedium)
             Text("Keep this fast. One screen, one preview, and no long character creator detour.")
@@ -350,15 +356,64 @@ struct OnboardingRootView: View {
             tokenTextField("Pronouns (optional)", text: $store.avatarDraft.pronouns)
 
             cardPanel(title: "Arrival preview", eyebrow: "Avatar basics") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(store.avatarDraft.displayName.isEmpty ? "Wayfarer" : store.avatarDraft.displayName)
-                        .font(AevoraTokens.Typography.headline)
-                    Text("Silhouette: \(store.avatarDraft.silhouetteId.replacingOccurrences(of: "_", with: " "))")
-                        .font(AevoraTokens.Typography.subheadline)
-                        .foregroundStyle(AevoraTokens.Color.text.secondary)
-                    Text("Palette: \(store.avatarDraft.paletteId.replacingOccurrences(of: "_", with: " "))")
-                        .font(AevoraTokens.Typography.footnote)
-                        .foregroundStyle(AevoraTokens.Color.text.secondary)
+                VStack(alignment: .leading, spacing: 14) {
+                    AvatarPreviewCard(configuration: avatarState.configuration, style: .onboarding)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Silhouette")
+                            .font(AevoraTokens.Typography.caption)
+                            .foregroundStyle(AevoraTokens.Color.text.secondary)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(avatarState.silhouetteOptions) { option in
+                                    Button {
+                                        store.avatarDraft.silhouetteId = option.id
+                                    } label: {
+                                        AvatarSilhouetteOptionChip(
+                                            option: option,
+                                            paletteId: store.avatarDraft.paletteId,
+                                            isSelected: option.id == store.avatarDraft.silhouetteId
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.vertical, 2)
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Palette")
+                            .font(AevoraTokens.Typography.caption)
+                            .foregroundStyle(AevoraTokens.Color.text.secondary)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(avatarState.paletteOptions) { option in
+                                    Button {
+                                        store.avatarDraft.paletteId = option.id
+                                    } label: {
+                                        AvatarPaletteOptionChip(
+                                            option: option,
+                                            isSelected: option.id == store.avatarDraft.paletteId
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.vertical, 2)
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Accessory")
+                            .font(AevoraTokens.Typography.caption)
+                            .foregroundStyle(AevoraTokens.Color.text.secondary)
+                        AvatarLabelChip(
+                            label: avatarState.configuration.accessoryLabel,
+                            fill: AevoraTokens.Color.parchmentStone.shade200,
+                            foreground: AevoraTokens.Color.text.primary
+                        )
+                    }
                 }
             }
         }
